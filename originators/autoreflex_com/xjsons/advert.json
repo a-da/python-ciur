@@ -1,0 +1,44 @@
+{
+    "name": "advert_autoreflex_com",
+    "test_url" : "http://www.autoreflex.com/voiture-occasion-porsche-autre-914-FVO5176045.html",
+    "version": 0,
+    "versions": [{
+        "version" : 0,
+        "timestamp" : 1345472221,
+        "config" : {
+            "xpath" : {
+                "root" : "/html:html/html:body",
+                "namespaces" : {
+                    "html": "http://www.w3.org/1999/xhtml"
+                }
+            },
+            "anomaly" : {
+                "root" : "/html:html/html:body",
+                "namespaces" : {
+                }
+            }
+        },
+        "anomaly" : {},
+        "light_handlers" : {
+            "^html:" : {},
+            "^replace:postal_code" : [{
+                    "from_re": "(?s) .*$",
+                    "to": ""
+                }
+            ],
+            "^replace:city" : [{
+                "from_re": "(?s)\\d+",
+                "to": ""
+            },
+                {
+                    "from_re": "(?s)\nFrance.*$",
+                    "to": ""
+            }]
+        },
+        "rules" : {
+            "region" : [ "text.|mandatory",  ".//html:div[@id='arx_chemindefer']/html:ul/html:li[last()-1]/html:a"]
+        },
+        "renames" : {},
+        "blocks" : { }
+    }]
+}

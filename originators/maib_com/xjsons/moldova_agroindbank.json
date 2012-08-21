@@ -1,0 +1,57 @@
+{
+    "name": "moldova_agroindbank",
+    "test_url" : "http://www.maib.com/",
+    "version": 0,
+    "versions": [{
+        "version" : 0,
+        "timestamp" : 1332498235,
+        "config" : {
+            "xpath" : {
+                "root" : "//html:html/html:body//html:span[text()='Curs valutar']/../../../../../../html:div[@class='bg_block_info']/html:table",
+                "namespaces" : {
+                    "html": "http://www.w3.org/1999/xhtml"
+                }
+            },
+            "anomaly" : {
+                "root" : "//html:html/html:body",
+                "namespaces" : { }
+            }
+        },
+        "anomaly" : {},
+        "light_handlers" : {
+            "^html:" : {}
+        },
+        "rules" : {
+            "usd" : ["mandatory", ".//html:b[text()='USD']/../..", {
+                "buy"  : ["float.|mandatory", "./following-sibling::html:td[1]/html:span"],
+                "sell" : ["float.|mandatory", "./following-sibling::html:td[2]/html:span"]
+            }],
+            "eur" : ["mandatory", ".//html:b[text()='EUR']/../..", {
+                "buy"  : ["float.|mandatory", "./following-sibling::html:td[1]/html:span"],
+                "sell" : ["float.|mandatory", "./following-sibling::html:td[2]/html:span"]
+            }],
+            "rub" : ["mandatory", ".//html:b[text()='RUB']/../..", {
+                "buy"  : ["float.|mandatory", "./following-sibling::html:td[1]/html:span"],
+                "sell" : ["float.|mandatory", "./following-sibling::html:td[2]/html:span"]
+            }],
+            "ron" : ["mandatory", ".//html:b[text()='RON']/../..", {
+                "buy"  : ["float.|mandatory", "./following-sibling::html:td[1]/html:span"],
+                "sell" : ["float.|mandatory", "./following-sibling::html:td[2]/html:span"]
+            }],
+            "uah" : ["mandatory", ".//html:b[text()='UAH']/../..", {
+                "buy"  : ["float.|mandatory", "./following-sibling::html:td[1]/html:span"],
+                "sell" : ["float.|mandatory", "./following-sibling::html:td[2]/html:span"]
+            }],
+            "gbp" : ["mandatory", ".//html:b[text()='GBP']/../..", {
+                "buy"  : ["float.|mandatory", "./following-sibling::html:td[1]/html:span"],
+                "sell" : ["float.|mandatory", "./following-sibling::html:td[2]/html:span"]
+            }],
+            "chf" : ["mandatory", ".//html:b[text()='CHF']/../..", {
+                "buy"  : ["float.|mandatory", "./following-sibling::html:td[1]/html:span"],
+                "sell" : ["float.|mandatory", "./following-sibling::html:td[2]/html:span"]
+            }]
+        },
+        "renames" : { }
+    }]
+}
+

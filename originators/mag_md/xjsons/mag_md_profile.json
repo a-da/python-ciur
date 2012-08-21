@@ -1,0 +1,44 @@
+{
+    "test_url" : "http://mag.md/catalog/02_noutbuki/nb_acer/acer_aspire_as5733z_grey_lx_rjw0c_050_15_6_led_hd_intel_pentium_dual_core_p6200_2_13ghz_2gb_ddr3_ram.html",
+    "name": "mag_md",
+    "version": 0,
+    "versions": [{
+            "version" : 0,
+            "timestamp" : 1330763164,
+            "config" : {
+                "xpath" : {
+                    "root" : "/html:html/html:body",
+                    "namespaces" : {
+                        "html": "http://www.w3.org/1999/xhtml"
+                    }
+                },
+                "anomaly" : {
+                    "root" : "/html:html/html:body",
+                    "namespaces" : {
+
+                    }
+                }
+            },
+            "anomaly" : {},
+            "rules" : {
+                "title" : ["text.|mandatory", "//html:title", "#comments"],
+                "int1" : ["int.|^fun_lol|mandatory", "//html:p[@id='int1']"],
+                "int2" : ["int.|mandatory", "//html:p[@id='int2']"],
+                "int3" : ["int.|mandatory", "//html:p[@id='int3']"],
+                "int4" : ["int.|mandatory", "//html:p[@id='int4']"],
+                "float1" : ["float.|mandatory", "//html:p[@id='float1']"],
+                "int5" : ["float.|int.|mandatory", "//html:p[@id='float1']"],
+                "float6" : ["float.round_2|mandatory", "//html:p[@id='float1']"],
+                "ara" : [ "ensure_list|mandatory", "//html:span[@class='ara']", {
+                    "unu" : ["text.|mandatory", "./html:*[@class='unu']"],
+                    "doi" : ["text.|mandatory", "./html:*[@class='doi']"]
+                }]
+            },
+            "renames" : {
+                "title" : "name"
+            },
+            "light_handlers" : {},
+            "blocks" : {}
+        }
+    ]
+}

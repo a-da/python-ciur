@@ -1,0 +1,41 @@
+{
+    "name": "manta_com_pagination",
+    "test_url" : "http://www.manta_com_city.json.com/world/Europe/Germany/-/Bremen/",
+    "version": 0,
+    "versions": [{
+        "version" : 0,
+        "timestamp" : 1330779530,
+        "config" : {
+            "xpath" : {
+                "root" : "/html:html/html:body",
+                "namespaces" : {
+                    "html": "http://www.w3.org/1999/xhtml"
+                }
+            },
+            "anomaly" : {
+                "root" : "/html:html/html:body",
+                "namespaces" : {
+
+                }
+            }
+        },
+        "anomaly" : {},
+        "rules" : {
+            "paths": ["ensure_list|mandatory", ".//html:div[@class='result-box vcard']//html:h2/html:a",
+                {
+                    "path": ["text.|^replace:path|mandatory", "./@href"]
+                }]
+        },
+        "light_handlers" : {
+            "^replace:path" : [{
+                "from_str" : "http://www.manta_com_city.json.com",
+                "to" : ""
+            }, {
+                "from_re" : "(?i)[A-Z]+$",
+                "to" : "..."
+            }]
+        },
+        "renames" : {},
+        "blocks" : {}
+    }]
+}

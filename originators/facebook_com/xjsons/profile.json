@@ -1,0 +1,251 @@
+{
+    "name": "facebook_com_profile",
+    "test_url" : "?",
+    "version": 0,
+    "versions": [{
+        "version" : 999,
+        "timestamp" : 0,
+        "config" : {
+            "xpath" : {
+                "root" : "/html:html",
+                "namespaces" : {
+                    "html": "http://www.w3.org/1999/xhtml"
+                }
+            },
+            "anomaly" : {
+                "root" : "/html:html/html:body",
+                "namespaces" : {
+                }
+            }
+        },
+        "anomaly" : {},
+        "rules" : {
+            "full_name" : ["text.|^replace:full_name|mandatory", [
+                ".//html:*[@itemprop='name']/html:span",
+                ".//html:a[@class='nameButton uiButton uiButtonOverlay']/html:span"
+            ]],
+            "alias_name" : ["text.|^replace:alias_name|optional", [
+                ".//html:*[@itemprop='name']/html:span",
+                ".//html:a[@class='nameButton uiButton uiButtonOverlay']/html:span"
+            ]],
+            "lives_in" : ["optional", ".//html:*[text()='Lives in ']/html:a", {
+                "name" : ["text.|mandatory", "."],
+                "href" : ["text.|mandatory", "./@href"]
+            }],
+            "from" : ["optional", ".//html:*[text()='From ']/html:a", {
+                "name" : ["text.|mandatory", "."],
+                "href" : ["text.|mandatory", "./@href"]
+            }],
+            "born_on" : ["text.|^replace:born|optional", ".//html:th[starts-with(.,'Born on ')]"],
+            "about" : ["text.|^replace:about|optional", [
+                ".//html:th[starts-with(.,'About ')]/following-sibling::html:td[1]",
+                ".//html:h3[starts-with(.,'About ')]/../../../following-sibling::html:div[1]"
+                ]
+            ],
+            "favorite_quotations" : ["text.join_by_space|optional", [
+                ".//html:th[text()='Favorite Quotations']/following-sibling::html:td[1]//text()",
+                ".//html:h3[text()='Favorite Quotations']/../../../following-sibling::html:div[1]//text()"
+            ]],
+            "knows_lang" : ["text.join_by_space|^replace:knows_lang|optional", [
+                ".//html:*[starts-with(.,'Knows ')]",
+                ".//html:th[text()='Languages']/following-sibling::html:td[1]//text()"]
+            ],
+            "profile_pic" : ["text.|mandatory", ".//html:img[@id='profile_pic']/@src|.//html:a[@class='profileThumb']/html:img/@src"],
+
+            "profile_photos" : ["text.|^replace:profile_photos|optional", ".//html:ul[@class='fbProfilePhotoBar']//@style",
+                "# images size _s.jpg, _n.jpg, _q.jpg"],
+            "political_views" : ["ensure_list|optional", [
+                ".//html:th[text()='Political Views']/following-sibling::html:td[1]//html:li",
+                ".//html:div[text()='Political Views']/../following-sibling::html:td[1]//html:li"
+                ], "=>politic_experience"],
+            "employers" : ["ensure_list|optional", [
+                ".//html:th[text()='Employers']/following-sibling::html:td[1]//html:li",
+                ".//html:div[text()='Employers']/../following-sibling::html:td[1]//html:li"
+            ], "=>experience"],
+            "college" : ["ensure_list|optional", [
+                ".//html:th[text()='College']/following-sibling::html:td[1]//html:li",
+                ".//html:div[text()='College']/../following-sibling::html:td[1]//html:li"
+                ], "=>experience"],
+            "high_school" : ["ensure_list|optional",  [
+                ".//html:th[text()='High School']/following-sibling::html:td[1]//html:li",
+                ".//html:div[text()='High School']/../following-sibling::html:td[1]//html:li"
+            ], "=>experience"],
+            "religious " : ["ensure_list|optional", [
+                ".//html:th[text()='Religious Views']/following-sibling::html:td[1]//html:li",
+                ".//html:div[text()='Religious Views']/../following-sibling::html:td[1]//html:li"
+            ], {
+                "link" : ["text.|mandatory", ".//html:a/@href"],
+                "title" : ["text.|mandatory", ".//html:div[@class='experienceTitle']//html:span"],
+                "body"  : ["text.join_by_space|optional", ".//html:div[@class='experienceBody fsm fwn fcg']//text()"],
+                "body_details" : ["text.|optional", ".//html:div[@class='experienceBody']"]
+            }],
+
+            "other" : ["ensure_list|optional", ".//html:th[text()='Other']/following-sibling::html:td[1]//html:a", {
+                "link" : ["text.|mandatory", "./@href"],
+                "title" : ["text.|optional", "."]
+            }],
+            "relationship" : ["optional", [
+                ".//html:div[@class='relationshipSection']//html:span[@class='fcg']/..",
+                ".//html:ul[@class='uiList familyList']"
+                ], {
+                "status" : ["text.|optional", "//html:th[text()='Relationship Status']/following-sibling::html:td[1]"],
+                "with" : ["optional", ".//html:span[text()='In a relationship with']/../../../../..//html:li", {
+                    "thumbs" : ["text.|mandatory", ".//html:img/@src"],
+                    "name" : ["text.|mandatory", ".//html:img/@alt"],
+                    "link" : ["text.|mandatory", ".//html:a[@tabindex='-1']/@href"],
+                    "id" : ["text.|^replace:id|mandatory", ".//html:a[@tabindex='-1']/@data-hovercard"]
+                }],
+                "family" : ["optional", [
+                    ".//html:span[text()='Family']/../../../../..//html:li",
+                    ".//html:div[@class='uiListItem  uiListVerticalItemBorder']",
+                    ".//html:div[@class='ptm uiListItem  uiListVerticalItemBorder']"
+                ], {
+                    "thumbs" : ["text.|mandatory", ".//html:img/@src"],
+                    "name" : ["text.|mandatory.skip", ".//html:img/@alt|.//html:div[@class='fsl fwb fcb']//text()"],
+                    "type" : ["text.|optional", ".//html:div[@class='fsm fwn fcg']|.//html:div[@class='profileFriendsText profileFriendsNetwork fsm fwn fcg']"],
+                    "link" : ["text.|optional", ".//html:a[@tabindex='-1']/@href"],
+                    "id" : ["text.|^replace:id|optional", ".//html:a[@tabindex='-1']/@data-hovercard"]
+
+                }],
+                "friends" : ["ensure_list|optional", ".//html:a[starts-with(., 'Friends ')]/../../../../../..//html:li", {
+                    "thumbs" : ["text.|mandatory", ".//html:img/@src"],
+                    "full_name" : ["text.|mandatory", ".//html:img/@alt"],
+                    "link" : ["text.|mandatory", ".//html:a[@tabindex='-1']/@href"],
+                    "id" : ["text.|^replace:id|mandatory", ".//html:a[@tabindex='-1']/@data-hovercard"]
+                }]
+            }],
+            "music" : ["ensure_list|optional", ".//html:th[text()='Music']/following-sibling::html:td[1]//html:li", "=>sports_arts_entertainment"],
+            "movies" : ["ensure_list|optional", ".//html:th[text()='Movies']/following-sibling::html:td[1]//html:li", "=>sports_arts_entertainment"],
+            "favorite_teams" : ["ensure_list|optional", ".//html:th[text()='Favorite Teams']/following-sibling::html:td[1]//html:li", "=>sports_arts_entertainment"],
+            "games" : ["ensure_list|optional", ".//html:th[text()='Games']/following-sibling::html:td[1]//html:li", "=>sports_arts_entertainment"],
+            "books" : ["ensure_list|optional", ".//html:th[text()='Books']/following-sibling::html:td[1]//html:li", "=>sports_arts_entertainment"],
+            "television" : ["ensure_list|optional", ".//html:th[text()='Television']/following-sibling::html:td[1]//html:li", "=>sports_arts_entertainment"],
+            "phone" : ["ensure_list|optional", ".//html:th[text()='Phone']/following-sibling::html:td[1]//html:li//html:tr", {
+                "number" : ["text.|mandatory", ".//html:td[1]//html:span"],
+                "type" : ["text.|mandatory", ".//html:td[2]//html:span"]
+            }],
+            "address" : ["text.force_list|optional", ".//html:th[text()='Address']/following-sibling::html:td[1]//html:li"],
+            "interests" : ["ensure_list|optional", ".//html:th[text()='Interests']/following-sibling::html:td[1]//html:li", {
+                "thumbs" : ["text.|mandatory", ".//html:img[@class='img']/@src"],
+                "title" : ["text.|mandatory", ".//html:img[@class='img']/@title"],
+                "link" : ["text.|mandatory", ".//html:a/@href"]
+            }],
+            "activities" : ["ensure_list|optional", ".//html:th[text()='Activities']/following-sibling::html:td[1]//html:li", {
+                "thumbs" : ["text.|mandatory", ".//html:img/@src"],
+                "title" : ["text.|mandatory", ".//html:img/@alt"],
+                "link" : ["text.|mandatory", ".//html:a[@tabindex='-1']/@href"]
+            }],
+            "is_male" : ["text.|^replace:genders|bool|optional", ".//html:th[text()='Sex']/following-sibling::html:td[1]"],
+            "interested_in" : ["text.|optional", ".//html:th[text()='Interested In']/following-sibling::html:td[1]"],
+            "mail" : ["text.force_list|optional", ".//html:th[text()='Email']/following-sibling::html:td[1]//html:li/html:span"],
+            "link" : ["text.|optional", ".//html:th[text()='Facebook']/following-sibling::html:td[1]//html:a/@href"],
+            "nick_name" : ["text.|^replace:nick_name|optional", ".//html:th[text()='Facebook']/following-sibling::html:td[1]//html:a/@href"],
+            "locale" : ["text.|^replace:locale|mandatory", ".//html:head/html:script[1]"],
+            "locale1" : ["text.|^replace:locale1|mandatory", ".//html:head/html:script[1]"],
+            "locale2" : ["text.|^replace:locale2|mandatory", ".//html:head/html:script[1]"],
+            "id"      : ["text.|^replace:id|mandatory", ".//html:div[@data-gt and not(@class='Beeps')]/@data-gt"]
+        },
+        "blocks" : {
+            "sports_arts_entertainment" : {
+                "thumbs" : ["text.|mandatory", ".//html:img[@class='img']/@src"],
+                "title" : ["text.|optional", ".//html:img[@class='img']/@title", "# if have no result then can get information from ${link}"],
+                "link" : ["text.|mandatory", ".//html:a/@href"]
+            },
+            "experience" :{
+                "thumbs" : ["text.|mandatory.skip", ".//html:img[@class='uiProfilePhoto hubPhoto uiProfilePhotoLarge img']/@src"],
+                "link" : ["text.|optional", ".//html:a[@tabindex='-1']/@href"],
+                "title" : ["text.|mandatory", ".//html:div[@class='experienceTitle']//html:span"],
+                "body"  : ["text.join_by_space|optional", ".//html:div[@class='experienceBody fsm fwn fcg']//text()"],
+                "body_details" : ["text.|optional", ".//html:div[@class='experienceBody']"]
+            },
+            "politic_experience" :{
+                "link" : ["text.|optional", ".//html:a[@tabindex='-1']/@href"],
+                "title" : ["text.|mandatory", ".//html:div[@class='experienceTitle']//html:span"],
+                "body"  : ["text.join_by_space|optional", ".//html:div[@class='experienceBody fsm fwn fcg']//text()"],
+                "body_details" : ["text.|optional", ".//html:div[@class='experienceBody']"]
+            }
+        },
+        "light_handlers" : {
+
+            "^replace:genders" : [{
+                "from_str" : "Female",
+                "to" : "false"
+            }, {
+                "from_str" : "Male",
+                "to" : "true"
+            }],
+
+            "^replace:id" : [{
+                "from_re" : "{\"profile_owner\":\"",
+                "to" : ""
+            }, {
+                "from_re" : "\".*$",
+                "to" : ""
+            }, {
+                "from_str" : "/ajax/hovercard/user.php?id=",
+                "to" : ""
+            }],
+
+            "^replace:profile_photos" : [{
+                "from_str" : "background-image: url(",
+                "to" : ""
+            }, {
+                "from_re" : "\\).*$",
+                "to" : ""
+            }],
+            "^replace:born" : [{
+                "from_re" : "Born on ",
+                "to" : ""
+            }],
+            "^replace:about" : [{
+                "from_re" : "About ",
+                "to" : ""
+            }],
+            "^replace:knows_lang" : [{
+                "from_re" : "Knows ",
+                "to" : ""
+            }],
+            "^replace:nick_name" : [{
+                "from_re" : ".*?/",
+                "to" : ""
+            }],
+            "^replace:locale" : [{
+                "from_re" : "(?s)^.*?locale\":\"",
+                "to" : ""
+            }, {
+                "from_re" : "\",.*$",
+                "to" : ""
+            }],
+            "^replace:locale1" : [{
+                "from_re" : "(?s)^.*?locale\":\"",
+                "to" : ""
+            }, {
+                "from_re" : "_.*$",
+                "to" : ""
+            }],
+            "^replace:locale2" : [{
+                "from_re" : "(?s)^.*?_",
+                "to" : ""
+            }, {
+                "from_re" : "\".*?$",
+                "to" : ""
+            }],
+            "^replace:alias_name" : [{
+                "from_re" : "^[^(]+",
+                "to" : ""
+            },{
+                "from_str" : "(",
+                "to" : ""
+            },{
+                "from_str" : ")",
+                "to" : ""
+            }],
+            "^replace:full_name" : [{
+                "from_re" : " \\(.*\\)$",
+                "to" : ""
+            }],
+            "^html:" : {}
+        },
+        "renames" : {}
+    }]
+}

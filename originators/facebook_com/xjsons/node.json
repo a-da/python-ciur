@@ -1,0 +1,34 @@
+{
+    "name": "facebook_com_node",
+    "test_url" : "https://www.facebook.com/directory/people/o-1-100",
+    "version": 0,
+    "versions": [{
+        "version" : 0,
+        "timestamp" : 1330762827,
+        "config" : {
+            "xpath" : {
+                "root" : "/html:html/html:body",
+                "namespaces" : {
+                    "html": "http://www.w3.org/1999/xhtml"
+                }
+            },
+            "anomaly" : {
+                "root" : "/html:html/html:body",
+                "namespaces" : {
+
+                }
+            }
+        },
+        "anomaly" : {},
+        "rules" : {
+            "paths": ["ensure_list|mandatory", ".//html:li[@class='fbDirectoryBoxColumnItem uiListItem  uiListVerticalItemBorder']/html:a",
+                {
+                    "path":["text.|mandatory", "./@href"],
+                    "name":["text.|mandatory", ".|./html:span"]
+                }]
+        },
+        "renames" : {},
+        "light_handlers" : {},
+        "blocks" : {}
+    }]
+}

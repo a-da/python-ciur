@@ -1,0 +1,91 @@
+{
+    "name": "facebook_com_search",
+    "test_url" : "?",
+    "version": 0,
+    "versions": [{
+        "version" : 0,
+        "timestamp" : 0,
+        "config" : {
+            "xpath" : {
+                "root" : "/html:html/html:body//html:div[@class='mbm detailedsearch_result detailedsearch_last_result']",
+                "namespaces" : {
+                    "html": "http://www.w3.org/1999/xhtml"
+                }
+            },
+            "anomaly" : {
+                "root" : "/html:html/html:body",
+                "namespaces" : {
+
+                }
+            }
+        },
+        "anomaly" : {},
+        "rules" : {
+            "search_picture"   : ["text.|mandatory",                      ".//html:img/@src"],
+            "full_name" : ["text.|mandatory",                    ".//html:div[@class='instant_search_title fsl fwb fcb']/html:a"],
+            "link"      : ["text.|mandatory",                    ".//html:div[@class='instant_search_title fsl fwb fcb']/html:a/@href"],
+            "nick_name" : ["text.|^replace:nick_name|optional", ".//html:div[@class='instant_search_title fsl fwb fcb']/html:a/@href"],
+            "locale"    : ["text.|^replace:locale|mandatory",    ".//html:div[@class='instant_search_title fsl fwb fcb']/html:a/@onmouseup"],
+            "locale1"   : ["text.|^replace:locale1|mandatory",   ".//html:div[@class='instant_search_title fsl fwb fcb']/html:a/@onmouseup"],
+            "locale2"   : ["text.|^replace:locale2|mandatory",   ".//html:div[@class='instant_search_title fsl fwb fcb']/html:a/@onmouseup"],
+            "id"        : ["text.|^replace:id|mandatory",        ".//html:div[@class='instant_search_title fsl fwb fcb']/html:a/@onclick"],
+            "events"    : ["skip", ".//html:*[@class='eventSubtitle fsm fwn fcg']", "#consider as no result if found events type"],
+            "mail"      : ["text.|^replace:mail|mandatory",
+                ".//html:div[@class='instant_search_title fsl fwb fcb']/html:a/@onmouseup",
+                "#.//html:a[text()='Send message']/@onmouseup#.//html:div[@class='fsm fwn fcg']/html:a/@onmouseup"]
+        },
+        "light_handlers" : {
+            "^replace:nick_name" : [{
+                "from_re" : ".*?/",
+                "to" : ""
+            }, {
+                "from_re" : "profile\\.php\\?id=\\d+",
+                "to" : ""
+            }],
+            "^replace:locale" : [{
+                "from_re" : "^.*?locale\":\"",
+                "to" : ""
+            }, {
+                "from_re" : "\",\".*?$",
+                "to" : ""
+            }],
+            "^replace:locale1" : [{
+                "from_re" : "^.*?locale\":\"",
+                "to" : ""
+            }, {
+                "from_re" : "_[A-Z]+\",\".*?$",
+                "to" : ""
+            }],
+            "^replace:locale2" : [{
+                "from_re" : "^.*?locale\":\"[a-z]+_",
+                "to" : ""
+            }, {
+                "from_re" : "\",\".*?$",
+                "to" : ""
+            }],
+            "^replace:mail" : [{
+                "from_str" : "\\\\u0040",
+                "to" : "@"
+            }, {
+                "from_re" : "^.*original_q\":\"",
+                "to" : ""
+            },  {
+                "from_re" : "\",.*$",
+                "to" : ""
+            },  {
+                "from_str" : "\\",
+                "to" : ""
+            }],
+            "^replace:id" : [{
+                "from_re" : "^.*\"id\":",
+                "to" : ""
+            }, {
+                "from_re" : ",\".*$",
+                "to" : ""
+            }],
+            "^html:" : {}
+        },
+        "blocks" : {},
+        "renames" : {}
+    }]
+}

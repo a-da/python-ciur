@@ -1,0 +1,82 @@
+{
+    "name": "advert_annonces_automobile_com",
+    "test_url" : "http://www.annonces-automobile.com/1891849,annonce-citroen-nemo-occasion.html",
+    "version": 0,
+    "versions": [{
+        "version" : 0,
+        "timestamp" : 1345460798,
+        "config" : {
+            "xpath" : {
+                "root" : "/html:html/html:body",
+                "namespaces" : {
+                    "html": "http://www.w3.org/1999/xhtml"
+                }
+            },
+            "anomaly" : {
+                "root" : "/html:html/html:body",
+                "namespaces" : {
+
+                }
+            }
+        },
+        "anomaly" : {},
+        "light_handlers" : {
+            "^html:" : {},
+            "^replace:postal_code" : [{
+                    "from_re": "^.*\\(",
+                    "to": ""
+                },
+                {
+                    "from_re": "\\).*$",
+                    "to": ""
+                }
+            ],
+            "^replace:department" : [{
+                    "from_re": " \\(\\d+\\).*$",
+                    "to": ""
+                }
+            ],
+            "^hash_map:regions" : {
+                "map" : {
+                    "67 68" : "Alsace",
+                    "24 33 40 47 64" : "Aquitaine",
+                    "03 15 43 63" : "Auvergne",
+                    "14 50 61" : "Basse-Normandie",
+                    "21 58 71 89" : "Bourgogne",
+                    "22 29 35 56" : "Bretagne",
+                    "18 28 36 37 41 45" : "Centre",
+                    "08 10 51 52" : "Champagne-Ardenne",
+                    "2A 2B 20" : "Corse",
+                    "25 39 70 90" : "Franche-Comté",
+                    "971" : "Guadeloupe",
+                    "973" : "Guyane",
+                    "27 76" : "Haute-Normandie",
+                    "75 77 78 91 92 93 94 95" : "Île-de-France",
+                    "974" : "La Réunion",
+                    "11 30 34 48" : "Languedoc-Roussillon",
+                    "19 23 87" : "Limousin",
+                    "54 55 57 88" : "Lorraine",
+                    "972" : "Martinique",
+                    "976" : "Mayotte",
+                    "09 12 31 32 46 65 81 82" : "Midi-Pyrénées",
+                    "59 62" : "Nord-Pas-de-Calais",
+                    "44 49 53 72 85" : "Pays de la Loire",
+                    "02 60 802" : "Picardie",
+                    "16 17 79 86" : "Poitou-Charentes",
+                    "04 05 06 13 83 84" : "Provence-Alpes-Côte d'Azur",
+                    "01 07 26 38 42 69 73 74" : "Rhône-Alpes"
+                },
+                "default" : "unknown",
+                "separator" : " ",
+                "operator" : "in"
+            }
+        },
+        "rules" : {
+            "postal_code": ["text.|^replace:postal_code|mandatory",  ".//html:div[contains(text(),' Dpt. :')]/following-sibling::html:div[1]/html:h2"],
+            "department": ["text.|^replace:department|mandatory",  ".//html:div[contains(text(),' Dpt. :')]/following-sibling::html:div[1]/html:h2", "#see .postal_code"],
+            "region" : ["text.|^replace:postal_code|^hash_map:regions|mandatory",  ".//html:div[contains(text(),' Dpt. :')]/following-sibling::html:div[1]/html:h2", "#see .postal_code"]
+        },
+        "renames" : {},
+        "blocks" : { }
+    }]
+}
