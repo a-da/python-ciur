@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 def test_mag_md():
     """
     >>> test_mag_md()

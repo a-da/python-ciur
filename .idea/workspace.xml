@@ -1,7 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="731e387a-9bba-4f7f-9724-0ba1d5a2d97c" name="Default" comment="" />
+    <list default="true" id="731e387a-9bba-4f7f-9724-0ba1d5a2d97c" name="Default" comment="">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/321auto_com/test/advert_01.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/321auto_com/test/advert_test_case.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/321auto_com/test/entry_point_01.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/321auto_com/test/entry_point_test_case.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/aa_com_tr/sample_pages/blogspot.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/aa_com_tr/sample_pages/e0.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/aa_com_tr/sample_pages/e3.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/aa_com_tr/sample_pages/e37.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/aa_com_tr/sample_pages/e55.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/aa_com_tr/sample_pages/rss.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/aa_com_tr/sample_pages/wordpress.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/annonceauto_com/test/advert_01.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/annonceauto_com/test/advert_test_case.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/annonces_automobile_com/test/advert_01.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/annonces_automobile_com/test/advert_test_case.py" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dictionaries/ada.xml" afterPath="$PROJECT_DIR$/.idea/dictionaries/ada.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/aa_com_tr/test/test.py" afterPath="$PROJECT_DIR$/originators/aa_com_tr/test/test.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/linkedin_com/test/company_profile.py" afterPath="$PROJECT_DIR$/originators/linkedin_com/test/company_profile.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/linkedin_com/test/people_directory.py" afterPath="$PROJECT_DIR$/originators/linkedin_com/test/people_directory.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/linkedin_com/test/people_profile.py" afterPath="$PROJECT_DIR$/originators/linkedin_com/test/people_profile.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/mag_md/test/test.py" afterPath="$PROJECT_DIR$/originators/mag_md/test/test.py" />
+    </list>
     <ignored path="ciur.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -22,26 +46,26 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="profile_test_case.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/originators/facebook_com/test/profile_test_case.py">
+      <file leaf-file-name="test_case_advert.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/originators/321auto_com/test/test_case_advert.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="10" column="21" selection-start="297" selection-end="297" vertical-scroll-proportion="0.0">
+            <state line="21" column="37" selection-start="650" selection-end="650" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="profile.json" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/originators/idefix_com/xjsons/profile.json">
+      <file leaf-file-name="advert_01.json" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/originators/321auto_com/test/expect/advert_01.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="26" column="36" selection-start="818" selection-end="818" vertical-scroll-proportion="0.0">
+            <state line="13" column="0" selection-start="310" selection-end="310" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="company_profile.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/originators/linkedin_com/test/company_profile.py">
+      <file leaf-file-name="__init__.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/originators/aa_com_tr/test/__init__.py">
           <provider selected="true" editor-type-id="text-editor">
             <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
               <folding />
@@ -49,28 +73,55 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="people_directory.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/originators/linkedin_com/test/people_directory.py">
+      <file leaf-file-name="test_case_advert.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/originators/annonceauto_com/test/test_case_advert.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+            <state line="15" column="35" selection-start="410" selection-end="410" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="people_profile.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/originators/linkedin_com/test/people_profile.py">
+      <file leaf-file-name="__init__.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/originators/321auto_com/test/__init__.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+            <state line="1" column="2" selection-start="21" selection-end="21" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="linkedin_com_company_profile.json" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/originators/linkedin_com/xjsons/linkedin_com_company_profile.json">
+      <file leaf-file-name="test.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/originators/aa_com_tr/test/test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="66" column="61" selection-start="3524" selection-end="3528" vertical-scroll-proportion="0.4178082">
+            <state line="1233" column="14" selection-start="166935" selection-end="166935" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="test.py" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/originators/mag_md/test/test.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="25" column="10" selection-start="523" selection-end="523" vertical-scroll-proportion="0.7009346">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="test_case_advert.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/originators/annonces_automobile_com/test/test_case_advert.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="11" column="27" selection-start="314" selection-end="314" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="test_case_entry_point.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/originators/321auto_com/test/test_case_entry_point.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="15" column="35" selection-start="419" selection-end="419" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -83,25 +134,28 @@
       <setting name="OPEN_NEW_TAB" value="false" />
     </FindUsagesManager>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/originators/facebook_com/test/expect/profile_04.json" />
-        <option value="$PROJECT_DIR$/originators/facebook_com/test/search_test_case.py" />
-        <option value="$PROJECT_DIR$/originators/facebook_com/test/expect/profile_12.json" />
-        <option value="$PROJECT_DIR$/originators/facebook_com/test/expect/profile_11.json" />
-        <option value="$PROJECT_DIR$/originators/facebook_com/test/expect/profile_09.json" />
-        <option value="$PROJECT_DIR$/originators/facebook_com/test/expect/profile_08.json" />
-        <option value="$PROJECT_DIR$/originators/facebook_com/test/expect/profile_07.json" />
-        <option value="$PROJECT_DIR$/originators/facebook_com/test/expect/profile_06.json" />
-        <option value="$PROJECT_DIR$/originators/facebook_com/test/expect/profile_05.json" />
-        <option value="$PROJECT_DIR$/../tintareni/file3.json" />
-        <option value="$PROJECT_DIR$/../tintareni/unu.py" />
-        <option value="$PROJECT_DIR$/../tintareni/a.json" />
-        <option value="$PROJECT_DIR$/originators/facebook_com/test/expect/profile_10.json" />
-        <option value="$PROJECT_DIR$/originators/facebook_com/test/expect/profile_01.json" />
         <option value="$PROJECT_DIR$/originators/facebook_com/test/expect/profile_02.json" />
         <option value="$PROJECT_DIR$/originators/facebook_com/test/profile_test_case.py" />
+        <option value="$PROJECT_DIR$/bash/unittests.sh" />
+        <option value="$PROJECT_DIR$/test/run_all.py" />
+        <option value="$PROJECT_DIR$/originators/linkedin_com/test/people_profile.py" />
+        <option value="$PROJECT_DIR$/originators/linkedin_com/test/people_directory.py" />
+        <option value="$PROJECT_DIR$/originators/linkedin_com/test/company_profile.py" />
+        <option value="$PROJECT_DIR$/originators/aa_com_tr/test/test.py" />
+        <option value="$PROJECT_DIR$/originators/mag_md/test/test.py" />
+        <option value="$PROJECT_DIR$/originators/321auto_com/test/test_case_entry_point.py" />
+        <option value="$PROJECT_DIR$/originators/321auto_com/test/test_case_advert.py" />
+        <option value="$PROJECT_DIR$/originators/321auto_com/test/expect/advert_01.json" />
+        <option value="$PROJECT_DIR$/originators/aa_com_tr/test/__init__.py" />
+        <option value="$PROJECT_DIR$/originators/annonceauto_com/test/advert_test_case.py" />
+        <option value="$PROJECT_DIR$/originators/321auto_com/test/__init__.py" />
+        <option value="$PROJECT_DIR$/originators/annonces_automobile_com/test/test_case_advert.py" />
       </list>
     </option>
   </component>
@@ -111,7 +165,7 @@
     <option name="width" value="1920" />
     <option name="height" value="1030" />
   </component>
-  <component name="ProjectLevelVcsManager" settingsEditedManually="false">
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="true" id="Add" />
     <OptionsSetting value="true" id="Remove" />
     <OptionsSetting value="true" id="Checkout" />
@@ -161,263 +215,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="tintareni" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
               <option name="myItemId" value="ciur" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ciur" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ciur" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ciur" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="util" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ciur" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ciur" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="originators" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ciur" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ciur" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="originators" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="linkedin_com" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="xjsons" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ciur" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ciur" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="originators" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="linkedin_com" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="test" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ciur" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ciur" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="originators" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="linkedin_com" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ciur" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ciur" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="originators" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="idefix_com" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="xjsons" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ciur" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ciur" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="originators" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="idefix_com" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="test" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ciur" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ciur" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="originators" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="idefix_com" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ciur" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ciur" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="originators" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="fincombank_com" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ciur" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ciur" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="originators" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="facebook_com" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="xjsons" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ciur" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ciur" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="originators" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="facebook_com" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="test" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ciur" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ciur" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="originators" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="facebook_com" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ciur" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ciur" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="common" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -450,22 +248,45 @@
       <recent name="$PROJECT_DIR$/originators/aa_com_tr" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/originators/annonces_automobile_com/test/expect" />
+      <recent name="$PROJECT_DIR$/originators/annonceauto_com/test/expect" />
+      <recent name="$PROJECT_DIR$/originators/321auto_com/test/expect" />
       <recent name="$PROJECT_DIR$/originators/facebook_com/test/expect" />
       <recent name="$PROJECT_DIR$/originator/ucuzu_com/xjsons" />
-      <recent name="$PROJECT_DIR$/originator" />
     </key>
   </component>
-  <component name="RunManager" selected="Python's test.Unittests in profile_test_case">
-    <configuration default="false" name="Unittests in node_test_case" type="tests" factoryName="Unittests" temporary="true">
+  <component name="RunManager" selected="Python's test.Unittests in /code/ciur/originators/annonces_automobile_com/test">
+    <configuration default="false" name="Unittests in /code/ciur/originators/321auto_com/test" type="tests" factoryName="Unittests" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs />
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/originators/facebook_com/test" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/originators/321auto_com/test" />
       <option name="IS_MODULE_SDK" value="true" />
       <module name="tintareni" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/originators/facebook_com/test/node_test_case.py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="$PROJECT_DIR$/originators/321auto_com/test" />
+      <option name="TEST_TYPE" value="TEST_FOLDER" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <option name="PUREUNITTEST" value="true" />
+      <RunnerSettings RunnerId="PythonRunner" />
+      <ConfigurationWrapper RunnerId="PythonRunner" />
+      <method />
+    </configuration>
+    <configuration default="false" name="Unittests in test_case_entry_point" type="tests" factoryName="Unittests" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/originators/321auto_com/test" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <module name="tintareni" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/originators/321auto_com/test/test_case_entry_point.py" />
       <option name="CLASS_NAME" value="" />
       <option name="METHOD_NAME" value="" />
       <option name="FOLDER_NAME" value="" />
@@ -477,38 +298,20 @@
       <ConfigurationWrapper RunnerId="PythonRunner" />
       <method />
     </configuration>
-    <configuration default="false" name="search_test_case" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/originators/facebook_com/test" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <module name="tintareni" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/originators/facebook_com/test/search_test_case.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="MULTIPROCESS" value="false" />
-      <RunnerSettings RunnerId="PythonRunner" />
-      <ConfigurationWrapper RunnerId="PythonRunner" />
-      <method />
-    </configuration>
-    <configuration default="false" name="Unittests in search_test_case" type="tests" factoryName="Unittests" temporary="true">
+    <configuration default="false" name="Unittests in advert_test_case" type="tests" factoryName="Unittests" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs />
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/originators/facebook_com/test" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/originators/321auto_com/test" />
       <option name="IS_MODULE_SDK" value="true" />
       <module name="tintareni" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/originators/facebook_com/test/search_test_case.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/originators/321auto_com/test/advert_test_case.py" />
       <option name="CLASS_NAME" value="" />
       <option name="METHOD_NAME" value="" />
-      <option name="FOLDER_NAME" value="" />
-      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="FOLDER_NAME" value="$PROJECT_DIR$" />
+      <option name="TEST_TYPE" value="TEST_FOLDER" />
       <option name="PATTERN" value="" />
       <option name="USE_PATTERN" value="false" />
       <option name="PUREUNITTEST" value="true" />
@@ -516,20 +319,20 @@
       <ConfigurationWrapper RunnerId="PythonRunner" />
       <method />
     </configuration>
-    <configuration default="false" name="Unittests in profile_test_case" type="tests" factoryName="Unittests" temporary="true">
+    <configuration default="false" name="Unittests in /code/ciur/originators/annonceauto_com/test" type="tests" factoryName="Unittests" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs />
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/originators/facebook_com/test" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/originators/annonceauto_com/test" />
       <option name="IS_MODULE_SDK" value="true" />
       <module name="tintareni" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/originators/facebook_com/test/profile_test_case.py" />
+      <option name="SCRIPT_NAME" value="" />
       <option name="CLASS_NAME" value="" />
       <option name="METHOD_NAME" value="" />
-      <option name="FOLDER_NAME" value="" />
-      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="FOLDER_NAME" value="$PROJECT_DIR$/originators/annonceauto_com/test" />
+      <option name="TEST_TYPE" value="TEST_FOLDER" />
       <option name="PATTERN" value="" />
       <option name="USE_PATTERN" value="false" />
       <option name="PUREUNITTEST" value="true" />
@@ -537,20 +340,23 @@
       <ConfigurationWrapper RunnerId="PythonRunner" />
       <method />
     </configuration>
-    <configuration default="false" name="unu" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration default="false" name="Unittests in /code/ciur/originators/annonces_automobile_com/test" type="tests" factoryName="Unittests" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
+      <envs />
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../tintareni" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/originators/annonces_automobile_com/test" />
       <option name="IS_MODULE_SDK" value="true" />
       <module name="tintareni" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/../tintareni/unu.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="MULTIPROCESS" value="false" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="$PROJECT_DIR$/originators/annonces_automobile_com/test" />
+      <option name="TEST_TYPE" value="TEST_FOLDER" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <option name="PUREUNITTEST" value="true" />
       <RunnerSettings RunnerId="PythonRunner" />
       <ConfigurationWrapper RunnerId="PythonRunner" />
       <method />
@@ -616,11 +422,11 @@
       <method />
     </configuration>
     <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="Python's test.Unittests in node_test_case" />
-      <item index="1" class="java.lang.String" itemvalue="Python.search_test_case" />
-      <item index="2" class="java.lang.String" itemvalue="Python's test.Unittests in search_test_case" />
-      <item index="3" class="java.lang.String" itemvalue="Python's test.Unittests in profile_test_case" />
-      <item index="4" class="java.lang.String" itemvalue="Python.unu" />
+      <item index="0" class="java.lang.String" itemvalue="Python's test.Unittests in /code/ciur/originators/321auto_com/test" />
+      <item index="1" class="java.lang.String" itemvalue="Python's test.Unittests in test_case_entry_point" />
+      <item index="2" class="java.lang.String" itemvalue="Python's test.Unittests in advert_test_case" />
+      <item index="3" class="java.lang.String" itemvalue="Python's test.Unittests in /code/ciur/originators/annonceauto_com/test" />
+      <item index="4" class="java.lang.String" itemvalue="Python's test.Unittests in /code/ciur/originators/annonces_automobile_com/test" />
     </list>
   </component>
   <component name="ShelveChangesManager" show_recycled="false" />
@@ -652,17 +458,18 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-9" y="17" width="1920" height="1030" extended-state="0" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32954547" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.21573876" sideWeight="0.28507796" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22132035" sideWeight="0.5318182" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2267316" sideWeight="0.67045456" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.46818182" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.5215909" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -710,7 +517,7 @@
     <option name="SHOW_VCS_ERROR_NOTIFICATIONS" value="true" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" />
+    <option name="LAST_COMMIT_MESSAGE" value="" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="false" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -728,114 +535,100 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/originators/facebook_com/test/expect/profile_06.json">
+    <entry file="file://$PROJECT_DIR$/bash/unittests.sh">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="1" selection-start="334" selection-end="334" vertical-scroll-proportion="0.37128714">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/originators/facebook_com/test/expect/profile_05.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="22" selection-start="1389" selection-end="1389" vertical-scroll-proportion="0.32012194">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../tintareni/unu.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="12" selection-start="304" selection-end="304" vertical-scroll-proportion="0.2532833">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../tintareni/b.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="29" selection-start="376" selection-end="376" vertical-scroll-proportion="0.2596154">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/util/AdvancedDict.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="317" column="44" selection-start="7936" selection-end="7945" vertical-scroll-proportion="0.5778612">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../tintareni/file3.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="225" column="1" selection-start="10504" selection-end="10504" vertical-scroll-proportion="0.8269231">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../tintareni/a.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="92" column="9" selection-start="3837" selection-end="3837" vertical-scroll-proportion="1.2007505">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/originators/facebook_com/test/expect/profile_02.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="73" column="15" selection-start="3143" selection-end="3143" vertical-scroll-proportion="0.29411766">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/originators/facebook_com/test/expect/profile_01.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="79" column="15" selection-start="3599" selection-end="3599" vertical-scroll-proportion="0.7764706">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/originators/facebook_com/test/expect/profile_10.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="15" selection-start="414" selection-end="414" vertical-scroll-proportion="0.36945814">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/originators/facebook_com/test/profile_test_case.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="21" selection-start="297" selection-end="297" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/originators/idefix_com/xjsons/profile.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="26" column="36" selection-start="818" selection-end="818" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/originators/linkedin_com/test/company_profile.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/originators/linkedin_com/test/people_directory.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/originators/linkedin_com/test/people_profile.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="0" column="0" selection-start="0" selection-end="141" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/originators/linkedin_com/xjsons/linkedin_com_company_profile.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="66" column="61" selection-start="3524" selection-end="3528" vertical-scroll-proportion="0.4178082">
+        <state line="66" column="61" selection-start="3524" selection-end="3528" vertical-scroll-proportion="2.260274" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/originators/linkedin_com/test/people_profile.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2" column="0" selection-start="46" selection-end="46" vertical-scroll-proportion="0.07058824" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/originators/linkedin_com/test/people_directory.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2" column="0" selection-start="46" selection-end="46" vertical-scroll-proportion="0.07058824" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/originators/linkedin_com/test/company_profile.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2" column="0" selection-start="46" selection-end="46" vertical-scroll-proportion="0.07058824" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/originators/idefix_com/xjsons/profile.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="26" column="36" selection-start="818" selection-end="818" vertical-scroll-proportion="0.03846154" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/originators/facebook_com/test/profile_test_case.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="10" column="21" selection-start="297" selection-end="297" vertical-scroll-proportion="0.1923077" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/originators/321auto_com/test/test_case_entry_point.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="15" column="35" selection-start="419" selection-end="419" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/originators/321auto_com/test/test_case_advert.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="21" column="37" selection-start="650" selection-end="650" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/originators/321auto_com/test/expect/advert_01.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="13" column="0" selection-start="310" selection-end="310" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/originators/aa_com_tr/test/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/originators/annonceauto_com/test/test_case_advert.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="15" column="35" selection-start="410" selection-end="410" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/originators/321auto_com/test/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1" column="2" selection-start="21" selection-end="21" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/originators/annonces_automobile_com/test/test_case_advert.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="11" column="27" selection-start="314" selection-end="314" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/originators/aa_com_tr/test/test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1233" column="14" selection-start="166935" selection-end="166935" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/originators/mag_md/test/test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="25" column="10" selection-start="523" selection-end="523" vertical-scroll-proportion="0.7009346">
           <folding />
         </state>
       </provider>

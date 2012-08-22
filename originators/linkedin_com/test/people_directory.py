@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 def test_linkedin_com_people_directory():
     """
     >>> test_linkedin_com_people_directory()
