@@ -50,6 +50,7 @@ class DomParser(object):
             force_list       // [ "one item" ]
             do_not_strip     // [ "   one item     ", "item two" ]
             join_by_space    // join list into string separated by " "
+            join_by_new_line // join list into string separated by " "
 
         // raise error if element is null
         mandatory
@@ -67,6 +68,12 @@ class DomParser(object):
             - `to`
             - counts // how mush to repeat replace actions
 
+        // extract some text from string with regexp
+        ^drain:<name>
+            where name define other rule
+            - `re`
+            - `group`
+
         // substitute string with its defined hash string
         ^hash_map:<name>
             where name define other rule
@@ -77,6 +84,10 @@ class DomParser(object):
                 in
                 startswith
                 endswith
+
+        // if element can't be found set it into default value
+        ^default:
+
 
         // get xml representation of dom with domains name
         ^xml:
@@ -128,7 +139,19 @@ class DomParser(object):
         #1 - check each xpath expression
         #2 - check casting chain
         """
-        etree_object = html5lib.parse("<html></html>", treebuilder = "lxml")
+        etree_object = html5lib.parse("<html>"
+                                      "<head>d</head>"
+                                      "<body>"
+                                      "<div>some text hear</div>"
+                                      "</body>"
+                                      "</html>", treebuilder = "lxml")
+
+        # TODO debug error for checking, after that decide to remove this is it needed
+        #                                                               .xpath("/html:html/html:body",
+        #                                                                     namespaces = {
+        #                                                                         "html": "http://www.w3.org/1999/xhtml"
+        #                                                                     })
+
         if not configs:
             raise DomParserException({
                 "msg" : "Cant find config or config is null"
@@ -183,6 +206,7 @@ class DomParser(object):
                 "^xml:",
                 "^inner_html:",
                 "^replace:",
+                "^drain:",
                 "^hash_map:",
                 "^default:"
             ]
@@ -195,23 +219,43 @@ class DomParser(object):
 
             if lh_key.startswith("^replace:"):
                 for i_r in lh_value:
-                    diff = set(i_r.keys()) - {"from_re", "from_str", "to", "counts"}
+                    diff = set(i_r.keys()) - {"from_re", "from_str", "to", "counts", "comment"}
                     if diff:
                         raise DomParserException({
                             "msg" : "detected not allowed key name in light_handlers",
                             "diff" : list(diff),
-                            "allowed_key" : ["from_re", "from_str", "to"]
+                            "allowed_key" : ["from_re", "from_str", "to", "comment"]
                         })
                     if i_r.has_key("from_re"):
                         try:
                             i_r["from_re"] = re.compile(i_r["from_re"]) # compile regexp
                         except sre_constants.error, e:
                             raise DomParserException({
-                                "msg" : "corrupted regexp in light_handlers",
+                                "msg" : "corrupted regexp in light_handler `^replace:`",
                                 "key" : lh_key,
                                 "regexp" : i_r["from_re"],
                                 "detail" : e.message
                             })
+
+            if lh_key.startswith("^drain:"):
+                diff = set(lh_value.keys()) - {"re", "group"}
+                if diff:
+                    raise DomParserException({
+                        "msg" : "detected not allowed key name in light_handler `^drain:`",
+                        "diff" : list(diff),
+                        "allowed_key" : ["re", "group"]
+                    })
+
+                try:
+                    lh_value["re"] = re.compile(lh_value["re"]) # compile regexp
+                except sre_constants.error, e:
+                    raise DomParserException({
+                        "msg" : "corrupted regexp in light_handlers",
+                        "key" : lh_key,
+                        "regexp" : lh_value["re"],
+                        "group" : lh_value["group"],
+                        "detail" : e.message
+                    })
 
 
             if lh_key.startswith("^hash_map:"):
@@ -234,6 +278,7 @@ class DomParser(object):
 
 
         def check_xpath_expression(expression, namespaces, key_path):
+            # TODO fix bug for ignoring ./html:li[contain(text(), 'km')] instead of ./html:li[contain(text(), 'km')]
             """
             inner function  for `recursive_check`
             """
@@ -298,7 +343,13 @@ class DomParser(object):
                             if m:
                                 r_tmp.append(i_r)
                         elif i_r.startswith("text."):
-                            m = re.search("^text\.(allow_empty_item|allow_empty_list|force_list|join_by_space)?$", i_r)
+                            m = re.search("^text\.("
+                                          "allow_empty_item|"
+                                          "allow_empty_list|"
+                                          "force_list|"
+                                          "join_by_space|"
+                                          "join_by_new_line"
+                                          ")?$", i_r)
                             if m:
                                 r_tmp.append(i_r)
                         elif i_r.startswith("^") and len(i_r) > 1:
@@ -585,6 +636,7 @@ class DomParser(object):
         flag_force_list       = False
         flag_do_not_strip     = False
         flag_join_by_space    = False
+        flag_join_by_new_line = False
         for flag in casting_rule.split(".")[1:]:
             if flag == "allow_empty_item":
                 flag_allow_empty_item = True
@@ -596,6 +648,8 @@ class DomParser(object):
                 flag_do_not_strip = True
             if flag == "join_by_space":
                 flag_join_by_space = True
+            if flag == "join_by_new_line":
+                flag_join_by_new_line = True
 
         if not isinstance(value, list):
             value = [value]
@@ -632,11 +686,19 @@ class DomParser(object):
             value = None
 
 
-        if flag_join_by_space and value and isinstance(value, list):
-            value = " ".join(value)
-            value = re.sub("\s*([\.,;\)\]\}])\s*", lambda x: x.group(1) + " ", value)
-            value = re.sub("\s+", " ", value)
-            value = value.strip()
+        if value and isinstance(value, list):
+            if flag_join_by_space:
+                value = " ".join(value)
+                value = re.sub("\s*([\.,;\)\]\}])\s*", lambda x: x.group(1) + " ", value)
+                value = re.sub("\s+", " ", value)
+                value = value.strip()
+
+            if flag_join_by_new_line:
+                value = "\n".join(value)
+
+
+
+
 
         return value
 
@@ -712,6 +774,29 @@ class DomParser(object):
             value = map(_fun_replace, value)
         else: #str
             value = _fun_replace(value)
+
+        return value
+
+
+    def __drain_by_light_handlers(self, value, drain_rule):
+        # TODO write doctests
+        """
+        handle `drain` inline function declarations from jxpath
+        """
+        def _drain(v):
+            v = v.strip()
+            m = drain_rule["re"].search(v)
+            if not m:
+                return None
+            v = m.group(drain_rule["group"])
+            return v
+
+        if not value:
+            pass # skip
+        elif isinstance(value, list):
+            value = map(_drain, value)
+        else: #str
+            value = _drain(value)
 
         return value
 
@@ -925,7 +1010,15 @@ class DomParser(object):
                 if (len(v_rule) == 3 and isinstance(v_rule[2], (str, unicode))) or len(v_rule) == 2 :
                     comments = True
 
-                value = xp_result_item.xpath(xpath_express, namespaces = self.xpath["config.xpath.namespaces"])
+                # TODO remove try/except after fix bug in checking
+                try:
+                    value = xp_result_item.xpath(xpath_express, namespaces = self.xpath["config.xpath.namespaces"])
+                except XPathEvalError, e:
+                    raise DomParserException({
+                        "msg" : e.message,
+                        "xpath" : xpath_express,
+                        "key_path" : key_path
+                    })
 
                 if comments: # have no children nodes
 
@@ -973,7 +1066,11 @@ class DomParser(object):
                                         value,
                                         self.xpath["light_handlers"][i_casting_chain]
                                     )
-
+                                elif i_casting_chain.startswith("^drain:"):
+                                    value = self.__drain_by_light_handlers(
+                                        value,
+                                        self.xpath["light_handlers"][i_casting_chain]
+                                    )
                                 elif i_casting_chain.startswith("^hash_map:"):
                                     value = self.__hash_map_by_light_handlers(
                                         value,
@@ -1119,12 +1216,14 @@ class DomParser(object):
             try:
                 xp_root = html5lib.parse(html, treebuilder = "lxml")
             except ValueError,e:
-                print "[WARNING] html5lib->", e.message
+                if self.debug:
+                    print "[WARNING] html5lib->", e.message
                 html = html.decode("utf-8")
                 for i_char_code in [31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19,
                           18, 17, 16, 15, 14, 11, 8, 7, 6, 5, 4, 3, 2, 1]:
                     if unichr(i_char_code) in html:
-                        print "[WARNING] remove BAD char code `%d` from html" %i_char_code
+                        if self.debug:
+                            print "[WARNING] remove BAD char code `%d` from html" %i_char_code
                         html = html.replace(unichr(i_char_code), "")
 
                 xp_root = html5lib.parse(html, treebuilder = "lxml")

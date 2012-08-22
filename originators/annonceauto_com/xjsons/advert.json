@@ -194,12 +194,13 @@
             }
         },
         "rules" : {
-            "postal_code": ["text.|^replace:postal_code|mandatory",  ".//html:div[@id='teh']",
-                "#Véhicule Volkswagen Golf diesel de 2003 en finition 1.9 TDI 100cv Wembley Plus à vendre 5700€. Berline visible à Romainville (93)."],
-
-            "department": ["text.|^replace:postal_code|^hash_map:department|mandatory",  ".//html:div[@id='teh']", "#see .postal_code"],
-            "city" : ["text.|^replace:city|mandatory",  ".//html:div[@id='teh']", "#see .postal_code"],
-            "region" : ["text.|^replace:postal_code|^hash_map:regions|mandatory",  ".//html:div[@id='teh']", "#see .postal_code"]
+            "teh" : ["mandatory",  ".//html:div[@id='teh']", {
+                "postal_code": ["text.|^replace:postal_code|mandatory",  ".",
+                    "#Véhicule Volkswagen Golf diesel de 2003 en finition 1.9 TDI 100cv Wembley Plus à vendre 5700€. Berline visible à Romainville (93)."],
+                "department": ["text.|^replace:postal_code|^hash_map:department|mandatory",  ".", "#see .postal_code"],
+                "city" : ["text.|^replace:city|mandatory",  ".", "#see .postal_code"],
+                "region" : ["text.|^replace:postal_code|^hash_map:regions|mandatory",  ".", "#see .postal_code"]
+            }]
         },
         "renames" : {},
         "blocks" : { }

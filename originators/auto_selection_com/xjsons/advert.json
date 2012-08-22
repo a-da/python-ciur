@@ -70,10 +70,12 @@
             }
         },
         "rules" : {
-            "postal_code": ["text.|mandatory", ".//html:div[@class='right map-icon']/following-sibling::html:a[1]/html:span[1]"],
-            "department": ["text.|mandatory",  ".//html:div[@class='right map-icon']/following-sibling::html:a[1]/html:span[2]//text()"],
-            "region" : ["text.|^hash_map:regions|mandatory",  ".//html:div[@class='right map-icon']/following-sibling::html:a[1]/html:span[1]"],
-            "city" : ["text.|^replace:city|mandatory",  ".//html:div[@class='right map-icon']/following-sibling::html:a[1]/@href"]
+            "common" : ["mandatory", ".//html:div[@class='right map-icon']/following-sibling::html:a[1]", {
+                "postal_code": ["text.|mandatory", "./html:span[1]"],
+                "department": ["text.|mandatory", "./html:span[2]//text()"],
+                "region" : ["text.|^hash_map:regions|mandatory", "./html:span[1]"],
+                "city" : ["text.|^replace:city|mandatory", "./@href"]
+            }]
         },
         "renames" : {},
         "blocks" : { }

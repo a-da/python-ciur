@@ -184,10 +184,12 @@
             }
         },
         "rules" : {
-            "postal_code": ["text.|^replace:postal_code|mandatory",  ".//html:div[@class='critere4 localisation']"],
-            "department": ["text.|^replace:postal_code|^hash_map:department|mandatory",  ".//html:div[@class='critere4 localisation']"],
-            "region" : ["text.|^replace:postal_code|^hash_map:regions|mandatory",  ".//html:div[@class='critere4 localisation']"],
-            "city" : ["text.|^replace:city|mandatory",  ".//html:div[@class='critere4 localisation']"]
+            "localisation" : ["mandatory",  ".//html:div[@class='critere4 localisation']", {
+                "postal_code": ["text.|^replace:postal_code|mandatory",  "."],
+                "department": ["text.|^replace:postal_code|^hash_map:department|mandatory",  "."],
+                "region" : ["text.|^replace:postal_code|^hash_map:regions|mandatory",  "."],
+                "city" : ["text.|^replace:city|mandatory",  "."]
+            }]
         },
         "renames" : {},
         "blocks" : { }

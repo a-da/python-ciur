@@ -25,7 +25,7 @@
         },
         "rules" : {
             "links": ["text.force_list|mandatory",  ".//html:div[@id='listeResultats']//html:div[@class='annonceDesc']/html:a[@class='annonceLien']/@href"],
-            "next_page" : ["text.|optional",  ".//html:a[@id='ancre_resultat']/following-sibling::html:div[1]//html:ul/html:li[last()]/html:a/@href"]
+            "next_page" : ["text.|optional",        ".//html:a[@id='ancre_resultat']/following-sibling::html:div[1]//html:ul/html:li[last()]/html:a/@href"]
         },
         "renames" : {},
         "blocks" : { }
