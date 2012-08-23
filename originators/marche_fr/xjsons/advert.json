@@ -29,6 +29,10 @@
                 "from_re": "^\\d+ - ",
                 "to": ""
             }],
+            "^replace:price" : [{
+                "from_re": "[€ ,.]",
+                "to": ""
+            }],
             "^hash_map:regions" : {
                 "map" : {
                     "67 68" : "Alsace",
@@ -68,7 +72,8 @@
             "postal_code": ["text.|^replace:postal_code|mandatory", ".//html:span[@class='region']"],
             "department": ["text.|^replace:department|mandatory",  ".//html:span[@class='region']"],
             "city": ["text.|mandatory",  ".//html:span[@class='locality']"],
-            "region" : ["text.|^replace:postal_code|^hash_map:regions|mandatory",  ".//html:span[@class='region']"]
+            "region" : ["text.|^replace:postal_code|^hash_map:regions|mandatory",  ".//html:span[@class='region']"],
+            "price" : ["text.|^replace:price|mandatory",  ".//html:span[@class='price']"]
         },
         "renames" : {},
         "blocks" : { }

@@ -1,10 +1,10 @@
 {
-    "name": "advert_carouest_com",
-    "test_url" : "http://www.carouest.com/annonce-voiture-peugeot-208-vire-calvados-743500.html",
+    "name": "franceautomobile_com",
+    "test_url" : "http://www.franceautomobile.com/fiche_occasion_auto-29-1.html",
     "version": 0,
     "versions": [{
         "version" : 0,
-        "timestamp" : 1345531455,
+        "timestamp" : 1345718966,
         "config" : {
             "xpath" : {
                 "root" : "/html:html/html:body",
@@ -44,7 +44,11 @@
                 }
             ],
             "^drain:postal_code" : {
-                "re": "\n(\\d+) ",
+                "re": " \\((\\d+)\\)$",
+                "group": 1
+            },
+            "^drain:department" : {
+                "re": "^(.*) \\(",
                 "group": 1
             },
             "^drain:city" : {
@@ -87,13 +91,10 @@
             }
         },
         "rules" : {
+            "#require aditional request" : "",
             "#department": "no",
-            "seller" : ["mandatory",  ".//html:div[@id='annonce_droite']/html:div[1]/html:b[2]", {
-                "city": ["text.tail|^drain:city|mandatory",  "."],
-                "postal_code": ["text.tail|^drain:postal_code|mandatory", "."]
-            }],
-            "#region" : "from url"
-
+            "city" : ["text.|mandatory",  ".//html:div[text()='Ville : ']/../following-sibling::html:td"],
+            "postal_code" : ["text.|mandatory",  ".//html:div[contains(text(), 'partement ')]/../following-sibling::html:td"]
         },
         "renames" : {},
         "blocks" : { }

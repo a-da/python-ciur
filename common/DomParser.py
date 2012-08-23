@@ -51,6 +51,7 @@ class DomParser(object):
             do_not_strip     // [ "   one item     ", "item two" ]
             join_by_space    // join list into string separated by " "
             join_by_new_line // join list into string separated by " "
+            tail
 
         // raise error if element is null
         mandatory
@@ -348,7 +349,8 @@ class DomParser(object):
                                           "allow_empty_list|"
                                           "force_list|"
                                           "join_by_space|"
-                                          "join_by_new_line"
+                                          "join_by_new_line|"
+                                          "tail"
                                           ")?$", i_r)
                             if m:
                                 r_tmp.append(i_r)
@@ -637,6 +639,7 @@ class DomParser(object):
         flag_do_not_strip     = False
         flag_join_by_space    = False
         flag_join_by_new_line = False
+        flag_tail             = False
         for flag in casting_rule.split(".")[1:]:
             if flag == "allow_empty_item":
                 flag_allow_empty_item = True
@@ -650,6 +653,8 @@ class DomParser(object):
                 flag_join_by_space = True
             if flag == "join_by_new_line":
                 flag_join_by_new_line = True
+            if flag == "tail":
+                flag_tail = True
 
         if not isinstance(value, list):
             value = [value]
@@ -659,8 +664,15 @@ class DomParser(object):
             if isinstance(i_value, (float, long, int, bool)):
                 i_value = str(i_value)
             else:
-                if not isinstance(i_value, (_ElementStringResult, str, unicode)):
+                if not isinstance(i_value, _ElementStringResult):
+                    if flag_tail:
+                        i_value = i_value.tail
+                    else:
+                        i_value = i_value.text
+
+                if not isinstance(i_value, (str, unicode)):
                     i_value = i_value.text
+
 
                 if not flag_do_not_strip and i_value:
                     i_value = i_value.strip()

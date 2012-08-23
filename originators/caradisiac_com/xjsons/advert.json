@@ -88,6 +88,13 @@
             }
         },
         "rules" : {
+            "# bug to fix meta" : ["mandatory", "./html:head/html:meta[@name='description']/@content", {
+                "postal_code": ["text.|^replace:postal_code|mandatory", ".", "#PEUGEOT 3008 1.6 HDI 112 FAP ALLURE Diesel, 6000 km, 21500 euros, à proximité de CACHAN, Val de Marne (94), 2012 à vendre. Vente de véhicule d'occasion de particuliers"],
+                "department": ["text.|^replace:department|mandatory",  "."],
+                "city": ["text.|^replace:city|mandatory",  "."],
+                "region" : ["text.|^replace:postal_code|^hash_map:regions|mandatory",  "."]
+            }],
+
             "postal_code": ["text.|^replace:postal_code|mandatory", "./html:head/html:meta[@name='description']/@content",
                 "#PEUGEOT 3008 1.6 HDI 112 FAP ALLURE Diesel, 6000 km, 21500 euros, à proximité de CACHAN, Val de Marne (94), 2012 à vendre. Vente de véhicule d'occasion de particuliers"
             ],
