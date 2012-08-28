@@ -1,10 +1,10 @@
 {
-    "name": "entry_point_321auto_com",
-    "test_url" : "http://occasion.321auto.com/page-1",
+    "name": "entry_point_marche_fr",
+    "test_url" : "http://www.marche.fr/sousRubrique.php?index=1&p=1&fuel=&kmdeb=&kmfin=&anneedeb=&anneefin=&priceup=&pricedown=&nombre=15&rub=7&dep=18&rubname=Auto",
     "version": 0,
     "versions": [{
         "version" : 0,
-        "timestamp" : 1345554086,
+        "timestamp" : 1345728180,
         "config" : {
             "xpath" : {
                 "root" : "/html:html/html:body",
@@ -24,8 +24,8 @@
             "^html:" : {}
         },
         "rules" : {
-            "links": ["text.force_list|mandatory",  ".//html:div[@id='listeResultats']//html:div[@class='annonceDesc']/html:a[@class='annonceLien']/@href"],
-            "next_page" : ["text.|optional",        ".//html:a[@id='ancre_resultat']/following-sibling::html:div[1]//html:ul/html:li[last()]/html:a/@href"]
+            "links": ["text.force_list|mandatory",  ".//html:a[@class='resultLinkTitle']/@href"],
+            "next_page" : ["text.|optional",        ".//html:div[@class='boxsearchcentersphinx']/following-sibling::html:center[2]/html:a[last()]/@href"]
         },
         "renames" : {},
         "blocks" : { }

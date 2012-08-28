@@ -180,10 +180,12 @@
             }
         },
         "rules" : {
-            "postal_code": ["text.|^replace:postal_code|mandatory",                      ".//html:div[@class='dealer-contact-data']/html:div[@class='detailtext']"],
-            "department": [ "text.|^replace:postal_code|^hash_map:department|mandatory", ".//html:div[@class='dealer-contact-data']/html:div[@class='detailtext']"],
-            "region" : [ "text.|^replace:postal_code|^hash_map:regions|mandatory",       ".//html:div[@class='dealer-contact-data']/html:div[@class='detailtext']"],
-            "city" : ["text.|^replace:city|mandatory",                                   ".//html:div[@class='dealer-contact-data']/html:div[@class='detailtext']"]
+            "deailtext" :["mandatory",                      ".//html:div[@class='dealer-contact-data']/html:div[@class='detailtext']", {
+                "postal_code": ["text.|^replace:postal_code|mandatory",                      "."],
+                "department": [ "text.|^replace:postal_code|^hash_map:department|mandatory", "."],
+                "region" : [ "text.|^replace:postal_code|^hash_map:regions|mandatory",       "."],
+                "city" : ["text.|^replace:city|mandatory",                                   "."]
+            }]
         },
         "renames" : {},
         "blocks" : { }

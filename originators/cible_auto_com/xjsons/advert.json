@@ -1,10 +1,10 @@
 {
-    "name": "advert_carouest_com",
-    "test_url" : "http://www.carouest.com/annonce-voiture-peugeot-208-vire-calvados-743500.html",
+    "name": "cible_auto_com",
+    "test_url" : "http://www.cible-auto.com/occasion-lada-niva-41468.html",
     "version": 0,
     "versions": [{
         "version" : 0,
-        "timestamp" : 1345531455,
+        "timestamp" : 1345717845,
         "config" : {
             "xpath" : {
                 "root" : "/html:html/html:body",
@@ -44,7 +44,11 @@
                 }
             ],
             "^drain:postal_code" : {
-                "re": "\n(\\d+) ",
+                "re": " \\((\\d+)\\)$",
+                "group": 1
+            },
+            "^drain:department" : {
+                "re": "^(.*) \\(",
                 "group": 1
             },
             "^drain:city" : {
@@ -88,9 +92,15 @@
         },
         "rules" : {
             "#department": "no",
-            "seller" : ["mandatory",  ".//html:div[@id='annonce_droite']/html:div[1]/html:b[2]", {
-                "city": ["text.tail|^drain:city|mandatory",  "."],
-                "postal_code": ["text.tail|^drain:postal_code|mandatory", "."]
+            "#table" : ["^html:|mandatory",  ".//html:dl"],
+            "table" : ["mandatory",  ".//html:dl[@id='caract_car']", {
+
+                "complex_ville": ["mandatory",  "./html:dd/html:p[text()='Ville']/following-sibling::html:a/html:b", {
+                    "postal_code": ["text.|^drain:postal_code|mandatory", "."],
+                    "city": ["text.|^drain:department|mandatory", "."]
+                }],
+                "department": ["text.|^drain:department|mandatory",  "./html:dd/html:p[text()='Département']/following-sibling::html:b" ],
+                "region": ["text.|mandatory",  "./html:dd/html:p[text()='Région']/following-sibling::html:b" ]
             }],
             "#region" : "from url"
 

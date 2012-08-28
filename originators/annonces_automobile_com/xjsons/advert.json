@@ -72,9 +72,11 @@
             }
         },
         "rules" : {
-            "postal_code": ["text.|^replace:postal_code|mandatory",  ".//html:div[contains(text(),' Dpt. :')]/following-sibling::html:div[1]/html:h2"],
-            "department": ["text.|^replace:department|mandatory",  ".//html:div[contains(text(),' Dpt. :')]/following-sibling::html:div[1]/html:h2", "#see .postal_code"],
-            "region" : ["text.|^replace:postal_code|^hash_map:regions|mandatory",  ".//html:div[contains(text(),' Dpt. :')]/following-sibling::html:div[1]/html:h2", "#see .postal_code"]
+            "dpt" : ["mandatory",  ".//html:div[contains(text(),' Dpt. :')]/following-sibling::html:div[1]/html:h2", {
+                "postal_code": ["text.|^replace:postal_code|mandatory",  "."],
+                "department": ["text.|^replace:department|mandatory",  ".", "#see .postal_code"],
+                "region" : ["text.|^replace:postal_code|^hash_map:regions|mandatory",  ".", "#see .postal_code"]
+            }]
         },
         "renames" : {},
         "blocks" : { }

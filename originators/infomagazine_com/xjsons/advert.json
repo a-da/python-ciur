@@ -1,10 +1,10 @@
 {
-    "name": "advert_carouest_com",
-    "test_url" : "http://www.carouest.com/annonce-voiture-peugeot-208-vire-calvados-743500.html",
+    "name": "advert_infomagazine_com",
+    "test_url" : "http://www.infomagazine.com/petites-annonces/index.php?page=annonceDetail&id=7064548",
     "version": 0,
     "versions": [{
         "version" : 0,
-        "timestamp" : 1345531455,
+        "timestamp" : 1345723657,
         "config" : {
             "xpath" : {
                 "root" : "/html:html/html:body",
@@ -21,36 +21,6 @@
         "anomaly" : {},
         "light_handlers" : {
             "^html:" : {},
-            "^replace:postal_code" : [{
-                    "from_re": "\\), .*$",
-                    "to": ""
-                },
-                {
-                    "from_re": "^.* \\(",
-                    "to": ""
-                }
-            ],
-            "^replace:department" : [{
-                    "from_re": " \\(.*$",
-                    "to": ""
-                },
-                {
-                    "from_re": "^.*, ",
-                    "to": ""
-                },
-                {
-                    "from_str": " ",
-                    "to": "-"
-                }
-            ],
-            "^drain:postal_code" : {
-                "re": "\n(\\d+) ",
-                "group": 1
-            },
-            "^drain:city" : {
-                "re": "\\d+ (.*)$",
-                "group": 1
-            },
             "^hash_map:regions" : {
                 "map" : {
                     "67 68" : "Alsace",
@@ -87,13 +57,6 @@
             }
         },
         "rules" : {
-            "#department": "no",
-            "seller" : ["mandatory",  ".//html:div[@id='annonce_droite']/html:div[1]/html:b[2]", {
-                "city": ["text.tail|^drain:city|mandatory",  "."],
-                "postal_code": ["text.tail|^drain:postal_code|mandatory", "."]
-            }],
-            "#region" : "from url"
-
         },
         "renames" : {},
         "blocks" : { }

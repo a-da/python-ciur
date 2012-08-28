@@ -6,6 +6,7 @@ from ciur.common.DomParserFile import DomParserFile
 from ciur.util.AdvancedDict    import AdvancedDict
 
 class AdvertTestCase(unittest.TestCase):
+    # not implemented !
     def runTest(self):
         dpf = DomParserFile(
             name = "test",
@@ -13,12 +14,12 @@ class AdvertTestCase(unittest.TestCase):
         )
 
         expect = AdvancedDict()
-        expect.load_json("./advert_01.json")
+        expect.load_json("./expect/advert_01.json")
 
         xpath = dpf.get_version()
         dpf.validate_configs(xpath)
         with open("../page_samples/advert_01.html") as f: html = f.read()
-        html = html.decode("ISO-8859-1")
+        html = html.decode("utf-8")
 
         got = dpf.dive_html_root_level(html = html, disable_br = True)
 
