@@ -8,6 +8,10 @@ import decimal
 from collections            import OrderedDict
 from ciur.common            import json_dump
 from ciur.util.AdvancedDict import AdvancedDict
+from ciur.common import JsonException
+
+
+class AdvancedOrderedDictException(JsonException):pass
 
 
 class AdvancedOrderedDict(OrderedDict, AdvancedDict):
@@ -164,12 +168,25 @@ class AdvancedOrderedDict(OrderedDict, AdvancedDict):
             f = open(file_path, "r")
             db_config = f.read()
             f.close()
+            try:
+                dict_obj = json.loads(
+                    db_config,
+                    object_pairs_hook = OrderedDict,
+                    parse_float       = decimal.Decimal
+                )
+            except ValueError, e:
+                import re
+                m = re.search(u"(?s),\s*[\]\}]", db_config)
+                if m:
+                    raise AdvancedOrderedDictException({
+                        "msg" : "No JSON object could be decoded",
+                        "suggestion" : "forgot to delete comma searator ;)"
+                    })
 
-            dict_obj = json.loads(
-                db_config,
-                object_pairs_hook = OrderedDict,
-                parse_float       = decimal.Decimal
-            )
+                raise AdvancedOrderedDictException({
+                    "msg" : "No JSON object could be decoded"
+                })
+
 
         if clear:
             self.clear()

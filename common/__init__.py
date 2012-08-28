@@ -1,5 +1,7 @@
 import json
-from decimal import Decimal
+import decimal
+import datetime
+from pymongo.objectid import ObjectId
 
 class JsonException(Exception):
     """
@@ -35,13 +37,13 @@ def dt_handler(obj):
     """
     convert all data fields in json intro string format
     """
-    if isinstance(obj, Decimal):
+    if isinstance(obj, decimal.Decimal):
         return "Decimal(%s)" %obj
 
     if isinstance(obj, unicode):
         return obj.encode("utf-8")
 
-    if isinstance(obj, datetime):
+    if isinstance(obj, datetime.datetime):
         return "Date(%s)" %obj.isoformat()
 
     if isinstance(obj, ObjectId):
