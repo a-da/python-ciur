@@ -1,7 +1,10 @@
 import json
 import decimal
 import datetime
-from pymongo.objectid import ObjectId
+try:
+    from pymongo.objectid import ObjectId
+except Exception:
+    pass
 
 class JsonException(Exception):
     """

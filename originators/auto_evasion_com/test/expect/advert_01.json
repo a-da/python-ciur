@@ -1,6 +1,8 @@
 {
-    "department": "Cantal",
-    "city": "AURILLAC",
-    "region": "Auvergne",
-    "postal_code": "15000"
+    "localisation": {
+        "department": "Cantal",
+        "city": "AURILLAC",
+        "region": "Auvergne",
+        "postal_code": "15000"
+    }
 }

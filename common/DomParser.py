@@ -11,7 +11,7 @@ from lxml            import etree
 from lxml.html.clean import clean_html
 from HTMLParser      import HTMLParser
 from ciur.common     import str_startswith
-from lxml.etree      import _Element, _ElementStringResult, XMLSyntaxError, XPathEvalError, tostring
+from lxml.etree      import _Element, _ElementStringResult, _ElementUnicodeResult, XMLSyntaxError, XPathEvalError, tostring
 
 from ciur.util.AdvanceDictDomParser import AdvancedDictDomParser
 from ciur.common import JsonException
@@ -484,7 +484,8 @@ class DomParser(object):
         return self.context["versions"].__len__()
 
 
-    def __int(self, casting_rule, value):
+    @staticmethod
+    def __int(casting_rule, value):
         # TODO casting_rule
         """
         convert into int
@@ -544,7 +545,8 @@ class DomParser(object):
         return value
 
 
-    def __float(self, casting_rule, value):
+    @staticmethod
+    def __float(casting_rule, value):
         # TODO casting_rule
         """
         casting into float
@@ -581,7 +583,8 @@ class DomParser(object):
         return value
 
 
-    def __bool(self, value):
+    @staticmethod
+    def __bool(value):
         # TODO casting_rule
         """
         casting into int
@@ -621,8 +624,8 @@ class DomParser(object):
 
         return True
 
-
-    def __text(self, casting_rule, value):
+    @classmethod
+    def __text(cls, casting_rule, value):
         """
         casting into text
         text.(allow_empty_item?|allow_empty_list?|force_list?)?
@@ -664,7 +667,7 @@ class DomParser(object):
             if isinstance(i_value, (float, long, int, bool)):
                 i_value = str(i_value)
             else:
-                if not isinstance(i_value, _ElementStringResult):
+                if not isinstance(i_value, (_ElementStringResult, _ElementUnicodeResult)):
                     if flag_tail:
                         i_value = i_value.tail
                     else:
@@ -682,12 +685,12 @@ class DomParser(object):
 
         value = value_list
 
-        # unsecape from <iPad&#039;s>  to <Ipad's>
+        # unescape from <iPad&#039;s>  to <Ipad's>
         length = len(value)
         while length:
             length -= 1
             if isinstance(value[length], (str, unicode)):
-                value[length] = self.html_parser.unescape(value[length])
+                value[length] = cls.html_parser.unescape(value[length])
 
         if flag_allow_empty_list or value:
             if not flag_force_list and isinstance(value, list) and value.__len__() == 1 and not flag_allow_empty_item:
@@ -707,10 +710,6 @@ class DomParser(object):
 
             if flag_join_by_new_line:
                 value = "\n".join(value)
-
-
-
-
 
         return value
 
@@ -756,8 +755,8 @@ class DomParser(object):
 
         return tmp
 
-
-    def __replace_by_light_handlers(self, value, replace_rule):
+    @staticmethod
+    def __replace_by_light_handlers(value, replace_rule):
         """
         handle `replace` inline function declarations from jxpath
         """
@@ -790,7 +789,8 @@ class DomParser(object):
         return value
 
 
-    def __drain_by_light_handlers(self, value, drain_rule):
+    @staticmethod
+    def __drain_by_light_handlers(value, drain_rule):
         # TODO write doctests
         """
         handle `drain` inline function declarations from jxpath
@@ -813,7 +813,8 @@ class DomParser(object):
         return value
 
 
-    def __hash_map_by_light_handlers(self, value, replace_rule):
+    @staticmethod
+    def __hash_map_by_light_handlers(value, replace_rule):
         # TODO multiply key subitems by separators
         """
         get map equivalent for string items
@@ -867,7 +868,8 @@ class DomParser(object):
         return value
 
 
-    def __default_by_light_handlers(self, value, replace_rule):
+    @staticmethod
+    def __default_by_light_handlers(value, replace_rule):
         """
         set default value
         """
@@ -890,12 +892,16 @@ class DomParser(object):
         return value
 
 
-    def __xml_by_light_handlers(self, value, args):
+    @staticmethod
+    def __xml_by_light_handlers(value, args):
         """
         handle `xml` inline function declarations from jxpath
         """
         def _f(v):
-            v = tostring(v, method="html", pretty_print = args.get("pretty_print"))
+            v = tostring(
+                v, method="html", pretty_print = args.get("pretty_print")
+                # TODO find out purposed of `inclusive_ns_prefixes`
+                )
             return v
 
         if isinstance(value, list):
@@ -906,11 +912,12 @@ class DomParser(object):
         return value
 
 
-    def __html_by_light_handlers(self, value, args):
+    @classmethod
+    def __html_by_light_handlers(cls, value, args):
         """
         handle `html` inline function declarations from jxpath
         """
-        res = self.__xml_by_light_handlers(value, args)
+        res = cls.__xml_by_light_handlers(value, args)
 
         def _f(v):
             v = v.replace(' xmlns:html=\"http://www.w3.org/1999/xhtml\">', ">")
@@ -927,7 +934,8 @@ class DomParser(object):
         return res
 
 
-    def __strip_tag_block(self, block):
+    @staticmethod
+    def __strip_tag_block(block):
         """
         inner function for __extract_content_tags
         """
@@ -946,13 +954,14 @@ class DomParser(object):
         return block
 
 
-    def __extract_content_tags(self, block):
+    @classmethod
+    def __extract_content_tags(cls, block):
         """
         inner function for __inner_html_by_light_handlers
         """
         beg_tag = re.compile("^<\s*([^>]+?)( +[^>]+)?\s*>\s*")
         end_tag = re.compile("\s*<\s*/([^>]+)\s*>\s*$")
-        block = self.__strip_tag_block(block)
+        block = cls.__strip_tag_block(block)
         # -[2]- extract tags
         m = beg_tag.search(block)
         if m:
@@ -984,16 +993,16 @@ class DomParser(object):
         block = end_tag.sub("", block)
         return block
 
-
-    def __inner_html_by_light_handlers(self, value, args):
+    @classmethod
+    def __inner_html_by_light_handlers(cls, value, args):
         """
         handle `inner_html` inline function declarations from jxpath
         """
-        value = self.__html_by_light_handlers(value, args)
+        value = cls.__html_by_light_handlers(value, args)
         if isinstance(value, list):
-            value = map(self.__extract_content_tags, value)
+            value = map(cls.__extract_content_tags, value)
         else:
-            value = self.__extract_content_tags(value)
+            value = cls.__extract_content_tags(value)
 
         return value
 
