@@ -1,0 +1,80 @@
+{
+    "name": "banca_de_economii",
+    "test_url" : "http://www.bem.md/",
+    "version": 2,
+    "versions": [{
+        "version" : 1,
+        "timestamp" : 1332498235,
+        "config" : {
+            "xpath" : {
+                "root" : "//html:html/html:body//html:div[@id='exchange-rates-block']",
+                "namespaces" : {
+                    "html": "http://www.w3.org/1999/xhtml"
+                }
+            },
+            "anomaly" : {
+                "root" : "//html:html/html:body",
+                "namespaces" : { }
+            }
+        },
+        "anomaly" : {},
+        "light_handlers" : {
+            "^html:" : {}
+        },
+        "rules" : {
+            "date" : ["text.|mandatory", "./html:p[@class='exchange-date']"],
+            "items" : [ "mandatory", "./html:table[@id='official-rates-table']", {
+                "usd" : ["mandatory", ".//html:td[@class='title usd']/..", "=>by_sell"],
+                "eur" : ["mandatory", ".//html:td[@class='title eur']/..", "=>by_sell"],
+                "rub" : ["mandatory", ".//html:td[@class='title rub']/..", "=>by_sell"],
+                "ron" : ["mandatory", ".//html:td[@class='title ron']/..", "=>by_sell"],
+                "uah" : ["mandatory", ".//html:td[@class='title uah']/..", "=>by_sell"]
+            }]
+        },
+        "reformat" : [],
+        "blocks" : {
+            "by_sell" : {
+                "buy" : ["float.|mandatory", "./html:td[@class='buy']"],
+                "sell" : ["float.|mandatory", "./html:td[@class='sell'][1]"]
+            }
+        }
+    },
+        {
+            "version" : 2,
+            "timestamp" : 1350978675,
+            "config" : {
+                "xpath" : {
+                    "root" : "//html:html/html:body//html:div[@id='exchange-rates-block']",
+                    "namespaces" : {
+                        "html": "http://www.w3.org/1999/xhtml"
+                    }
+                },
+                "anomaly" : {
+                    "root" : "//html:html/html:body",
+                    "namespaces" : { }
+                }
+            },
+            "anomaly" : {},
+            "light_handlers" : {
+                "^html:" : {},
+                "^date:" : ["%d.%m.%Y"]
+            },
+            "rules" : {
+                "date" : ["text.|^date:|mandatory", "./html:p[@class='exchange-date']"],
+                "items" : [ "mandatory", "./html:table[@id='official-rates-table']", {
+                    "*" : ["mandatory", {
+                        "for" : ["usd", "eur", "rub", "ron", "uah"],
+                        "in" : ".//html:td[@class='title %s']/.."
+                    }, "=>by_sell"]
+                }]
+            },
+            "blocks" : {
+                "by_sell" : {
+                    "buy" : ["float.|mandatory", "./html:td[@class='buy']"],
+                    "sell" : ["float.|mandatory", "./html:td[@class='sell'][1]"]
+                }
+            },
+            "reformat" : []
+        }]
+}
+
