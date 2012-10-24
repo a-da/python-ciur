@@ -1,0 +1,138 @@
+{
+    "name": "eurocreditbank",
+    "test_url" : "http://www.ecb.md/",
+    "version": 2,
+    "versions": [{
+        "version" : 1,
+        "timestamp" : 1332498235,
+        "config" : {
+            "xpath" : {
+                "root" : "//html:html/html:body//html:table[@id='excTable']/html:tbody",
+                "namespaces" : {
+                    "html": "http://www.w3.org/1999/xhtml"
+                }
+            },
+            "anomaly" : {
+                "root" : "//html:html/html:body",
+                "namespaces" : { }
+            }
+        },
+        "anomaly" : {},
+        "light_handlers" : {
+            "^html:" : {},
+            "^html:pretty" : {
+                "pretty_print" : true
+            }
+        },
+        "rules" : {
+            "date" : ["text.|mandatory", "./html:tr[2]//html:table//html:td[@class='excHeadTxt']"],
+            "items" : ["mandatory", "./html:tr[6]//html:table", {
+                "usd" : ["mandatory", ".//html:td/html:img[@src='../img/USD.gif']/../..", "=>buy_sell"],
+                "eur" : ["mandatory", ".//html:td/html:img[@src='../img/EUR.gif']/../..", "=>buy_sell"],
+                "rub" : ["mandatory", ".//html:td/html:img[@src='../img/RUB.gif']/../..", "=>buy_sell"],
+                "ron" : ["mandatory", ".//html:td/html:img[@src='../img/RON.gif']/../..", "=>buy_sell"],
+                "uah" : ["mandatory", ".//html:td/html:img[@src='../img/UAH.gif']/../..", "=>buy_sell"],
+                "gbp" : ["mandatory", ".//html:td/html:img[@src='../img/GBP.gif']/../..", "=>buy_sell"],
+                "chf" : ["mandatory", ".//html:td/html:img[@src='../img/CHF.gif']/../..", "=>buy_sell"]
+            }]
+        },
+        "reformat" : [],
+        "blocks" : {
+            "buy_sell" : {
+                "buy"  : ["float.has_comma_sep|mandatory", "./html:td[2]"],
+                "sell" : ["float.has_comma_sep|mandatory", "./html:td[3]"]
+            }
+        }
+    },
+        {
+            "version" : 2,
+            "timestamp" : 1350980602,
+            "config" : {
+                "xpath" : {
+                    "root" : "//html:html/html:body//html:table[@id='excTable']/html:tbody",
+                    "namespaces" : {
+                        "html": "http://www.w3.org/1999/xhtml"
+                    }
+                },
+                "anomaly" : {
+                    "root" : "//html:html/html:body",
+                    "namespaces" : { }
+                }
+            },
+            "anomaly" : {},
+            "light_handlers" : {
+                "^html:" : {},
+                "^html:pretty" : {
+                    "pretty_print" : true
+                },
+                "^replace:date" : [
+                    {
+                        "from_str" : "ianuarie",
+                        "to" : "01"
+                    },
+                    {
+                        "from_str" : "februarie",
+                        "to" : "02"
+                    },
+                    {
+                        "from_str" : "martie",
+                        "to" : "03"
+                    },
+                    {
+                        "from_str" : "aprilie",
+                        "to" : "04"
+                    },
+                    {
+                        "from_str" : "mai",
+                        "to" : "05"
+                    },
+                    {
+                        "from_str" : "iunie",
+                        "to" : "06"
+                    },
+                    {
+                        "from_str" : "iulie",
+                        "to" : "07"
+                    },
+                    {
+                        "from_str" : "august",
+                        "to" : "08"
+                    },
+                    {
+                        "from_str" : "septembrie",
+                        "to" : "09"
+                    },
+                    {
+                        "from_str" : "octombrie",
+                        "to" : "10"
+                    },
+                    {
+                        "from_str" : "noiembrie",
+                        "to" : "11"
+                    },
+                    {
+                        "from_str" : "decembrie",
+                        "to" : "12"
+                    }
+                ],
+                "^date:" : ["%d %m %Y"]
+            },
+            "rules" : {
+                "date" : ["text.|^replace:date|^date:|mandatory", "./html:tr[2]//html:table//html:td[@class='excHeadTxt']"],
+                "items" : ["mandatory", "./html:tr[6]//html:table", {
+                    "*" : ["mandatory", {
+                        "for" : ["USD", "EUR", "RUB", "RON", "UAH", "GBP", "CHF"],
+                        "in" : ".//html:td/html:img[@src='../img/%s.gif']/../.."
+                    }, "=>buy_sell"]
+                }]
+            },
+            "blocks" : {
+                "buy_sell" : {
+                    "buy"  : ["float.has_comma_sep|mandatory", "./html:td[2]"],
+                    "sell" : ["float.has_comma_sep|mandatory", "./html:td[3]"]
+                }
+            },
+            "reformat" : []
+        }]
+}
+
