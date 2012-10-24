@@ -23,7 +23,7 @@
             "^html:" : {}
         },
         "rules" : {
-            "key": ["rules chain", "xpath", "#comments"],
+            "key": ["rules chain", "xpath", "#comments"]
         },
         "renames" : {},
         "blocks" : { }
