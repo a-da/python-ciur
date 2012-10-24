@@ -1,7 +1,14 @@
+
 import json
 import decimal
 import datetime
+import _sre
+import re
+
+
 from pymongo.objectid import ObjectId
+
+
 
 class JsonException(Exception):
     """
@@ -13,7 +20,8 @@ class JsonException(Exception):
     """
     def __init__(self, *args, **kwargs):
         super(JsonException, self).__init__( *args, **kwargs)
-        self.value = args[0]
+        if args:
+            self.value = args[0]
 
 
     def __str__(self):
@@ -22,6 +30,7 @@ class JsonException(Exception):
 
 def str_startswith(text, list_starts):
     """
+    Return Matched item else retrun False
     >>> str_startswith("banana", ['xr', 'ge', 'bi', 'ba', 'ad'])
     True
     >>> str_startswith("not banana", ['xr', 'ge', 'bi', 'bo', 'ad'])
@@ -29,7 +38,7 @@ def str_startswith(text, list_starts):
     """
     for i in list_starts:
         if text.startswith(i):
-            return True
+            return i
     return False
 
 
@@ -37,6 +46,9 @@ def dt_handler(obj):
     """
     convert all data fields in json intro string format
     """
+    if isinstance(obj, re.compile("").__class__):
+        return "SRE_Pattern(%s)" %obj.pattern
+
     if isinstance(obj, decimal.Decimal):
         return "Decimal(%s)" %obj
 
@@ -52,6 +64,8 @@ def dt_handler(obj):
     if isinstance(obj, type):
         return str(obj)
 
+    return type(obj)
+
 
 def json_dump(obj, sort_keys = False):
     """
@@ -64,4 +78,3 @@ def json_dump(obj, sort_keys = False):
         default      = dt_handler,
         ensure_ascii = False
     )
-

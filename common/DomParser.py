@@ -9,14 +9,16 @@ import sre_constants
 
 from lxml            import etree
 from lxml.html.clean import clean_html
-from HTMLParser      import HTMLParser
 from ciur.common     import str_startswith
-from lxml.etree      import _Element, _ElementStringResult, XMLSyntaxError, XPathEvalError, tostring
+from lxml.etree      import XMLSyntaxError, XPathEvalError
 
 from ciur.util.AdvanceDictDomParser import AdvancedDictDomParser
-from ciur.common import JsonException
+from ciur.common                    import JsonException
+from ciur.common.inline_handlers    import InlineHandlers
 
-class DomParserException(JsonException): pass
+
+class DomParserException(JsonException):
+    pass
 
 
 class DomParser(object):
@@ -37,6 +39,8 @@ class DomParser(object):
         // accept only a list with one element
         float.
             round(<digit_number>)
+            has_comma_sep like "84,57" instead of "84.57", if has dot separator instead of comma separator raise error
+
 
         // accept float, long, int, str, unicode, bool
         // accept only a list with one element
@@ -51,29 +55,40 @@ class DomParser(object):
             do_not_strip     // [ "   one item     ", "item two" ]
             join_by_space    // join list into string separated by " "
             join_by_new_line // join list into string separated by " "
-            tail
+            tail             // get only tail
+            with_tail        // get text element with tail TODO
+            skip             // if found such text skip parsing other fragments and return empty item
 
         // raise error if element is null
         mandatory
-
-        // skip that parent group item from list of parent item
-        mandatory.skip
+            // skip that parent group item from list of parent item
+            mandatory.skip
 
         // do not raise error if element is null
         optional
 
         // replace string
         ^replace:<name>
-            where name define other rule
-            - `from_str` or `from_re`
-            - `to`
-            - counts // how mush to repeat replace actions
+            [
+                {
+                    - `from_str` or `from_re`
+                    - `to`
+                    - counts // how mush to repeat replace actions
+                }
+            ]
 
         // extract some text from string with regexp
         ^drain:<name>
             where name define other rule
-            - `re`
-            - `group`
+            {
+                - `re`
+                - `group`
+            }
+
+        // parse date from string http://docs.python.org/library/datetime.html#strftime-and-strptime-behavior
+        ^date:<name>
+            [ list_of_date_string_formats ]
+
 
         // substitute string with its defined hash string
         ^hash_map:<name>
@@ -98,6 +113,10 @@ class DomParser(object):
         ^html:
             - args.pretty_print // True or False
 
+            samples:
+            * "^html:some_name": {"pretty_print" : true}
+            * "^html:another_name": {"pretty_print" : false}  equivalent to "^html:another_name": {}
+
         // get inner html value
         // like `  <div>  <b>some value </b></div>  ` -> `<b>some value </b>`
         ^inner_html:
@@ -108,6 +127,13 @@ class DomParser(object):
 
         // raise error if element of node is null
         mandatory
+
+    more info about xpath:
+        - http://msdn.microsoft.com/en-us/library/ms256086.aspx
+        - http://www.w3.org/TR/xpath/
+        - http://www.w3schools.com/xpath/xpath_operators.asp
+        - http://xpath.alephzarro.com/content/cheatsheet.html#chRegExp
+
     """
     # context
     # rules
@@ -115,8 +141,6 @@ class DomParser(object):
     # source
     # xpath
     # handlers
-    html_parser = HTMLParser()
-
 
     def __init__(self, name, source, debug = False):
         self.name     = name
@@ -126,12 +150,82 @@ class DomParser(object):
         self.xpath    = None
 
         if self.debug:
-            print "constructor DOMParser"
+            print "[INFO] constructor DOMParser"
 
 
     def __del__(self):
         if self.debug:
-            print "destructor DOMParser"
+            print "[INFO] destructor DOMParser"
+
+
+    @staticmethod
+    def _check_primitives_chain_rules(chain_rules):
+        # check chain_rules
+        rule_list = [
+            "text.",
+            "float.",
+            "int.",
+            "bool.",
+            "mandatory",
+            "mandatory.skip",
+            "optional"
+        ]
+
+        diff_rules = set(chain_rules.split("|")) - set(rule_list)
+        r_tmp = [ ]
+        for i_rule in diff_rules:
+            if i_rule.startswith("float."):
+                m = re.search("^float\.(round_\d+|has_comma_sep)$", i_rule)
+                if m:
+                    r_tmp.append(i_rule)
+
+            elif i_rule.startswith("int."):
+                m = re.search("^int\.(min|max)?$", i_rule)
+                if m:
+                    r_tmp.append(i_rule)
+
+            elif i_rule.startswith("text."):
+                m = re.search("text\.("
+                              "allow_empty_item|"
+                              "allow_empty_list|"
+                              "force_list|"
+                              "join_by_space|"
+                              "join_by_new_line|"
+                              "with_tail|"
+                              "tail"
+                              ")?$", i_rule)
+                if m:
+                    r_tmp.append(i_rule)
+
+            elif i_rule.startswith("^") and len(i_rule) > 1:
+                r_tmp.append(i_rule)
+
+            else:
+                raise NotImplemented
+
+        diff_rules = list(diff_rules - set(r_tmp))
+        if diff_rules:
+            raise DomParserException({
+                "msg"                 : "invalid configs chain rule for primitives",
+                "chain_rule"          : chain_rules,
+                "expected_chain_rule" : rule_list,
+                "diff"                : list(diff_rules)
+            })
+
+
+    @staticmethod
+    def _check_nodes_chain_rules(chain_rules):
+        rules_list = ["ensure_list", "mandatory", "optional"]
+
+        diff_rules = list(set(chain_rules.split("|")) - set(rules_list))
+        if diff_rules:
+            raise DomParserException({
+                "msg"                 : "invalid configs chain rule for nodes",
+                "chain_rule"          : chain_rules,
+                "expected_chain_rule" : rules_list,
+                "diff"                : diff_rules
+            })
+
 
 
     def validate_configs(self, configs):
@@ -170,7 +264,7 @@ class DomParser(object):
             "config" : dict,
             "anomaly" : dict,
             "rules" : dict,
-            "renames" : dict,
+            "reformat" : list,
             "light_handlers" : dict
         }
 
@@ -184,7 +278,7 @@ class DomParser(object):
             })
 
         for k, v in mandatory_keys.iteritems():
-            if not configs.has_key(k):
+            if k not in configs:
                 raise DomParserException({
                     "msg" : "missing mandatory key",
                     "key_name" : k,
@@ -208,13 +302,14 @@ class DomParser(object):
                 "^inner_html:",
                 "^replace:",
                 "^drain:",
+                "^date:",
                 "^hash_map:",
                 "^default:"
             ]
             if not str_startswith(lh_key, allowed_ruled):
                 raise DomParserException({
-                    "msg" : "this rule are not allowed",
-                    "key_name" : lh_key,
+                    "msg"          : "this rule are not allowed",
+                    "key_name"     : lh_key,
                     "allowed_rule" : allowed_ruled
                 })
 
@@ -227,7 +322,7 @@ class DomParser(object):
                             "diff" : list(diff),
                             "allowed_key" : ["from_re", "from_str", "to", "comment"]
                         })
-                    if i_r.has_key("from_re"):
+                    if "from_re" in i_r:
                         try:
                             i_r["from_re"] = re.compile(i_r["from_re"]) # compile regexp
                         except sre_constants.error, e:
@@ -315,114 +410,106 @@ class DomParser(object):
 
 
         def recursive_check(root, key_path = ""):
+
+            # astrix handling `for_each`
+            if "*" in root:
+                v = root["*"]
+                if isinstance(v[1], dict):
+                    len_v = len(v)
+                    for_ = v[1]["for"]
+
+                    if "%s" not in v[1]["in"]:
+                        raise  DomParserException({
+                            "msg" : "astrix patter should contain at least on `%s` symbol",
+                            "got" : v[1]["in"]
+                        })
+
+                    if isinstance(for_, dict):
+                        for k_for, v_for in for_.iteritems():
+                            if not isinstance(v_for, (str, unicode)):
+                                raise  DomParserException({
+                                    "msg" : "wrong type for `*` rule",
+                                    "got" : repr(v_for),
+                                    "expected" : ["str", "unicode"]
+                                })
+
+                            if len_v == 3:
+                                root[k_for.lower()] = [v[0], v[1]["in"] %v_for, v[2]]
+                            else: # len_v == 2
+                                root[k_for.lower()] = [v[0], v[1]["in"] %v_for]
+
+                    elif isinstance(for_, list):
+                        for item in for_:
+                            if not isinstance(item, (str, unicode)):
+                                raise  DomParserException({
+                                    "msg" : "wrong type for `*` rule",
+                                    "got" : repr(item),
+                                    "expected" : ["str", "unicode"]
+                                })
+
+                            if len_v == 3:
+                                root[item.lower()] = [v[0], v[1]["in"] %item, v[2]]
+                            else: # len_v == 2
+                                root[item.lower()] = [v[0], v[1]["in"] %item]
+                    else:
+                        raise NotImplemented
+
+                    del root["*"]
+            else:
+                for k, v in root.iteritems():
+                    if isinstance(v[1], dict):
+                        raise DomParserException({
+                            "msg" : "expect to be astrix notation in key",
+                            "v" : v,
+                            "k" : k
+                        })
+
+
             for k, v in root.iteritems():
                 if k.startswith("#"): # ignore commented configs
                     continue
 
                 tmp_key_path = key_path + "." + k
-                v_len = v.__len__()
-                if v_len == 2 or v_len == 3 and (isinstance(v[2], (str, unicode)) and not v[2].startswith("=>")):
-                    # check chain_rules
-                    r = set(v[0].split("|")) - {
-                        "text.",
-                        "float.",
-                        "int.",
-                        "bool",
-                        "mandatory",
-                        "mandatory.skip",
-                        "optional",
-                        "skip"
-                    }
-                    r_tmp = [ ]
-                    for i_r in r:
-                        if i_r.startswith("float."):
-                            m = re.search("^float\.round_\d+$", i_r)
-                            if m:
-                                r_tmp.append(i_r)
-                        elif i_r.startswith("int."):
-                            m = re.search("^int\.(min|max)?$", i_r)
-                            if m:
-                                r_tmp.append(i_r)
-                        elif i_r.startswith("text."):
-                            m = re.search("^text\.("
-                                          "allow_empty_item|"
-                                          "allow_empty_list|"
-                                          "force_list|"
-                                          "join_by_space|"
-                                          "join_by_new_line|"
-                                          "tail"
-                                          ")?$", i_r)
-                            if m:
-                                r_tmp.append(i_r)
-                        elif i_r.startswith("^") and len(i_r) > 1:
-                            r_tmp.append(i_r)
+                v_len = len(v)
 
-                    r -= set(r_tmp)
-                    if r:
-                        raise DomParserException({
-                            "msg" : "invalid configs chain rule for primitives",
-                            "chain_rule" : v[0],
-                            "expected_chain_rule" : "text.|float.|int.|bool|mandatory|mandatory.skip|optional",
-                            "key_path" : tmp_key_path,
-                            "diff" : list(r)
-                        })
+                if v_len not in [2, 3]:
+                    raise NotImplemented
 
-                    check_xpath_expression(
-                        expression = v[1],
-                        namespaces = configs["config.xpath.namespaces"],
-                        key_path   = tmp_key_path
-                    )
+                if not isinstance(v[0], (str, unicode)):
+                    raise DomParserException({
+                        "msg"           : "invalid data type for configs chain rule",
+                        "chain_rule"    : v[0],
+                        "expected_type" : "string",
+                        "key_path"      : tmp_key_path
+                    })
 
-                elif v_len == 3 and (isinstance(v[2], dict) or
-                                     isinstance(v[2], (str, unicode)) and v[2].startswith("=>")):
-
-                    if not isinstance(v[0], (str, unicode)):
-                        raise DomParserException({
-                            "msg" : "invalid data type for configs chain rule",
-                            "chain_rule" : v[0],
-                            "expected_type" : "string",
-                            "key_path" : tmp_key_path
-                        })
-                    # check chain_rules
-                    r = set(v[0].split("|")) - {"ensure_list", "mandatory", "optional"}
-                    if r:
-                        raise DomParserException({
-                            "msg" : "invalid configs chain rule for nodes",
-                            "chain_rule" : v[0],
-                            "expected_chain_rule" : "text.|float.|int.|mandatory",
-                            "key_path" : tmp_key_path,
-                            "diff" : list(r)
-                        })
-
-                    check_xpath_expression(
-                        expression = v[1],
-                        namespaces = configs["config.xpath.namespaces"],
-                        key_path   = tmp_key_path
-                    )
-
-                    if isinstance(v[2], (str, unicode)):
+                if v_len == 3 and isinstance(v[2], (str, unicode)):
+                    if v[2].startswith("=>"):
                         blocks_ref_key = v[2][2:]
-                        if not configs["blocks"].has_key(blocks_ref_key):
+                        if blocks_ref_key not in configs["blocks"]:
                             raise DomParserException({
-                                "msg" : "missed blocks_ref_key",
+                                "msg"            : "missed blocks_ref_key",
                                 "blocks_ref_key" : blocks_ref_key,
-                                "key_path" : tmp_key_path
+                                "key_path"       : tmp_key_path
                             })
-                        else:
-                            next_layer = configs["blocks"][blocks_ref_key]
-                            v[2] = next_layer # overwrite with values from ref block
-                    else:
-                        next_layer = v[2]
 
-                    recursive_check(next_layer, tmp_key_path)
+                        v[2] = configs["blocks"][blocks_ref_key]
+                    elif not v[2].startswith("#"):
+                        raise NotImplemented
+
+                if v_len == 2 or (v_len == 3 and isinstance(v[2], (str, unicode))):
+                    self._check_primitives_chain_rules(v[0])
+
+                elif v_len == 3 and isinstance(v[2], dict):
+                    self._check_nodes_chain_rules(v[0])
+                    recursive_check(v[2], tmp_key_path)
 
                 else:
-                    raise DomParserException({
-                        "msg" : "invalid configs rule item length or unexpected type data of node rule",
-                        "length" : v_len,
-                        "key_path" : tmp_key_path,
-                        "type" : type(v[2] if v_len == 3 else None)
-                    })
+                    check_xpath_expression(
+                        expression = v[1],
+                        namespaces = configs["config.xpath.namespaces"],
+                        key_path   = tmp_key_path
+                    )
 
         recursive_check(configs["rules"])
         return True
@@ -484,238 +571,7 @@ class DomParser(object):
         return self.context["versions"].__len__()
 
 
-    def __int(self, casting_rule, value):
-        # TODO casting_rule
-        """
-        convert into int
-        """
-
-        if isinstance(value, list):
-            value = [i for i in value if not (isinstance(i, _Element) and i.text == None)] # do not optimise
-
-        if not value: # None
-            return value
-
-        if isinstance(value, (float, long, int, str, unicode, bool)):
-            try:
-                value = int(value)
-                return value
-            except ValueError, e:
-                raise DomParserException({
-                    "msg" : e.message,
-                    "suggestion" : "tried to make convert for only one item and expected to be int",
-                    "code" : "__int"
-                })
-
-
-        v_len = value.__len__()
-
-        if not v_len:
-            return None
-
-        tmp_value = [ ]
-        for i_value in value:
-            if isinstance(i_value, _Element):
-                i_value = i_value.text
-            try:
-                i_value = int(i_value, 0)
-            except ValueError, e:
-                if e.message.startswith("invalid literal for int() with base 0:"):
-                    raise DomParserException({
-                        "msg" : e.message,
-                        "suggestion" : "tried to make convert for more than one item and expected to be int",
-                        "code" : "__int"
-                    })
-                else:
-                    raise
-
-            tmp_value.append(i_value)
-        value = tmp_value
-
-        if casting_rule == "int.max":
-            return max(value)
-
-        if casting_rule == "int.min":
-            return min(value)
-
-        if len(value) == 1 and (value[0] == 0 or value[0]):
-            return value[0]
-
-        return value
-
-
-    def __float(self, casting_rule, value):
-        # TODO casting_rule
-        """
-        casting into float
-        """
-
-        if isinstance(value, list):
-            value = [i for i in value if not (isinstance(i, _Element) and i.text == None)] # do not optimise
-
-        if not value: # None
-            return value
-
-        if isinstance(value, (float, long, int, str, unicode, bool)):
-            value = int(value)
-            return value
-
-        v_len = value.__len__()
-        if not v_len:
-            return None
-
-        if v_len > 1:
-            raise DomParserException({
-                "msg" : "undesired behavior, xpath int should have only one item but have `%d` items" %v_len,
-                "code" : "__float"
-            })
-
-        value = value[0]
-        value = value.text
-        value = float(value)
-
-        m = re.search(".round_(\d)", casting_rule)
-        if m:
-            value = round(value, int(m.group(1)))
-
-        return value
-
-
-    def __bool(self, value):
-        # TODO casting_rule
-        """
-        casting into int
-        """
-
-        if isinstance(value, list):
-            value = [i for i in value if not (isinstance(i, _Element) and i.text == None)] # do not optimise
-
-        if not value and not isinstance(value, (float, int, long, bool)):
-            return False
-
-        if isinstance(value, (float, long, int, bool)):
-            value = int(value)
-            return value
-        elif isinstance(value, (unicode, str)):
-            value = value.strip()
-            if value.lower() == "false" or value == "":
-                return False
-            return True
-
-        v_len = value.__len__()
-        if not v_len:
-            return None
-
-        if v_len > 1:
-            raise DomParserException({
-                "msg" : "undesired behavior, xpath int should have only one item but have `%d` items" %v_len,
-                "code" : "__float"
-            })
-
-        value = value[0]
-        if not isinstance(value, _ElementStringResult):
-            value = value.text
-
-        if value.lower() == "false":
-            return False
-
-        return True
-
-
-    def __text(self, casting_rule, value):
-        """
-        casting into text
-        text.(allow_empty_item?|allow_empty_list?|force_list?)?
-        allow_empty_item: ["", "ddd"]
-        allow_empty_list: [ ]
-        force_list: "text" -> ["text"]
-        default:
-            don't allow empty item and empty list
-            if result is list with one item return only this item
-        """
-        flag_allow_empty_item = False
-        flag_allow_empty_list = False
-        flag_force_list       = False
-        flag_do_not_strip     = False
-        flag_join_by_space    = False
-        flag_join_by_new_line = False
-        flag_tail             = False
-        for flag in casting_rule.split(".")[1:]:
-            if flag == "allow_empty_item":
-                flag_allow_empty_item = True
-            if flag == "allow_empty_list":
-                flag_allow_empty_list = True
-            if flag == "force_list":
-                flag_force_list = True
-            if flag == "do_not_strip":
-                flag_do_not_strip = True
-            if flag == "join_by_space":
-                flag_join_by_space = True
-            if flag == "join_by_new_line":
-                flag_join_by_new_line = True
-            if flag == "tail":
-                flag_tail = True
-
-        if not isinstance(value, list):
-            value = [value]
-
-        value_list = [ ]
-        for i_value in value:
-            if isinstance(i_value, (float, long, int, bool)):
-                i_value = str(i_value)
-            else:
-                if not isinstance(i_value, _ElementStringResult):
-                    if flag_tail:
-                        i_value = i_value.tail
-                    else:
-                        i_value = i_value.text
-
-                if not isinstance(i_value, (str, unicode)):
-                    i_value = i_value.text
-
-
-                if not flag_do_not_strip and i_value:
-                    i_value = i_value.strip()
-
-            if flag_allow_empty_item or i_value:
-                value_list.append(i_value)
-
-        value = value_list
-
-        # unsecape from <iPad&#039;s>  to <Ipad's>
-        length = len(value)
-        while length:
-            length -= 1
-            if isinstance(value[length], (str, unicode)):
-                value[length] = self.html_parser.unescape(value[length])
-
-        if flag_allow_empty_list or value:
-            if not flag_force_list and isinstance(value, list) and value.__len__() == 1 and not flag_allow_empty_item:
-                value = value[0]
-            elif flag_force_list and not isinstance(value, list):
-                value = [value]
-        else:
-            value = None
-
-
-        if value and isinstance(value, list):
-            if flag_join_by_space:
-                value = " ".join(value)
-                value = re.sub("\s*([\.,;\)\]\}])\s*", lambda x: x.group(1) + " ", value)
-                value = re.sub("\s+", " ", value)
-                value = value.strip()
-
-            if flag_join_by_new_line:
-                value = "\n".join(value)
-
-
-
-
-
-        return value
-
-
-    def __children_nodes(self, casting_rule, value, children_rule, key_path):
+    def _children_nodes(self, casting_rule, value, children_rule, key_path):
         """
         handle nodes
         """
@@ -731,7 +587,7 @@ class DomParser(object):
 
         tmp_list = [ ]
         for i_value in value:
-            tmp = self.__dive_next_level([i_value], children_rule, key_path)
+            tmp = self._dive_next_level([i_value], children_rule, key_path)
             if tmp:
                 tmp_list.append(tmp)
 
@@ -751,260 +607,18 @@ class DomParser(object):
             raise DomParserException({
                 "key_path" : key_path,
                 "msg" : "Require mandatory elements from children",
-                "code" : "__dive_next_level"
+                "code" : "DomParser._dive_next_level"
             })
 
         return tmp
 
 
-    def __replace_by_light_handlers(self, value, replace_rule):
-        """
-        handle `replace` inline function declarations from jxpath
-        """
-        def _fun_replace(v):
-            for i_rr in replace_rule:
-                v = v.strip()
-                if not v: break
-                counts = i_rr.get("counts", 1)
-                while counts:
-                    counts -= 1
-                    if i_rr.has_key("from_str"):
-                        v = v.replace(i_rr["from_str"], i_rr["to"])
-                    elif i_rr.has_key("from_re"):
-                        v = i_rr["from_re"].sub(i_rr["to"], v)
-                    else:
-                        raise DomParserException({
-                            "msg" : "can't detected replace key `from`",
-                            "keys" : i_rr,
-                            "expected" : ["from_re", "from_str"]
-                        })
-            return v
-
-        if not value:
-            pass # skip
-        elif isinstance(value, list):
-            value = map(_fun_replace, value)
-        else: #str
-            value = _fun_replace(value)
-
-        return value
-
-
-    def __drain_by_light_handlers(self, value, drain_rule):
-        # TODO write doctests
-        """
-        handle `drain` inline function declarations from jxpath
-        """
-        def _drain(v):
-            v = v.strip()
-            m = drain_rule["re"].search(v)
-            if not m:
-                return None
-            v = m.group(drain_rule["group"])
-            return v
-
-        if not value:
-            pass # skip
-        elif isinstance(value, list):
-            value = map(_drain, value)
-        else: #str
-            value = _drain(value)
-
-        return value
-
-
-    def __hash_map_by_light_handlers(self, value, replace_rule):
-        # TODO multiply key subitems by separators
-        """
-        get map equivalent for string items
-        """
-        def _f(v):
-            if not isinstance(v, (str, unicode)):
-                raise DomParserException({
-                    "msg" : "expected only string or unicode format",
-                    "received_type" : str(type(v))
-                })
-
-            if v in replace_rule["map"]:
-                return replace_rule["map"][v]
-            else:
-                # check in key name by separators
-                # remove after implement TODO
-                operator = replace_rule.get("operator")
-                if operator not in ["in", "startswith", "endswith"]:
-                    raise DomParserException({
-                        "msg" : "expected hash_map.operator in [in, startswith, endswith]",
-                        "received_type" : operator
-                    })
-
-                if operator == "in":
-                    for  k_map in replace_rule["map"]:
-                        if v in k_map.split(replace_rule["separator"]):
-                            return replace_rule["map"][k_map]
-                elif operator == "startswith":
-                    for  k_map in replace_rule["map"]:
-                        for i_splited in k_map.split(replace_rule["separator"]):
-                            if v.startswith(i_splited):
-                                return replace_rule["map"][k_map]
-                elif operator == "endswith":
-                    for  k_map in replace_rule["map"]:
-                        for i_splited in k_map.split(replace_rule["separator"]):
-                            if v.endswith(i_splited):
-                                return replace_rule["map"][k_map]
-
-                if not replace_rule["default"]:
-                    return v
-                else:
-                    return replace_rule["default"]
-
-        if not value:
-            pass # skip
-        elif isinstance(value, list):
-            value = map(_f, value)
-        else: #str
-            value = _f(value)
-
-        return value
-
-
-    def __default_by_light_handlers(self, value, replace_rule):
-        """
-        set default value
-        """
-        def _f(v):
-            if not v:
-                if isinstance(v, (int, bool, float, long)):
-                    return v
-                else:
-                    return replace_rule
-            return v
-
-        if not value:
-            return replace_rule
-
-        if isinstance(value, list):
-            value = map(_f, value)
-        else: #str
-            value = _f(value)
-
-        return value
-
-
-    def __xml_by_light_handlers(self, value, args):
-        """
-        handle `xml` inline function declarations from jxpath
-        """
-        def _f(v):
-            v = tostring(v, method="html", pretty_print = args.get("pretty_print"))
-            return v
-
-        if isinstance(value, list):
-            value = map(_f, value)
-        else: #str
-            value = _f(value)
-
-        return value
-
-
-    def __html_by_light_handlers(self, value, args):
-        """
-        handle `html` inline function declarations from jxpath
-        """
-        res = self.__xml_by_light_handlers(value, args)
-
-        def _f(v):
-            v = v.replace(' xmlns:html=\"http://www.w3.org/1999/xhtml\">', ">")
-            v = v.replace(' xmlns:html=\"http://www.w3.org/1999/xhtml\" ', " ")
-            v = v.replace("<html:", "<")
-            v = v.replace("</html:", "</")
-            return v
-
-        if type(res) == list:
-            res = map(_f, res)
-        else:
-            res = _f(res)
-
-        return res
-
-
-    def __strip_tag_block(self, block):
-        """
-        inner function for __extract_content_tags
-        """
-        remove_beg = re.compile("^(&nbsp;|\s*|&#160)")
-        remove_end = re.compile("(&nbsp;|\s*|&#160)$")
-
-        # strip
-        while True:
-            len_b = len(block)
-            block = remove_beg.sub("", block)
-            block = remove_end.sub("", block)
-            len_a = len(block)
-            if len_b == len_a:
-                break
-
-        return block
-
-
-    def __extract_content_tags(self, block):
-        """
-        inner function for __inner_html_by_light_handlers
-        """
-        beg_tag = re.compile("^<\s*([^>]+?)( +[^>]+)?\s*>\s*")
-        end_tag = re.compile("\s*<\s*/([^>]+)\s*>\s*$")
-        block = self.__strip_tag_block(block)
-        # -[2]- extract tags
-        m = beg_tag.search(block)
-        if m:
-            open_tag = m.group(1)
-        else:
-            raise Exception({
-                "msg" : "can't find open tag",
-                "tags_block" : block
-            })
-
-        m = end_tag.search(block)
-        if m:
-            close_tag = m.group(1)
-        else:
-            raise Exception({
-                "msg" : "can't find close tag",
-                "tags_block" : block
-            })
-
-        if open_tag != close_tag:
-            raise Exception({
-                "msg" : "open and close tag are different",
-                "tags_block" : block,
-                "open_tag" : open_tag,
-                "close_tag" : close_tag
-            })
-
-        block = beg_tag.sub("", block)
-        block = end_tag.sub("", block)
-        return block
-
-
-    def __inner_html_by_light_handlers(self, value, args):
-        """
-        handle `inner_html` inline function declarations from jxpath
-        """
-        value = self.__html_by_light_handlers(value, args)
-        if isinstance(value, list):
-            value = map(self.__extract_content_tags, value)
-        else:
-            value = self.__extract_content_tags(value)
-
-        return value
-
-
-    def __dive_next_level(self, xp_root_node, rules, parent_key = ""):
+    def _dive_next_level(self, xp_root_node, rules, parent_key = ""):
         """
         `casting_chain`
         mandatory|optional
         """
         m = AdvancedDictDomParser()
-
         for xp_result_item in xp_root_node:
             for k_rule, v_rule in rules.iteritems():
                 key_path = parent_key + "." + k_rule
@@ -1033,14 +647,15 @@ class DomParser(object):
                     })
 
                 if comments: # have no children nodes
-
                     for i_casting_chain in casting_chain.lower().split("|"):
+                        error_message = ""
+
                         if i_casting_chain == "mandatory":
                             if not (isinstance(value, (bool, int, float, long)) or value): #! do not change (ignore bool)
                                 raise DomParserException({
                                     "key_path" : key_path,
-                                    "msg" : "Require mandatory elements from data type",
-                                    "code" : "__dive_next_level"
+                                    "msg"      : "Require mandatory elements from data type",
+                                    "code"     : "DomParser._dive_next_level"
                                 })
                             # else: is ok
 
@@ -1051,99 +666,45 @@ class DomParser(object):
                         elif i_casting_chain == "optional":
                             pass
 
-                        elif i_casting_chain.startswith("text."):
-                            value = self.__text(i_casting_chain, value)
-
-                        elif i_casting_chain.startswith("bool"):
-                            value = self.__bool(value)
-
-                        elif i_casting_chain.startswith("int."):
-                            value = self.__int(i_casting_chain, value)
-
-                        elif i_casting_chain.startswith("float."):
-                            value = self.__float(i_casting_chain, value)
-
-                        elif i_casting_chain == "skip":
-                            value = self.__text("text.", value)
-                            if value:
-                                return AdvancedDictDomParser()
+                        elif str_startswith(i_casting_chain, ["text.", "int.", "float.", "bool."]): # do not optimise here !
+                            method_name = str_startswith(i_casting_chain, ["text.", "int.", "float.", "bool."])[:-1]
+                            value = getattr(InlineHandlers, method_name)(i_casting_chain, value)
 
                         elif i_casting_chain.startswith("^"):
+
                             if i_casting_chain[1:] in self.handlers:
                                 value = self.handlers[i_casting_chain[1:]](value)
 
                             elif i_casting_chain in self.xpath["light_handlers"]:
-                                if i_casting_chain.startswith("^replace:"):
-                                    value = self.__replace_by_light_handlers(
-                                        value,
-                                        self.xpath["light_handlers"][i_casting_chain]
-                                    )
-                                elif i_casting_chain.startswith("^drain:"):
-                                    value = self.__drain_by_light_handlers(
-                                        value,
-                                        self.xpath["light_handlers"][i_casting_chain]
-                                    )
-                                elif i_casting_chain.startswith("^hash_map:"):
-                                    value = self.__hash_map_by_light_handlers(
-                                        value,
-                                        self.xpath["light_handlers"][i_casting_chain]
-                                    )
+                                method_name = str_startswith(i_casting_chain, [
+                                    "^replace:", "^drain:", "^date:", "^hash_map:", "^default:", "^xml:", "^html:"
+                                ])
 
-                                elif i_casting_chain.startswith("^default:"):
-                                    value = self.__default_by_light_handlers(
-                                        value,
-                                        self.xpath["light_handlers"][i_casting_chain]
-                                    )
+                                if method_name:
+                                    method_name = method_name[1:-1]
+                                    value = getattr(InlineHandlers, method_name)(self.xpath["light_handlers"][i_casting_chain], value)
 
-                                elif i_casting_chain.startswith("^xml:"):
-                                    value = self.__xml_by_light_handlers(
-                                        value,
-                                        self.xpath["light_handlers"][i_casting_chain]
-                                    )
+                                else: error_message = "unknown light handler function prefix"
+                            else: error_message = "unknown data type/rule from inline functions"
+                        else: error_message = "unknown data type/rule from inline functions"
 
-                                elif i_casting_chain.startswith("^html:"):
-                                    value = self.__html_by_light_handlers(
-                                        value,
-                                        self.xpath["light_handlers"][i_casting_chain]
-                                    )
-
-                                elif i_casting_chain.startswith("^inner_html:"):
-                                    value = self.__inner_html_by_light_handlers(
-                                        value,
-                                        self.xpath["light_handlers"][i_casting_chain]
-                                    )
-
-                                else:
-                                    raise DomParserException({
-                                        "key_path" : key_path,
-                                        "msg" : "unknown light handler function prefix",
-                                        "i_casting_chain" : i_casting_chain,
-                                        "light_handlers" : self.xpath["light_handlers"].keys()
-                                    })
-                            else:
-                                raise DomParserException({
-                                    "key_path" : key_path,
-                                    "msg" : "unknown data type/rule from inline functions",
-                                    "i_casting_chain" : i_casting_chain,
-                                    "casting_chain" : casting_chain
-                                })
-                        else:
+                        if error_message:
                             raise DomParserException({
-                                "key_path" : key_path,
-                                "msg" : "unknown data type/rule from casting_chain",
+                                "key_path"        : key_path,
+                                "msg"             : error_message,
                                 "i_casting_chain" : i_casting_chain,
-                                "casting_chain" : casting_chain,
-                                "code" : "__dive_next_level"
+                                "casting_chain"   : casting_chain,
+                                "code"            : "DomParser._dive_next_level"
                             })
 
                     tmp = value
 
                 else: # have children nodes
-                    tmp = self.__children_nodes(
-                        casting_rule = casting_chain,
-                        value = value,
+                    tmp = self._children_nodes(
+                        casting_rule  = casting_chain,
+                        value         = value,
                         children_rule = v_rule[2],
-                        key_path = key_path
+                        key_path      = key_path
                     )
 
                 m.dom_push(k_rule, tmp)
@@ -1155,20 +716,39 @@ class DomParser(object):
         self.handlers = dict([ (i.__name__, i) for i in handlers])
 
 
-    def __dive_root_level(self, xpath_result):
+    def _reformat(self, result):
+        a = AdvancedDictDomParser()
+        for reformat in self.xpath["reformat"]:
+            if "update" in reformat:
+                from_, to_ =  reformat["update"]
+                a.update()
+                result[from_].update(result[to_])
+            elif "rename" in reformat:
+                from_, to_ =  reformat["rename"]
+                result.rename_key(from_, to_)
+            elif "delete" in reformat:
+                for i in reformat["delete"]:
+                    del result[i]
+
+        return result
+
+
+    def _dive_root_level(self, xpath_result):
         len_xp_result = len(xpath_result)
 
         if len(xpath_result) != 1:
             raise DomParserException({
-                "msg" : "Failed root detection",
+                "msg"              : "Failed root detection",
                 "xpath_expression" : self.xpath["config.xpath.root"],
-                "roots_numbers" : len_xp_result
+                "roots_numbers"    : len_xp_result
             })
 
-        result = self.__dive_next_level(xpath_result, self.xpath["rules"])
+        result = self._dive_next_level(xpath_result, self.xpath["rules"])
 
         if type(result) == list and len(result) == 1:
             result = result[0]
+
+        result = self._reformat(result)
 
         return result
 
@@ -1198,12 +778,12 @@ class DomParser(object):
 
         if not len(etree_xml):
             raise DomParserException({
-                "msg" : "xml is not str or unicode or failed initialisation",
+                "msg"      : "xml is not str or unicode or failed initialisation",
                 "type_xml" : type(xml),
-                "val_xml" : xml
+                "val_xml"  : xml
             })
 
-        result = self.__dive_root_level(xpath_result=etree_xml)
+        result = self._dive_root_level(xpath_result=etree_xml)
         return result
 
 
@@ -1247,55 +827,6 @@ class DomParser(object):
         else:
             xp_result = html
 
-        result = self.__dive_root_level(xp_result)
+        result = self._dive_root_level(xp_result)
 
         return result
-
-
-class DomParserObjectJson(DomParser):
-    """
-    Json object implimentation of DomParser
-    1. Got xjson json object
-    2. Got page string
-    3. return desired data form parsed page into json format
-    """
-    pass
-
-
-class DomParserUrl(DomParser):
-    """
-    Remote implimentation of DomParser
-    1. Got xjson from links
-    2. Got page from link
-    3. return desired data form parsed page into json format
-    """
-    pass
-
-
-class DomParserSQLite(DomParser):
-    """
-    Database SQLite implimentation of DomParser
-    1. Got xjson from Database SQLite
-    2. Got page *
-    3. return desired data form parsed page into json format
-    """
-    pass
-
-class DomParserMySQL(DomParser):
-    """
-    Database MySQL implimentation of DomParser
-    1. Got xjson from Database MySQL
-    2. Got page *
-    3. return desired data form parsed page into json format
-    """
-    pass
-
-
-class DomParserMongoDb(DomParser):
-    """
-    Database MongoDb implimentation of DomParser
-    1. Got xjson from Database MongoDb
-    2. Got page *
-    3. return desired data form parsed page into json format
-    """
-    pass

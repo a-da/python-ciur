@@ -1,9 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import re
 from ciur.common.DomParser import DomParser
-from ciur.util.AdvancedOrderedDict import AdvancedOrderedDict
+from advanced_dict import AdvancedOrderedDict
 
 class DomParserFile(DomParser):
     """
@@ -15,13 +14,12 @@ class DomParserFile(DomParser):
     def __init__(self, name, source, debug = False):
         self.abstract = False
         super(DomParserFile, self).__init__(name, source, debug)
-        self.context = AdvancedOrderedDict()
-        self.context.load_json(self.source)
+        self.context = AdvancedOrderedDict().load_json(self.source)
 
         if not self.context: # create new one
             self.context = {
-                "name" : self.name,
-                "version" : 0,
+                "name"     : self.name,
+                "version"  : 0,
                 "versions" : [ ]
             }
 

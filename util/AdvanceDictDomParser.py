@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from ciur.util.AdvancedDict import AdvancedDict
+from advanced_dict import AdvancedDict
 
 class AdvancedDictDomParser(AdvancedDict):
     """
-    AdvancedDict implimentation for DomParser
+    AdvancedDict implementation for DomParser
     >>> a2 = AdvancedDictDomParser({\
         "1" : "1",\
         "2" : {\
