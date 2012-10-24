@@ -1,0 +1,107 @@
+{
+    "name": "malticor",
+    "test_url" : "http://www.malticor.wgz.ro/malticor-exchange/exotica-2",
+    "version": 2,
+    "versions": [{
+        "version" : 1,
+        "timestamp" : 1350664009,
+        "config" : {
+            "xpath" : {
+                "root" : "//html:html/html:body//html:table//html:span[text()='CURSUL VALUTAR ']/../../../../..",
+                "namespaces" : {
+                    "html": "http://www.w3.org/1999/xhtml"
+                }
+            },
+            "anomaly" : {
+                "root" : "//html:html/html:body",
+                "namespaces" : { }
+            }
+        },
+        "anomaly" : {},
+        "light_handlers" : {
+            "^html:" : {},
+            "^replace:double_dot" : [{
+                "from_str" : "..",
+                "to" : "."
+            }]
+        },
+        "rules" : {
+            "date" : ["text.|mandatory", ".//html:span[text()='CURSUL VALUTAR ']/../following-sibling::html:span/html:span"],
+            "items" : ["mandatory", ".", {
+                "czk" : ["mandatory", ".//html:span[text()='CZK']/../../../../..", "=>buy_sell"],
+                "try" : ["mandatory", ".//html:span[text()='TRY']/../../../../..", "=>buy_sell"],
+                "pln" : ["mandatory", ".//html:span[text()='PLN']/../../../../..", "=>buy_sell"],
+                "ils" : ["mandatory", ".//html:span[text()='ILS']/../../../../..", "=>buy_sell"],
+                "cad" : ["mandatory", ".//html:span[text()='CAD']/../../../../..", "=>buy_sell"],
+                "aed" : ["mandatory", ".//html:span[text()='AED']/../../../../..", "=>buy_sell"],
+                "bgn" : ["mandatory", ".//html:span[text()='BGN']/../../../../..", "=>buy_sell"],
+                "dkk" : ["mandatory", ".//html:span[text()='DKK']/../../../../..", "=>buy_sell"],
+                "aud" : ["mandatory", ".//html:span[text()='AUD']/../../../../..", "=>buy_sell"],
+
+                "sek" : ["mandatory", ".//html:span[text()='SEK']/../../../..",    "=>buy_sell"],
+                "nok" : ["mandatory", ".//html:span[text()='NOK']/../../../..",    "=>buy_sell"]
+            }]
+        },
+        "reformat" : [],
+        "blocks" : {
+            "buy_sell" : {
+                "buy"  : ["text.|^replace:double_dot|float.|mandatory", "./html:td[3]//html:span"],
+                "sell" : ["float.|mandatory", "./html:td[4]//html:span"]
+            }
+        }
+    },
+        {
+            "version" : 2,
+            "timestamp" : 1350982419,
+            "config" : {
+                "xpath" : {
+                    "root" : "//html:html/html:body//html:table//html:span[text()='CURSUL VALUTAR ']/../../../../..",
+                    "namespaces" : {
+                        "html": "http://www.w3.org/1999/xhtml"
+                    }
+                },
+                "anomaly" : {
+                    "root" : "//html:html/html:body",
+                    "namespaces" : { }
+                }
+            },
+            "anomaly" : {},
+            "light_handlers" : {
+                "^html:" : {},
+                "^replace:double_dot" : [{
+                    "from_str" : "..",
+                    "to" : "."
+                }],
+                "^date:" : ["%d.%m.%Y"]
+            },
+            "rules" : {
+                "date" : ["text.|^date:|mandatory", ".//html:span[text()='CURSUL VALUTAR ']/../following-sibling::html:span/html:span"],
+                "items" : ["mandatory", ".", {
+                    "*" : ["mandatory", {
+                        "for" : {
+                            "czk" : "CZK']/..",
+                            "try" : "TRY']/..",
+                            "pln" : "PLN']/..",
+                            "ils" : "ILS']/..",
+                            "cad" : "CAD']/..",
+                            "aed" : "AED']/..",
+                            "bgn" : "BGN']/..",
+                            "dkk" : "DKK']/..",
+                            "aud" : "AUD']/..",
+                            "sek" : "SEK']",
+                            "nok" : "NOK']"
+                        },
+                        "in" : ".//html:span[text()='%s/../../../.."
+                    }, "=>buy_sell"]
+                }]
+            },
+            "blocks" : {
+                "buy_sell" : {
+                    "buy"  : ["text.|^replace:double_dot|float.|mandatory", "./html:td[3]//html:span"],
+                    "sell" : ["float.|mandatory", "./html:td[4]//html:span"]
+                }
+            },
+            "reformat" : []
+        }]
+}
+

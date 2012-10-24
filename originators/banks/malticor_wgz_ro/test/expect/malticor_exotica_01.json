@@ -1,0 +1,16 @@
+{
+    "date": "Date(2012-10-19T00:00:00)",
+    "items": {
+        "ils": {"sell": 3.1, "buy": 2.8},
+        "aud": {"sell": 12.8, "buy": 11.8},
+        "nok": {"sell": 2.1, "buy": 1.65},
+        "bgn": {"sell": 9.0, "buy": 7.4},
+        "try": {"sell": 7.0, "buy": 6.35},
+        "czk": {"sell": 0.7, "buy": 0.51},
+        "aed": {"sell": 3.2, "buy": 2.2},
+        "pln": {"sell": 3.8, "buy": 3.35},
+        "sek": {"sell": 2.0, "buy": 1.5},
+        "dkk": {"sell": 2.15, "buy": 1.7},
+        "cad": {"sell": 12.5, "buy": 12.2}
+    }
+}
