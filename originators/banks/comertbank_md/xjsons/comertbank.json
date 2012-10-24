@@ -1,0 +1,79 @@
+{
+    "name": "comertbank",
+    "test_url" : "http://www.comertbank.md/",
+    "version": 2,
+    "versions": [{
+        "version" : 1,
+        "timestamp" : 1332498235,
+        "config" : {
+            "xpath" : {
+                "root" : "//html:html/html:body//html:table[@id='crates_table'][1]",
+                "namespaces" : {
+                    "html": "http://www.w3.org/1999/xhtml"
+                }
+            },
+            "anomaly" : {
+                "root" : "//html:html/html:body",
+                "namespaces" : { }
+            }
+        },
+        "anomaly" : {},
+        "light_handlers" : {
+            "^html:" : {}
+        },
+        "rules" : {
+            "date" : ["text.|mandatory", ".//html:td[@class='crates_title']/html:font"],
+            "items" : ["mandatory", ".", {
+                "usd" : ["mandatory", ".//html:td[text()='USD']/..", "=>sell_buy"],
+                "eur" : ["mandatory", ".//html:td[text()='EUR']/..", "=>sell_buy"],
+                "rub" : ["mandatory", ".//html:td[text()='RUB']/..", "=>sell_buy"],
+                "uah" : ["mandatory", ".//html:td[text()='UAH']/..", "=>sell_buy"]
+            }]
+        },
+        "reformat" : [],
+        "blocks" : {
+            "sell_buy" : {
+                "sell" : ["float.|mandatory", "./html:td[3]"],
+                "buy"  : ["float.|mandatory", "./html:td[4]"]
+            }
+        }
+    },
+        {
+            "version" : 2,
+            "timestamp" : 1350980406,
+            "config" : {
+                "xpath" : {
+                    "root" : "//html:html/html:body//html:table[@id='crates_table'][1]",
+                    "namespaces" : {
+                        "html": "http://www.w3.org/1999/xhtml"
+                    }
+                },
+                "anomaly" : {
+                    "root" : "//html:html/html:body",
+                    "namespaces" : { }
+                }
+            },
+            "anomaly" : {},
+            "light_handlers" : {
+                "^html:" : {},
+                "^date:" : ["%d.%m.%Y"]
+            },
+            "rules" : {
+                "date" : ["text.|^date:|mandatory", ".//html:td[@class='crates_title']/html:font"],
+                "items" : ["mandatory", ".", {
+                    "*" : ["mandatory", {
+                        "for" : ["USD", "EUR", "RUB", "UAH"],
+                        "in" : ".//html:td[text()='%s']/.."
+                    }, "=>sell_buy"]
+                }]
+            },
+            "blocks" : {
+                "sell_buy" : {
+                    "sell" : ["float.|mandatory", "./html:td[3]"],
+                    "buy"  : ["float.|mandatory", "./html:td[4]"]
+                }
+            },
+            "reformat" : []
+        }]
+}
+
