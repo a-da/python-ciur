@@ -1,0 +1,96 @@
+{
+    "name": "bcr",
+    "test_url" : "http://info.bcr.md/ExchangeRates.aspx",
+    "version": 2,
+    "versions": [{
+        "version" : 1,
+        "timestamp" : 1350592144,
+        "config" : {
+            "xpath" : {
+                "root" : "//html:html/html:body//html:table",
+                "namespaces" : {
+                    "html": "http://www.w3.org/1999/xhtml"
+                }
+            },
+            "anomaly" : {
+                "root" : "//html:html/html:body",
+                "namespaces" : { }
+            }
+        },
+        "anomaly" : {},
+        "light_handlers" : {
+            "^html:" : {},
+            "^drain:date" :{
+                "re" : "(\\d{2}\\.\\d{2}\\.\\d{4})",
+                "group" : 1
+            }
+        },
+        "rules" : {
+            "date" : ["text.tail|^drain:date|mandatory", ".//html:td[@class='title']/html:b"],
+            "items" : ["mandatory", ".", {
+                "usd" : ["mandatory", ".//html:td[text()='Dolar SUA (USD)']/..",         "=>by_sell"],
+                "eur" : ["mandatory", ".//html:td[text()='Euro (EUR)']/..",              "=>by_sell"],
+                "rub" : ["mandatory", ".//html:td[text()='Rubla ruseasca (RUB)']/..",    "=>by_sell"],
+                "ron" : ["mandatory", ".//html:td[text()='Leu romanesc (RON)']/..",      "=>by_sell"],
+                "uah" : ["mandatory", ".//html:td[text()='Hrivna ucraineana (UAH)']/..", "=>by_sell"]
+            }]
+        },
+        "blocks" : {
+            "by_sell" : {
+                "buy"  : ["float.|mandatory", "./html:td[2]"],
+                "sell" : ["float.|mandatory", "./html:td[3]"]
+            }
+        },
+        "reformat" : []
+    },
+        {
+            "version" : 2,
+            "timestamp" : 1350592144,
+            "config" : {
+                "xpath" : {
+                    "root" : "//html:html/html:body//html:table",
+                    "namespaces" : {
+                        "html": "http://www.w3.org/1999/xhtml"
+                    }
+                },
+                "anomaly" : {
+                    "root" : "//html:html/html:body",
+                    "namespaces" : { }
+                }
+            },
+            "anomaly" : {},
+            "light_handlers" : {
+                "^html:" : {},
+                "^drain:date" :{
+                    "re" : "(\\d{2}\\.\\d{2}\\.\\d{4})",
+                    "group" : 1
+                },
+                "^date:" : ["%d.%m.%Y"]
+            },
+            "rules" : {
+                "date" : ["text.tail|^drain:date|^date:|mandatory", ".//html:td[@class='title']/html:b"],
+                "items" : ["mandatory", ".", {
+                    "*" : ["mandatory", {
+                        "for" : {
+                            "usd" : "Dolar SUA (USD)",
+                            "eur" : "Euro (EUR)",
+                            "rub" : "Rubla ruseasca (RUB)",
+                            "ron" : "Leu romanesc (RON)",
+                            "uah" : "Hrivna ucraineana (UAH)"
+                        },
+                        "in" : ".//html:td[text()='%s']/.."
+                    },
+                        "=>by_sell"]
+
+                }]
+            },
+            "blocks" : {
+                "by_sell" : {
+                    "buy"  : ["float.|mandatory", "./html:td[2]"],
+                    "sell" : ["float.|mandatory", "./html:td[3]"]
+                }
+            },
+            "reformat" : []
+        }]
+}
+
