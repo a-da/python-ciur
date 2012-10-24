@@ -1,0 +1,13 @@
+{
+    "city": "LA CIOTAT",
+    "title": "ALFA ROMEO GIULIETTA 1.6 JTDm Sélective S&S",
+    "info_vehicule": {
+        "price": {
+            "currency": "€",
+            "value": 19900
+        }
+    },
+    "region": "Provence-Alpes-Côte d'Azur",
+    "postal_code": "13",
+    "department": "Bouches-du-Rhône"
+}

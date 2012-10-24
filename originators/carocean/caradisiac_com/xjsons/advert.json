@@ -1,0 +1,109 @@
+{
+    "name": "advert_caradisiac_com",
+    "test_url" : "http://occasions-particuliers.caradisiac.com/peugeot-3008-0-002cc83a92b1f44047e0e42dd25ad4d7.htm",
+    "version": 0,
+    "versions": [{
+        "version" : 0,
+        "timestamp" : 1345530375,
+        "config" : {
+            "xpath" : {
+                "root" : "/html:html",
+                "namespaces" : {
+                    "html": "http://www.w3.org/1999/xhtml"
+                }
+            },
+            "anomaly" : {
+                "root" : "/html:html",
+                "namespaces" : {
+                }
+            }
+        },
+        "anomaly" : {},
+        "light_handlers" : {
+            "^html:" : {},
+            "^replace:postal_code" : [{
+                    "from_re": "\\), .*$",
+                    "to": ""
+                },
+                {
+                    "from_re": "^.* \\(",
+                    "to": ""
+                }
+            ],
+            "^replace:department" : [{
+                    "from_re": " \\(.*$",
+                    "to": ""
+                },
+                {
+                    "from_re": "^.*, ",
+                    "to": ""
+                },
+                {
+                    "from_str": " ",
+                    "to": "-"
+                }
+            ],
+            "^replace:city" : [{
+                "from_re": "^.*à proximité de ",
+                "to": ""
+            },
+                {
+                    "from_re": ", .*$",
+                    "to": ""
+                }
+            ],
+            "^hash_map:regions" : {
+                "map" : {
+                    "67 68" : "Alsace",
+                    "24 33 40 47 64" : "Aquitaine",
+                    "03 15 43 63" : "Auvergne",
+                    "14 50 61" : "Basse-Normandie",
+                    "21 58 71 89" : "Bourgogne",
+                    "22 29 35 56" : "Bretagne",
+                    "18 28 36 37 41 45" : "Centre",
+                    "08 10 51 52" : "Champagne-Ardenne",
+                    "2A 2B 20" : "Corse",
+                    "25 39 70 90" : "Franche-Comté",
+                    "971" : "Guadeloupe",
+                    "973" : "Guyane",
+                    "27 76" : "Haute-Normandie",
+                    "75 77 78 91 92 93 94 95" : "Île-de-France",
+                    "974" : "La Réunion",
+                    "11 30 34 48" : "Languedoc-Roussillon",
+                    "19 23 87" : "Limousin",
+                    "54 55 57 88" : "Lorraine",
+                    "972" : "Martinique",
+                    "976" : "Mayotte",
+                    "09 12 31 32 46 65 81 82" : "Midi-Pyrénées",
+                    "59 62" : "Nord-Pas-de-Calais",
+                    "44 49 53 72 85" : "Pays de la Loire",
+                    "02 60 802" : "Picardie",
+                    "16 17 79 86" : "Poitou-Charentes",
+                    "04 05 06 13 83 84" : "Provence-Alpes-Côte d'Azur",
+                    "01 07 26 38 42 69 73 74" : "Rhône-Alpes"
+                },
+                "default" : "unknown",
+                "separator" : " ",
+                "operator" : "startswith"
+            }
+        },
+        "rules" : {
+            "# bug to fix meta" : ["mandatory", "./html:head/html:meta[@name='description']/@content", {
+                "postal_code": ["text.|^replace:postal_code|mandatory", ".", "#PEUGEOT 3008 1.6 HDI 112 FAP ALLURE Diesel, 6000 km, 21500 euros, à proximité de CACHAN, Val de Marne (94), 2012 à vendre. Vente de véhicule d'occasion de particuliers"],
+                "department": ["text.|^replace:department|mandatory",  "."],
+                "city": ["text.|^replace:city|mandatory",  "."],
+                "region" : ["text.|^replace:postal_code|^hash_map:regions|mandatory",  "."]
+            }],
+
+            "postal_code": ["text.|^replace:postal_code|mandatory", "./html:head/html:meta[@name='description']/@content",
+                "#PEUGEOT 3008 1.6 HDI 112 FAP ALLURE Diesel, 6000 km, 21500 euros, à proximité de CACHAN, Val de Marne (94), 2012 à vendre. Vente de véhicule d'occasion de particuliers"
+            ],
+            "department": ["text.|^replace:department|mandatory",  "./html:head/html:meta[@name='description']/@content"],
+            "city": ["text.|^replace:city|mandatory",  "./html:head/html:meta[@name='description']/@content"],
+            "region" : ["text.|^replace:postal_code|^hash_map:regions|mandatory",  "./html:head/html:meta[@name='description']/@content"]
+
+        },
+        "renames" : {},
+        "blocks" : { }
+    }]
+}

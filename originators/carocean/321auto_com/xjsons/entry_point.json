@@ -1,0 +1,33 @@
+{
+    "name": "entry_point_321auto_com",
+    "test_url" : "http://occasion.321auto.com/page-1",
+    "version": 0,
+    "versions": [{
+        "version" : 0,
+        "timestamp" : 1345554086,
+        "config" : {
+            "xpath" : {
+                "root" : "/html:html/html:body",
+                "namespaces" : {
+                    "html": "http://www.w3.org/1999/xhtml"
+                }
+            },
+            "anomaly" : {
+                "root" : "/html:html/html:body",
+                "namespaces" : {
+
+                }
+            }
+        },
+        "anomaly" : {},
+        "light_handlers" : {
+            "^html:" : {}
+        },
+        "rules" : {
+            "links": ["text.force_list|mandatory",  ".//html:div[@id='listeResultats']//html:div[@class='annonceDesc']/html:a[@class='annonceLien']/@href"],
+            "next_page" : ["text.|optional",        ".//html:a[@id='ancre_resultat']/following-sibling::html:div[1]//html:ul/html:li[last()]/html:a/@href"]
+        },
+        "renames" : {},
+        "blocks" : { }
+    }]
+}
