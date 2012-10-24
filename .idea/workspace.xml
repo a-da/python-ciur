@@ -5,220 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="731e387a-9bba-4f7f-9724-0ba1d5a2d97c" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/originators/banks/bcr_md/__init__.py" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/321auto_com/page_samples/advert_01.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/321auto_com/page_samples/entry_point_01.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/321auto_com/test/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/321auto_com/test/expect/advert_01.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/321auto_com/test/expect/entry_point_01.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/321auto_com/test/test_case_advert.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/321auto_com/test/test_case_entry_point.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/321auto_com/xjsons/advert.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/321auto_com/xjsons/entry_point.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/annonceauto_com/page_samples/advert_01.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/annonceauto_com/test/expect/advert_01.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/annonceauto_com/test/test_case_advert.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/annonceauto_com/xjsons/advert.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/annonces_automobile_com/page_samples/advert_01.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/annonces_automobile_com/test/expect/advert_01.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/annonces_automobile_com/test/test_case_advert.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/annonces_automobile_com/xjsons/advert.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/ape_es/test/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/auto_evasion_com/page_samples/advert_01.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/auto_evasion_com/test/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/auto_evasion_com/test/expect/advert_01.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/auto_evasion_com/test/test_case_advert.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/auto_evasion_com/xjsons/advert.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/auto_selection_com/page_samples/advert_01.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/auto_selection_com/test/expect/advert_01.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/auto_selection_com/test/test_case_advert.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/auto_selection_com/xjsons/advert.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/automobile_fr/page_samples/advert_01.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/automobile_fr/test/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/automobile_fr/test/expect/advert_01.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/automobile_fr/test/test_case_advert.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/automobile_fr/xjsons/advert.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/autoreflex_com/page_samples/advert_01.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/autoreflex_com/test/expect/advert_01.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/autoreflex_com/test/test_case_advert.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/autoreflex_com/xjsons/advert.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/autoscout24_fr/page_samples/advert_01.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/autoscout24_fr/test/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/autoscout24_fr/test/expect/advert_01.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/autoscout24_fr/test/test_case_advert.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/autoscout24_fr/xjsons/advert.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/bem_md/page_samples/banca_de_economii.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/bem_md/test/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/bem_md/xjsons/banca_de_economii.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/caradisiac_com/page_samples/advert_01.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/caradisiac_com/test/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/caradisiac_com/test/expect/advert_01.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/caradisiac_com/test/test_case_advert.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/caradisiac_com/xjsons/advert.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/carouest_com/page_samples/advert_01.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/carouest_com/test/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/carouest_com/test/expect/advert_01.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/carouest_com/test/test_case_advert.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/carouest_com/xjsons/advert.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/cible_auto_com/page_samples/advert_01.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/cible_auto_com/test/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/cible_auto_com/test/expect/advert_01.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/cible_auto_com/test/test_case_advert.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/cible_auto_com/xjsons/advert.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/ecb_md/page_samples/eurocreditbank.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/ecb_md/xjsons/eurocreditbank.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/energbank_com/sample_pages/energbank.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/eximbank_com/sample_pages/eximbank.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/eximbank_com/xjsons/eximbank.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/fincombank_com/sample_pages/fincombank.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/fincombank_com/xjsons/fincombank.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/franceautomobile_com/page_samples/advert_01.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/franceautomobile_com/test/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/franceautomobile_com/test/expect/advert_01.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/franceautomobile_com/test/test_case_advert.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/franceautomobile_com/xjsons/advert.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/infomagazine_com/test/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/infomagazine_com/test/expect/advert_01.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/infomagazine_com/test/test_case_advert.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/infomagazine_com/xjsons/advert.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/lacentrale_fr/page_samples/advert_01.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/lacentrale_fr/test/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/lacentrale_fr/test/expect/advert_01.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/lacentrale_fr/test/test_case_advert.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/lacentrale_fr/xjsons/advert.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/largus_fr/page_samples/advert_01.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/largus_fr/test/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/largus_fr/test/expect/advert_01.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/largus_fr/test/test_case_advert.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/largus_fr/xjsons/advert.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/maib_com/sample_pages/moldova_agroindbank.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/maib_com/xjsons/moldova_agroindbank.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/marche_fr/page_samples/advert_01.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/marche_fr/page_samples/advert_02.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/marche_fr/page_samples/entry_point_01.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/marche_fr/test/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/marche_fr/test/expect/advert_01.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/marche_fr/test/test_case_advert.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/marche_fr/test/test_case_entry_point.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/marche_fr/xjsons/advert.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/marche_fr/xjsons/entry_point.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/micb_md/page_samples/moldinconbank.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/mobiasbanca_md/page_samples/mobiasbanca.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/mobiasbanca_md/xjsons/mobiasbanca.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/procreditbank_md/sample_pages/procredit_bank.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/procreditbank_md/xjsons/procredit_bank.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/socbank_md/page_samples/banca_sociala.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/socbank_md/xjsons/banca_sociala.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/unibank_md/page_samples/unibank.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/victoriabank_md/page_samples/victoriabank.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/victoriabank_md/test/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/originators/victoriabank_md/xjsons/victoriabank.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/util/AdvancedDict.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/util/AdvancedOrderedDict.py" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/.name" afterPath="$PROJECT_DIR$/.idea/.name" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/ciur.iml" afterPath="$PROJECT_DIR$/.idea/ciur.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dictionaries/ada.xml" afterPath="$PROJECT_DIR$/.idea/dictionaries/ada.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/encodings.xml" afterPath="$PROJECT_DIR$/.idea/encodings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/scopes/scope_settings.xml" afterPath="$PROJECT_DIR$/.idea/scopes/scope_settings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/__init__.py" afterPath="$PROJECT_DIR$/__init__.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/common/DomParser.py" afterPath="$PROJECT_DIR$/common/DomParser.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/common/DomParserFile.py" afterPath="$PROJECT_DIR$/common/DomParserFile.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/common/__init__.py" afterPath="$PROJECT_DIR$/common/__init__.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/999_md/test/__init__.py" afterPath="$PROJECT_DIR$/originators/999_md/test/__init__.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/aa_com_tr/page_samples/blogspot.xml" afterPath="$PROJECT_DIR$/originators/aa_com_tr/page_samples/blogspot.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/aa_com_tr/page_samples/e0.xml" afterPath="$PROJECT_DIR$/originators/aa_com_tr/page_samples/e0.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/aa_com_tr/page_samples/e3.xml" afterPath="$PROJECT_DIR$/originators/aa_com_tr/page_samples/e3.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/aa_com_tr/page_samples/e37.xml" afterPath="$PROJECT_DIR$/originators/aa_com_tr/page_samples/e37.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/aa_com_tr/page_samples/e55.xml" afterPath="$PROJECT_DIR$/originators/aa_com_tr/page_samples/e55.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/aa_com_tr/page_samples/rss.xml" afterPath="$PROJECT_DIR$/originators/aa_com_tr/page_samples/rss.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/aa_com_tr/page_samples/wordpress.xml" afterPath="$PROJECT_DIR$/originators/aa_com_tr/page_samples/wordpress.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/aa_com_tr/test/__init__.py" afterPath="$PROJECT_DIR$/originators/aa_com_tr/test/__init__.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/aa_com_tr/test/test.py" afterPath="$PROJECT_DIR$/originators/aa_com_tr/test/test.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/aa_com_tr/xjsons/rss.json" afterPath="$PROJECT_DIR$/originators/aa_com_tr/xjsons/rss.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/facebook_com/page_samples/node.html" afterPath="$PROJECT_DIR$/originators/facebook_com/page_samples/node.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/facebook_com/page_samples/profile_01.html" afterPath="$PROJECT_DIR$/originators/facebook_com/page_samples/profile_01.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/facebook_com/page_samples/profile_02.html" afterPath="$PROJECT_DIR$/originators/facebook_com/page_samples/profile_02.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/facebook_com/page_samples/profile_03.html" afterPath="$PROJECT_DIR$/originators/facebook_com/page_samples/profile_03.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/facebook_com/page_samples/profile_04.html" afterPath="$PROJECT_DIR$/originators/facebook_com/page_samples/profile_04.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/facebook_com/page_samples/profile_05.html" afterPath="$PROJECT_DIR$/originators/facebook_com/page_samples/profile_05.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/facebook_com/page_samples/profile_06.html" afterPath="$PROJECT_DIR$/originators/facebook_com/page_samples/profile_06.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/facebook_com/page_samples/profile_07.html" afterPath="$PROJECT_DIR$/originators/facebook_com/page_samples/profile_07.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/facebook_com/page_samples/profile_08.html" afterPath="$PROJECT_DIR$/originators/facebook_com/page_samples/profile_08.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/facebook_com/page_samples/profile_09.html" afterPath="$PROJECT_DIR$/originators/facebook_com/page_samples/profile_09.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/facebook_com/page_samples/profile_10.html" afterPath="$PROJECT_DIR$/originators/facebook_com/page_samples/profile_10.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/facebook_com/page_samples/profile_11.html" afterPath="$PROJECT_DIR$/originators/facebook_com/page_samples/profile_11.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/facebook_com/page_samples/profile_12.html" afterPath="$PROJECT_DIR$/originators/facebook_com/page_samples/profile_12.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/facebook_com/page_samples/search_01.html" afterPath="$PROJECT_DIR$/originators/facebook_com/page_samples/search_01.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/facebook_com/page_samples/search_02.html" afterPath="$PROJECT_DIR$/originators/facebook_com/page_samples/search_02.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/facebook_com/page_samples/search_03.html" afterPath="$PROJECT_DIR$/originators/facebook_com/page_samples/search_03.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/facebook_com/page_samples/search_04.html" afterPath="$PROJECT_DIR$/originators/facebook_com/page_samples/search_04.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/facebook_com/test/expect/node.json" afterPath="$PROJECT_DIR$/originators/facebook_com/test/expect/node.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/facebook_com/test/expect/profile_01.json" afterPath="$PROJECT_DIR$/originators/facebook_com/test/expect/profile_01.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/facebook_com/test/expect/profile_02.json" afterPath="$PROJECT_DIR$/originators/facebook_com/test/expect/profile_02.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/facebook_com/test/expect/profile_03.json" afterPath="$PROJECT_DIR$/originators/facebook_com/test/expect/profile_03.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/facebook_com/test/expect/profile_04.json" afterPath="$PROJECT_DIR$/originators/facebook_com/test/expect/profile_04.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/facebook_com/test/expect/profile_05.json" afterPath="$PROJECT_DIR$/originators/facebook_com/test/expect/profile_05.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/facebook_com/test/expect/profile_06.json" afterPath="$PROJECT_DIR$/originators/facebook_com/test/expect/profile_06.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/facebook_com/test/expect/profile_07.json" afterPath="$PROJECT_DIR$/originators/facebook_com/test/expect/profile_07.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/facebook_com/test/expect/profile_08.json" afterPath="$PROJECT_DIR$/originators/facebook_com/test/expect/profile_08.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/facebook_com/test/expect/profile_09.json" afterPath="$PROJECT_DIR$/originators/facebook_com/test/expect/profile_09.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/facebook_com/test/expect/profile_10.json" afterPath="$PROJECT_DIR$/originators/facebook_com/test/expect/profile_10.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/facebook_com/test/expect/profile_11.json" afterPath="$PROJECT_DIR$/originators/facebook_com/test/expect/profile_11.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/facebook_com/test/expect/profile_12.json" afterPath="$PROJECT_DIR$/originators/facebook_com/test/expect/profile_12.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/facebook_com/test/expect/search_01.json" afterPath="$PROJECT_DIR$/originators/facebook_com/test/expect/search_01.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/facebook_com/test/expect/search_02.json" afterPath="$PROJECT_DIR$/originators/facebook_com/test/expect/search_02.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/facebook_com/test/expect/search_03.json" afterPath="$PROJECT_DIR$/originators/facebook_com/test/expect/search_03.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/facebook_com/test/expect/search_04.json" afterPath="$PROJECT_DIR$/originators/facebook_com/test/expect/search_04.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/facebook_com/test/node_test_case.py" afterPath="$PROJECT_DIR$/originators/facebook_com/test/node_test_case.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/facebook_com/test/profile_test_case.py" afterPath="$PROJECT_DIR$/originators/facebook_com/test/profile_test_case.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/facebook_com/test/search_test_case.py" afterPath="$PROJECT_DIR$/originators/facebook_com/test/search_test_case.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/facebook_com/xjsons/node.json" afterPath="$PROJECT_DIR$/originators/facebook_com/xjsons/node.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/facebook_com/xjsons/profile.json" afterPath="$PROJECT_DIR$/originators/facebook_com/xjsons/profile.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/facebook_com/xjsons/search.json" afterPath="$PROJECT_DIR$/originators/facebook_com/xjsons/search.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/idefix_com/page_samples/profile_01.html" afterPath="$PROJECT_DIR$/originators/idefix_com/page_samples/profile_01.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/idefix_com/test/profile.json" afterPath="$PROJECT_DIR$/originators/idefix_com/test/profile.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/idefix_com/test/profile_test_case.py" afterPath="$PROJECT_DIR$/originators/idefix_com/test/profile_test_case.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/idefix_com/xjsons/profile.json" afterPath="$PROJECT_DIR$/originators/idefix_com/xjsons/profile.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/linkedin_com/page_samples/linkedin_com_company_profile.html" afterPath="$PROJECT_DIR$/originators/linkedin_com/page_samples/linkedin_com_company_profile.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/linkedin_com/page_samples/linkedin_com_people_directory.html" afterPath="$PROJECT_DIR$/originators/linkedin_com/page_samples/linkedin_com_people_directory.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/linkedin_com/page_samples/linkedin_com_people_profile.html" afterPath="$PROJECT_DIR$/originators/linkedin_com/page_samples/linkedin_com_people_profile.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/linkedin_com/test/company_profile.py" afterPath="$PROJECT_DIR$/originators/linkedin_com/test/company_profile.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/linkedin_com/test/people_directory.py" afterPath="$PROJECT_DIR$/originators/linkedin_com/test/people_directory.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/linkedin_com/test/people_profile.py" afterPath="$PROJECT_DIR$/originators/linkedin_com/test/people_profile.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/linkedin_com/xjsons/linkedin_com_company_profile.json" afterPath="$PROJECT_DIR$/originators/linkedin_com/xjsons/linkedin_com_company_profile.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/linkedin_com/xjsons/linkedin_com_people_directory.json" afterPath="$PROJECT_DIR$/originators/linkedin_com/xjsons/linkedin_com_people_directory.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/linkedin_com/xjsons/linkedin_com_people_profile.json" afterPath="$PROJECT_DIR$/originators/linkedin_com/xjsons/linkedin_com_people_profile.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/mag_md/page_samples/mag_md_profile.html" afterPath="$PROJECT_DIR$/originators/mag_md/page_samples/mag_md_profile.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/mag_md/test/test.py" afterPath="$PROJECT_DIR$/originators/mag_md/test/test.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/mag_md/xjsons/mag_md_profile.json" afterPath="$PROJECT_DIR$/originators/mag_md/xjsons/mag_md_profile.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/manta_com/page_samples/manta_com_city.html" afterPath="$PROJECT_DIR$/originators/manta_com/page_samples/manta_com_city.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/manta_com/page_samples/manta_com_country.html" afterPath="$PROJECT_DIR$/originators/manta_com/page_samples/manta_com_country.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/manta_com/page_samples/manta_com_pagination.html" afterPath="$PROJECT_DIR$/originators/manta_com/page_samples/manta_com_pagination.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/manta_com/page_samples/manta_com_profile.html" afterPath="$PROJECT_DIR$/originators/manta_com/page_samples/manta_com_profile.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/manta_com/test/city.py" afterPath="$PROJECT_DIR$/originators/manta_com/test/city.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/manta_com/test/country.py" afterPath="$PROJECT_DIR$/originators/manta_com/test/country.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/manta_com/test/pagination.py" afterPath="$PROJECT_DIR$/originators/manta_com/test/pagination.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/manta_com/test/profile.py" afterPath="$PROJECT_DIR$/originators/manta_com/test/profile.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/manta_com/xjsons/manta_com_city.json" afterPath="$PROJECT_DIR$/originators/manta_com/xjsons/manta_com_city.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/manta_com/xjsons/manta_com_country.json" afterPath="$PROJECT_DIR$/originators/manta_com/xjsons/manta_com_country.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/manta_com/xjsons/manta_com_pagination.json" afterPath="$PROJECT_DIR$/originators/manta_com/xjsons/manta_com_pagination.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/manta_com/xjsons/manta_com_profile.json" afterPath="$PROJECT_DIR$/originators/manta_com/xjsons/manta_com_profile.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/ucuzu_com/page_samples/ucuzu_com_profile.html" afterPath="$PROJECT_DIR$/originators/ucuzu_com/page_samples/ucuzu_com_profile.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/ucuzu_com/page_samples/ucuzu_com_specs.html" afterPath="$PROJECT_DIR$/originators/ucuzu_com/page_samples/ucuzu_com_specs.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/ucuzu_com/test/profile.py" afterPath="$PROJECT_DIR$/originators/ucuzu_com/test/profile.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/ucuzu_com/test/specs.py" afterPath="$PROJECT_DIR$/originators/ucuzu_com/test/specs.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/ucuzu_com/xjsons/ucuzu_com_profile.json" afterPath="$PROJECT_DIR$/originators/ucuzu_com/xjsons/ucuzu_com_profile.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/ucuzu_com/xjsons/ucuzu_com_specs.json" afterPath="$PROJECT_DIR$/originators/ucuzu_com/xjsons/ucuzu_com_specs.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/yellowpages_com_tr/sample_pages/yellowpages_com_tr_profile.html" afterPath="$PROJECT_DIR$/originators/yellowpages_com_tr/sample_pages/yellowpages_com_tr_profile.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/yellowpages_com_tr/test/profile.py" afterPath="$PROJECT_DIR$/originators/yellowpages_com_tr/test/profile.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/originators/yellowpages_com_tr/xjsons/yellowpages_com_tr_profile.json" afterPath="$PROJECT_DIR$/originators/yellowpages_com_tr/xjsons/yellowpages_com_tr_profile.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/util/AdvanceDictDomParser.py" afterPath="$PROJECT_DIR$/util/AdvanceDictDomParser.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/util/__init__.py" afterPath="$PROJECT_DIR$/util/__init__.py" />
     </list>
     <ignored path="ciur.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -240,112 +27,7 @@
     <favorites_list name="ciur" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="bcr.json" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/originators/banks/bcr_md/xjsons/bcr.json">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="42" column="44" selection-start="1650" selection-end="1650" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="e#192#539#0" expanded="true" />
-                <element signature="e#216#403#0" expanded="true" />
-                <element signature="e#311#389#0" expanded="true" />
-                <element signature="e#429#529#0" expanded="true" />
-                <element signature="e#592#754#0" expanded="true" />
-                <element signature="e#648#744#0" expanded="true" />
-                <element signature="e#774#1452#0" expanded="true" />
-                <element signature="e#893#1442#0" expanded="true" />
-                <element signature="e#912#1441#0" expanded="true" />
-                <element signature="e#1473#1649#0" expanded="true" />
-                <element signature="e#1499#1639#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="energbank.json" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/originators/banks/energbank_com/xjsons/energbank.json">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="e#0#3224#1" expanded="true" />
-                <element signature="e#106#3222#0" expanded="true" />
-                <element signature="e#107#1727#0" expanded="true" />
-                <element signature="e#185#542#0" expanded="true" />
-                <element signature="e#209#407#0" expanded="true" />
-                <element signature="e#315#393#0" expanded="true" />
-                <element signature="e#433#532#0" expanded="true" />
-                <element signature="e#595#758#0" expanded="true" />
-                <element signature="e#652#748#0" expanded="true" />
-                <element signature="e#778#1469#0" expanded="true" />
-                <element signature="e#884#1459#0" expanded="true" />
-                <element signature="e#914#1458#0" expanded="true" />
-                <element signature="e#1514#1721#0" expanded="true" />
-                <element signature="e#1541#1711#0" expanded="true" />
-                <element signature="e#1737#3221#0" expanded="true" />
-                <element signature="e#1827#2228#0" expanded="true" />
-                <element signature="e#1855#2073#0" expanded="true" />
-                <element signature="e#1969#2055#0" expanded="true" />
-                <element signature="e#2103#2214#0" expanded="true" />
-                <element signature="e#2289#2476#0" expanded="true" />
-                <element signature="e#2354#2462#0" expanded="true" />
-                <element signature="e#2500#2931#0" expanded="true" />
-                <element signature="e#2614#2917#0" expanded="true" />
-                <element signature="e#2644#2916#0" expanded="true" />
-                <element signature="e#2672#2898#0" expanded="true" />
-                <element signature="e#2686#2863#0" expanded="true" />
-                <element signature="e#2955#3182#0" expanded="true" />
-                <element signature="e#2986#3168#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DomParser.py" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/common/DomParser.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="411" column="29" selection-start="15800" selection-end="15800" vertical-scroll-proportion="0.37716264">
-              <folding>
-                <element signature="e#10417#11917#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="energbank_test_case.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/originators/banks/energbank_com/test/energbank_test_case.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="19" column="37" selection-start="552" selection-end="552" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="e#47#62#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="bcr_test_case.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/originators/banks/bcr_md/test/bcr_test_case.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="8" column="31" selection-start="187" selection-end="187" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="e#47#62#0" expanded="true" />
-                <element signature="e#225#709#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="case.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file:///usr/lib/python2.7/unittest/case.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="173" column="0" selection-start="5185" selection-end="5185" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="e#5348#6486#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf />
   </component>
   <component name="FindManager">
     <FindUsagesManager>
@@ -380,8 +62,8 @@
   <component name="ProjectFrameBounds">
     <option name="x" value="-10" />
     <option name="y" value="17" />
-    <option name="width" value="1386" />
-    <option name="height" value="735" />
+    <option name="width" value="1940" />
+    <option name="height" value="1048" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="true" id="Add" />
@@ -490,6 +172,28 @@
               <option name="myItemId" value="energbank_com" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ciur" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ciur" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="originators" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="banks" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="energbank_com" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="xjsons" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
@@ -518,28 +222,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="test" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ciur" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ciur" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="originators" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="banks" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="energbank_com" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -612,11 +294,12 @@
   <component name="PropertiesComponent">
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="options.lastSelected" value="project.propVCSSupport.Mappings" />
     <property name="recentsLimit" value="5" />
-    <property name="options.lastSelected" value="com.jetbrains.python.configuration.PythonSdkConfigurable" />
+    <property name="restartRequiresConfirmation" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/.." />
-    <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.searchVisible" value="true" />
+    <property name="options.splitter.details.proportions" value="0.2" />
   </component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
@@ -642,7 +325,7 @@
       <recent name="$PROJECT_DIR$/originator/ucuzu_com/xjsons" />
     </key>
   </component>
-  <component name="RunManager" selected="Python's test.Nosetests in energbank_test_case">
+  <component name="RunManager" selected="Python's test.Nosetests in /code/ciur/originators/banks">
     <configuration default="false" name="Nosetests in bnm_test_case" type="tests" factoryName="Nosetests" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -725,9 +408,11 @@
       <option name="TEST_TYPE" value="TEST_FOLDER" />
       <option name="PATTERN" value="" />
       <option name="USE_PATTERN" value="false" />
-      <option name="PARAMS" value="" />
-      <option name="USE_PARAM" value="false" />
+      <option name="PARAMS" value="-vv --exe" />
+      <option name="USE_PARAM" value="true" />
+      <RunnerSettings RunnerId="PythonCover" />
       <RunnerSettings RunnerId="PythonRunner" />
+      <ConfigurationWrapper RunnerId="PythonCover" />
       <ConfigurationWrapper RunnerId="PythonRunner" />
       <method />
     </configuration>
@@ -842,9 +527,9 @@
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python's test.Nosetests in energbank_test_case" />
-        <item index="1" class="java.lang.String" itemvalue="Python's test.Nosetests in /code/ciur/originators/banks/bcr_md" />
-        <item index="2" class="java.lang.String" itemvalue="Python's test.Nosetests in /code/ciur/originators/banks" />
+        <item index="0" class="java.lang.String" itemvalue="Python's test.Nosetests in /code/ciur/originators/banks" />
+        <item index="1" class="java.lang.String" itemvalue="Python's test.Nosetests in energbank_test_case" />
+        <item index="2" class="java.lang.String" itemvalue="Python's test.Nosetests in /code/ciur/originators/banks/bcr_md" />
         <item index="3" class="java.lang.String" itemvalue="Python's test.Nosetests in bnm_test_case" />
         <item index="4" class="java.lang.String" itemvalue="Python's test.Nosetests in bem_test_case" />
       </list>
@@ -879,30 +564,34 @@
       <created>1345612571650</created>
       <updated>1345612571650</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="added expect folder and set up name for tests files begin with &quot;test_case_*&quot;">
+      <created>1351081332442</created>
+      <updated>1351081332442</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-10" y="17" width="1386" height="735" extended-state="6" />
+    <frame x="-10" y="17" width="1940" height="1048" extended-state="6" />
     <editor active="false" />
     <layout>
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Regex Tester" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32850778" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32962137" sideWeight="0.49571735" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.21573876" sideWeight="0.28507796" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25038052" sideWeight="0.51954395" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.17933619" sideWeight="0.6703786" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.48045602" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32962137" sideWeight="0.5005353" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.47995546" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32962137" sideWeight="0.49785867" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32954547" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Regex Tester" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39739415" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -962,29 +651,21 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/originators/banks/comertbank_md/xjsons/comertbank.json">
+    <entry file="file:///usr/lib/python2.7/unittest/case.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="10" selection-start="223" selection-end="223" vertical-scroll-proportion="0.051903114">
+        <state line="173" column="0" selection-start="5185" selection-end="5185" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/originators/banks/comertbank_md/xjsons/comertbank.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="10" selection-start="223" selection-end="223" vertical-scroll-proportion="0.051903114" />
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/originators/banks/bem_md/xjsons/banca_de_economii.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="10" selection-start="561" selection-end="561" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="e#187#560#0" expanded="true" />
-            <element signature="e#211#424#0" expanded="true" />
-            <element signature="e#332#410#0" expanded="true" />
-            <element signature="e#450#550#0" expanded="true" />
-            <element signature="e#613#650#0" expanded="true" />
-            <element signature="e#670#1301#0" expanded="true" />
-            <element signature="e#772#1291#0" expanded="true" />
-            <element signature="e#831#1290#0" expanded="true" />
-            <element signature="e#1347#1548#0" expanded="true" />
-            <element signature="e#1373#1538#0" expanded="true" />
-          </folding>
-        </state>
+        <state line="18" column="10" selection-start="561" selection-end="561" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/originators/banks/bnm/xjsons/bnm.json">
@@ -1008,16 +689,13 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/originators/banks/bcr_md/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/originators/banks/bnm/test/expect/bnm_01.json">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
           <folding>
-            <element signature="e#0#3684#1" expanded="true" />
             <element signature="n#!!block;n#items#0;n#!!top" expanded="true" />
           </folding>
         </state>
@@ -1026,11 +704,7 @@
     <entry file="file://$PROJECT_DIR$/originators/banks/bnm/page_samples/bnm_01.html">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding>
-            <marker date="1350629347000" expanded="false" signature="1365:1593" placeholder="..." />
-            <marker date="1350629347000" expanded="false" signature="1645:1713" placeholder="..." />
-            <marker date="1350629347000" expanded="true" signature="1657:1705" placeholder="{...}" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1043,131 +717,53 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/originators/banks/bem_md/test/expect/banca_de_economii_01.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="e#0#419#1" expanded="true" />
-            <element signature="n#!!block;n#items#0;n#!!top" expanded="true" />
-            <element signature="n#!!block;n#rub#0;n#!!block;n#items#0;n#!!top" expanded="true" />
-            <element signature="n#!!block;n#uah#0;n#!!block;n#items#0;n#!!top" expanded="true" />
-            <element signature="n#!!block;n#usd#0;n#!!block;n#items#0;n#!!top" expanded="true" />
-            <element signature="n#!!block;n#ron#0;n#!!block;n#items#0;n#!!top" expanded="true" />
-            <element signature="n#!!block;n#eur#0;n#!!block;n#items#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/originators/banks/bem_md/test/bem_test_case.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="21" selection-start="775" selection-end="775" vertical-scroll-proportion="0.7404844">
-          <folding>
-            <element signature="e#47#62#0" expanded="true" />
-          </folding>
-        </state>
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/originators/banks/bcr_md/test/expect/bcr_01.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1" column="23" selection-start="25" selection-end="25" vertical-scroll-proportion="0.051903114">
-          <folding>
-            <element signature="n#!!block;n#items#0;n#!!top" expanded="true" />
-            <element signature="n#!!block;n#rub#0;n#!!block;n#items#0;n#!!top" expanded="true" />
-            <element signature="n#!!block;n#uah#0;n#!!block;n#items#0;n#!!top" expanded="true" />
-            <element signature="n#!!block;n#usd#0;n#!!block;n#items#0;n#!!top" expanded="true" />
-            <element signature="n#!!block;n#ron#0;n#!!block;n#items#0;n#!!top" expanded="true" />
-            <element signature="n#!!block;n#eur#0;n#!!block;n#items#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
+        <state line="1" column="23" selection-start="25" selection-end="25" vertical-scroll-proportion="0.051903114" />
       </provider>
     </entry>
     <entry file="file:///usr/lib/python2.7/unittest/case.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="173" column="0" selection-start="5185" selection-end="5185" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="e#5348#6486#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/originators/banks/bcr_md/test/bcr_test_case.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="31" selection-start="187" selection-end="187" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="e#47#62#0" expanded="true" />
-            <element signature="e#225#709#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/originators/banks/bcr_md/xjsons/bcr.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="42" column="44" selection-start="1650" selection-end="1650" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="e#192#539#0" expanded="true" />
-            <element signature="e#216#403#0" expanded="true" />
-            <element signature="e#311#389#0" expanded="true" />
-            <element signature="e#429#529#0" expanded="true" />
-            <element signature="e#592#754#0" expanded="true" />
-            <element signature="e#648#744#0" expanded="true" />
-            <element signature="e#774#1452#0" expanded="true" />
-            <element signature="e#893#1442#0" expanded="true" />
-            <element signature="e#912#1441#0" expanded="true" />
-            <element signature="e#1473#1649#0" expanded="true" />
-            <element signature="e#1499#1639#0" expanded="true" />
-          </folding>
+        <state line="8" column="0" selection-start="165" selection-end="165" vertical-scroll-proportion="0.0">
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/originators/banks/energbank_com/test/energbank_test_case.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="19" column="37" selection-start="552" selection-end="552" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="e#47#62#0" expanded="true" />
-          </folding>
+        <state line="19" column="37" selection-start="487" selection-end="487" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/common/DomParser.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="411" column="29" selection-start="14653" selection-end="14653" vertical-scroll-proportion="0.32603687">
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/originators/banks/energbank_com/xjsons/energbank.json">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="e#0#3224#1" expanded="true" />
-            <element signature="e#106#3222#0" expanded="true" />
-            <element signature="e#107#1727#0" expanded="true" />
-            <element signature="e#185#542#0" expanded="true" />
-            <element signature="e#209#407#0" expanded="true" />
-            <element signature="e#315#393#0" expanded="true" />
-            <element signature="e#433#532#0" expanded="true" />
-            <element signature="e#595#758#0" expanded="true" />
-            <element signature="e#652#748#0" expanded="true" />
-            <element signature="e#778#1469#0" expanded="true" />
-            <element signature="e#884#1459#0" expanded="true" />
-            <element signature="e#914#1458#0" expanded="true" />
-            <element signature="e#1514#1721#0" expanded="true" />
-            <element signature="e#1541#1711#0" expanded="true" />
-            <element signature="e#1737#3221#0" expanded="true" />
-            <element signature="e#1827#2228#0" expanded="true" />
-            <element signature="e#1855#2073#0" expanded="true" />
-            <element signature="e#1969#2055#0" expanded="true" />
-            <element signature="e#2103#2214#0" expanded="true" />
-            <element signature="e#2289#2476#0" expanded="true" />
-            <element signature="e#2354#2462#0" expanded="true" />
-            <element signature="e#2500#2931#0" expanded="true" />
-            <element signature="e#2614#2917#0" expanded="true" />
-            <element signature="e#2644#2916#0" expanded="true" />
-            <element signature="e#2672#2898#0" expanded="true" />
-            <element signature="e#2686#2863#0" expanded="true" />
-            <element signature="e#2955#3182#0" expanded="true" />
-            <element signature="e#2986#3168#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/common/DomParser.py">
+    <entry file="file://$PROJECT_DIR$/originators/banks/bcr_md/xjsons/bcr.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="411" column="29" selection-start="15800" selection-end="15800" vertical-scroll-proportion="0.37716264">
-          <folding>
-            <element signature="e#10417#11917#0" expanded="true" />
-          </folding>
+        <state line="42" column="10" selection-start="1650" selection-end="1650" vertical-scroll-proportion="0.19009216">
+          <folding />
         </state>
       </provider>
     </entry>
