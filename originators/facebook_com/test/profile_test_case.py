@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from ciur.common.DomParserFile import DomParserFile
-from ciur.util.AdvancedDict    import AdvancedDict
+from ciur.common    import DomParserFile
+from advanced_dict  import AdvancedDict
 from node_test_case import NodeTestCase
 
 class ProfileCase(NodeTestCase):

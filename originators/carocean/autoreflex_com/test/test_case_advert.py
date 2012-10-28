@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import unittest
-from ciur.common.DomParserFile import DomParserFile
-from ciur.util.AdvancedDict    import AdvancedDict
+from ciur.common   import DomParserFile
+from advanced_dict import AdvancedDict
 
 class AdvertTestCase(unittest.TestCase):
     def runTest(self):

@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from ciur.common import DomParserFile
 
-def test_rss(xml, do_retrun = False):
+def test_rss(xml, do_return = False):
     dpf = DomParserFile(
         name = "test",
         source = "/oknetwiki/trunk/py_lib/vsft/test/rss.json"

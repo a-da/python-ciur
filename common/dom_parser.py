@@ -12,9 +12,9 @@ from lxml.html.clean import clean_html
 from ciur.common     import str_startswith
 from lxml.etree      import XMLSyntaxError, XPathEvalError
 
-from ciur.util.AdvanceDictDomParser import AdvancedDictDomParser
-from ciur.common                    import JsonException
-from ciur.common.inline_handlers    import InlineHandlers
+from ciur.util   import AdvancedDictDomParser
+from ciur.common import JsonException
+from ciur.common import InlineHandlers
 
 
 class DomParserException(JsonException):
@@ -168,8 +168,7 @@ class DomParser(object):
             "bool.",
             "mandatory",
             "mandatory.skip",
-            "optional",
-            "skip" #TODO find samples with skip
+            "optional"
         ]
 
         diff_rules = set(chain_rules.split("|")) - set(rule_list)
@@ -226,6 +225,7 @@ class DomParser(object):
                 "expected_chain_rule" : rules_list,
                 "diff"                : diff_rules
             })
+
 
 
     def validate_configs(self, configs):
@@ -668,7 +668,8 @@ class DomParser(object):
 
                         elif str_startswith(i_casting_chain, ["text.", "int.", "float.", "bool."]): # do not optimise here !
                             method_name = str_startswith(i_casting_chain, ["text.", "int.", "float.", "bool."])[:-1]
-                            value = InlineHandlers.__getattribute__(method_name)(self.xpath["light_handlers"][i_casting_chain], value)
+                            value = getattr(InlineHandlers, method_name)(i_casting_chain, value)
+
                         elif i_casting_chain.startswith("^"):
 
                             if i_casting_chain[1:] in self.handlers:
@@ -681,7 +682,7 @@ class DomParser(object):
 
                                 if method_name:
                                     method_name = method_name[1:-1]
-                                    value = InlineHandlers.__getattribute__(method_name)(value, self.xpath["light_handlers"][i_casting_chain])
+                                    value = getattr(InlineHandlers, method_name)(self.xpath["light_handlers"][i_casting_chain], value)
 
                                 else: error_message = "unknown light handler function prefix"
                             else: error_message = "unknown data type/rule from inline functions"

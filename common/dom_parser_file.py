@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from ciur.common.DomParser import DomParser
+from ciur.common import DomParser
 from advanced_dict import AdvancedOrderedDict
 
 class DomParserFile(DomParser):

@@ -18,7 +18,7 @@ class AdvancedDictDomParser(AdvancedDict):
     >>> a2.get_utf8("2.3", 555.999)
     {'4': 'patru'}
     >>> a2.rename_keys({"2.3": "2.13", "2.33" : "2.133"})
-    >>> print a2.get_pretty()
+    >>> print a2.get_pretty() #doctest: +NORMALIZE_WHITESPACE
     {
         "1": "1",
         "2": {
@@ -36,7 +36,7 @@ class AdvancedDictDomParser(AdvancedDict):
     b
     >>> d["as"] = "cur"
     >>> d.dom_push("unu", "one")
-    >>> print d.get_pretty()
+    >>> print d.get_pretty() #doctest: +NORMALIZE_WHITESPACE
     {
         "a": "b",
         "as": "cur",
@@ -46,7 +46,7 @@ class AdvancedDictDomParser(AdvancedDict):
     >>> d.dom_push("unu", ["doi1", "doi2"])
     >>> d.dom_push("unu", ["trei1", "trei2"])
     >>> d.dom_push("unu", ["patru1", "patru2"])
-    >>> print d.get_pretty()
+    >>> print d.get_pretty() #doctest: +NORMALIZE_WHITESPACE
     {
         "a": "b",
         "as": "cur",

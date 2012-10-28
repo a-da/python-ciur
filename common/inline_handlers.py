@@ -1,5 +1,3 @@
-__author__ = 'ada'
-
 import re
 import datetime
 
@@ -129,9 +127,7 @@ class InlineHandlers(object):
         return value
 
     @staticmethod
-    def bool(
-            casting_rule,
-            value):
+    def bool(casting_rule, value):
         # TODO casting_rule
         """
         casting into int

@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 def test_ucuzu_com_specs():
     """
     >>> test_ucuzu_com_specs()
