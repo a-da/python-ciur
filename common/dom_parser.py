@@ -806,7 +806,7 @@ class DomParser(object):
                 html = re.sub("(?i)\s*<\s*hr\s*/?\s*>\s*", "\n", html)
 
             try:
-                xp_root = html5lib.parse(html, treebuilder = "lxml")
+                xp_root = html5lib.parse(html, treebuilder = "lxml", namespaceHTMLElements=self.xpath["config"]["xpath"]["namespaces"])
             except ValueError,e:
                 if self.debug:
                     print "[WARNING] html5lib->", e.message
@@ -818,7 +818,7 @@ class DomParser(object):
                             print "[WARNING] remove BAD char code `%d` from html" %i_char_code
                         html = html.replace(unichr(i_char_code), "")
 
-                xp_root = html5lib.parse(html, treebuilder = "lxml")
+                xp_root = html5lib.parse(html, treebuilder = "lxml", namespaceHTMLElements=self.xpath["config"]["xpath"]["namespaces"])
 
             xp_result = xp_root.xpath(
                 _path = self.xpath["config.xpath.root"],
