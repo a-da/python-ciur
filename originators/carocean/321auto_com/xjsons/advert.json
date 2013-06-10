@@ -114,7 +114,7 @@
                 "#region" : ["HAS region in title text.|^replace:postal_code|^hash_map:regions|mandatory",  "."]
             }],
             "title" : ["text.|mandatory",  ".//html:span[@id='titreDetail']"],
-            "info_vehicule" : ["optional",  ".//html:div[@id='infosVehicule']", {
+            "info_vehicle" : ["optional",  ".//html:div[@id='infosVehicule']", {
                 "price" : ["optional",  "./html:ul[last()]/html:li[1]/html:span[1]", {
                     "currency" : ["text.|^replace:price_currency|mandatory",  "."],
                     "value" : ["text.|^replace:price_value|float.|int.|mandatory",  "."]

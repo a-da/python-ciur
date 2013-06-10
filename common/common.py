@@ -2,10 +2,12 @@ import re
 import json
 import decimal
 import datetime
+
 try:
     from pymongo.objectid import ObjectId
 except Exception:
     pass
+
 
 class JsonException(Exception):
     """
@@ -16,7 +18,7 @@ class JsonException(Exception):
     JsonException: {'key_name2': 'val2', 'key_name1': 'val1'}
     """
     def __init__(self, *args, **kwargs):
-        super(JsonException, self).__init__( *args, **kwargs)
+        super(JsonException, self).__init__(*args, **kwargs)
         if args:
             self.value = args[0]
 
@@ -64,15 +66,15 @@ def _dt_handler(obj):
     return type(obj)
 
 
-def json_dump(obj, sort_keys = False):
+def json_dump(obj, sort_keys=False):
     """
     pretty formatting json
     """
     return json.dumps(
         obj,
-        sort_keys    = sort_keys,
-        indent       = 4,
-        default      = _dt_handler,
-        ensure_ascii = False
+        sort_keys=sort_keys,
+        indent=4,
+        default=_dt_handler,
+        ensure_ascii=False
     )
 

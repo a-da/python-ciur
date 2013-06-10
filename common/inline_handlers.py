@@ -1,5 +1,6 @@
 import re
 import datetime
+import decimal
 
 from HTMLParser import HTMLParser
 from lxml.etree import _Element
@@ -19,6 +20,10 @@ class InlineHandlers(object):
     @staticmethod
     def int(casting_rule, value):
         # TODO casting_rule
+        # TODO int.positive
+        # TODO int.negative
+        # TODO int.non_positive
+        # TODO int.non_negative
         """
         convert into int
         """
@@ -80,6 +85,10 @@ class InlineHandlers(object):
     @staticmethod
     def float(casting_rule, value):
         # TODO casting_rule
+        # TODO float.positive
+        # TODO float.negative
+        # TODO float.non_positive
+        # TODO float.non_negative
         """
         casting into float
         """
@@ -91,7 +100,7 @@ class InlineHandlers(object):
             return value
 
         if isinstance(value, (float, long, int, str, unicode, bool)):
-            value = float(value)
+            value = float(decimal.Decimal(value))
             return value
 
         v_len = len(value)
@@ -118,13 +127,22 @@ class InlineHandlers(object):
             value = value.replace(",", ".")
 
 
-        value = float(value)
+        try:
+            value = decimal.Decimal(value)
+            value = float(value)
+        except decimal.InvalidOperation, e:
+            raise InlineHandlersException({
+                "msg"        : e.message,
+                "suggestion" : "failed float casting",
+                "code"       : "InlineHandlers.float"
+            })
 
         m = re.search("round_(\d)", casting_rule)
         if m:
             value = round(value, int(m.group(1)))
 
         return value
+
 
     @staticmethod
     def bool(casting_rule, value):
@@ -140,6 +158,7 @@ class InlineHandlers(object):
 
         if not value and not isinstance(value, (float, int, long, bool)):
             return False
+
 
         if isinstance(value, (float, long, int, bool)):
             value = bool(value)
@@ -157,7 +176,7 @@ class InlineHandlers(object):
 
         if v_len > 1:
             raise InlineHandlersException({
-                "msg"  : "undesired behavior, xpath int should have only one item but have `%d` items" %v_len,
+                "msg"  : "undesired behavior, xpath bool should have only one item but have `%d` items" %v_len,
                 "code" : "InlineHandlers.bool"
             })
 
@@ -173,6 +192,11 @@ class InlineHandlers(object):
 
     @classmethod
     def text(cls, casting_rule, value):
+        # TODO add doctest
+        # TODO text.lower
+        # TODO text.upper
+        # TODO text.capitalize
+        # TODO text.title
         """
         casting into text
         text.(allow_empty_item?|allow_empty_list?|force_list?)?
@@ -185,11 +209,11 @@ class InlineHandlers(object):
         """
         flag_allow_empty_item = False
         flag_allow_empty_list = False
-        flag_force_list       = False
-        flag_do_not_strip     = False
-        flag_join_by_space    = False
+        flag_force_list = False
+        flag_do_not_strip = False
+        flag_join_by_space = False
         flag_join_by_new_line = False
-        flag_tail             = False
+        flag_tail = False
         for flag in casting_rule.split(".")[1:]:
             if flag == "allow_empty_item":
                 flag_allow_empty_item = True
@@ -223,7 +247,7 @@ class InlineHandlers(object):
                         if not i_value:
                             continue
 
-                if not isinstance(i_value, (str, unicode)):
+                if i_value and not isinstance(i_value, (str, unicode)):
                     i_value = i_value.text
 
                 if not flag_do_not_strip and i_value:
@@ -482,13 +506,19 @@ class InlineHandlers(object):
         convert date from string into datetime
         """
         def _f(v):
+            exception_ = None
             for i_date in rule:
-                # try:
-                v = datetime.datetime.strptime(v, i_date)
-                #except ...
-                return v
+                try:
+                    v = datetime.datetime.strptime(v, i_date)
+                except ValueError, e:
+                    exception_ = e
+                else:
+                    return v
 
-            return None
+            raise InlineHandlersException({
+                "msg" : "cant convert time",
+                "exc" : str(exception_)
+            })
 
         if not value:
             pass # skip

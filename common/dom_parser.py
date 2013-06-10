@@ -20,12 +20,38 @@ from ciur.common import InlineHandlers
 class DomParserException(JsonException):
     pass
 
+# TODO
+"""
+    add set feature unique value in list
+
+    "repolist" : ["optional", "//div[@class='repo-tab']//ul[@class='repo-stats']", {
+                "#lang" : ["text.|optional", "/li[not(@class)]"],
+                "#stargazers" : ["text.tail|mandatory", "/li[@class='stargazers']/a/span"],
+                "_forks" : ["text.tail|mandatory", "./li[@class='forks']/a/span"],
+                "forks"  : ["^html:|mandatory", "./li[@class='forks']/a"],
+                "#name" : ["text.|mandatory", "../h3/a"]
+            }]
+
+     "_forks" : ["text.tail|mandatory", "/li[@class='forks']/a/span"],
+
+    without dot will throw error
+"""
+
 
 class DomParser(object):
     # TODO abstract functionality
     # TODO: $first get only first xpath match and ignore seconds
     # TODO: mandatory.list_len:<number>
     # TODO: mandatory.re_match:<name>
+    # TODO: ^between : [<lower>, <top>]
+    # TODO: ^in : [<i1>, <i2>, .., <in2>]
+    # TODO: ^ensure_count
+    # TODO: make absolute url
+    # TODO: force_list for node
+    # TODO:  fix bug "name" : ["text.|mandatory", "//h3/a"]
+    #  File "/code5/my/lib/ciur/common/dom_parser.py", line 209, in _check_primitives_chain_rules
+    # raise NotImplemented
+    # TypeError: exceptions must be old-style classes or derived from BaseException, not NotImplementedType
     """
     Abstract class for DOMParser child's
     `PRIMITIVES`
@@ -143,11 +169,11 @@ class DomParser(object):
     # handlers
 
     def __init__(self, name, source, debug = False):
-        self.name     = name
-        self.source   = source
-        self.debug    = debug
+        self.name = name
+        self.source = source
+        self.debug = debug
         self.handlers = {}
-        self.xpath    = None
+        self.xpath = None
 
         if self.debug:
             print "[INFO] constructor DOMParser"
@@ -201,7 +227,10 @@ class DomParser(object):
                 r_tmp.append(i_rule)
 
             else:
-                raise NotImplemented
+                raise DomParserException({
+                    "msg": "NotImplemented",
+                    "rule": i_rule
+                })
 
         diff_rules = list(diff_rules - set(r_tmp))
         if diff_rules:
@@ -418,9 +447,9 @@ class DomParser(object):
                     len_v = len(v)
                     for_ = v[1]["for"]
 
-                    if "%s" not in v[1]["in"]:
+                    if "{0}" not in v[1]["in"]:
                         raise  DomParserException({
-                            "msg" : "astrix patter should contain at least on `%s` symbol",
+                            "msg" : "astrix patter should contain at least on `{0}` symbol",
                             "got" : v[1]["in"]
                         })
 
@@ -434,9 +463,9 @@ class DomParser(object):
                                 })
 
                             if len_v == 3:
-                                root[k_for.lower()] = [v[0], v[1]["in"] %v_for, v[2]]
+                                root[k_for.lower()] = [v[0], v[1]["in"].format(v_for), v[2]]
                             else: # len_v == 2
-                                root[k_for.lower()] = [v[0], v[1]["in"] %v_for]
+                                root[k_for.lower()] = [v[0], v[1]["in"].format(v_for)]
 
                     elif isinstance(for_, list):
                         for item in for_:
@@ -448,9 +477,9 @@ class DomParser(object):
                                 })
 
                             if len_v == 3:
-                                root[item.lower()] = [v[0], v[1]["in"] %item, v[2]]
+                                root[item.lower()] = [v[0], v[1]["in"].format(item), v[2]]
                             else: # len_v == 2
-                                root[item.lower()] = [v[0], v[1]["in"] %item]
+                                root[item.lower()] = [v[0], v[1]["in"].format(item)]
                     else:
                         raise NotImplemented
 
@@ -717,6 +746,7 @@ class DomParser(object):
 
 
     def _reformat(self, result):
+        # TODO add more description
         a = AdvancedDictDomParser()
         for reformat in self.xpath["reformat"]:
             if "update" in reformat:
