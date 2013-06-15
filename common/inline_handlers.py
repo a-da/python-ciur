@@ -4,7 +4,8 @@ import decimal
 
 from HTMLParser import HTMLParser
 from lxml.etree import _Element
-from lxml.etree import _ElementStringResult
+from lxml.etree import _ElementStringResult, _ElementUnicodeResult
+
 from lxml.etree import tostring
 
 from ciur.common import JsonException
@@ -239,7 +240,7 @@ class InlineHandlers(object):
                 i_value = str(i_value)
 
             else:
-                if not isinstance(i_value, _ElementStringResult):
+                if not isinstance(i_value, (_ElementStringResult, _ElementUnicodeResult)):
                     if flag_tail:
                         i_value = i_value.tail
                     else:
@@ -452,9 +453,9 @@ class InlineHandlers(object):
 
                     else:
                         raise InlineHandlersException({
-                            "msg"      : "can't detected replace key `from`",
-                            "keys"     : i_replace,
-                            "expected" : ["from_re", "from_str"]
+                            "msg": "can't detected replace key `from`",
+                            "keys": i_replace,
+                            "expected": ["from_re", "from_str"]
                         })
             return v
 
