@@ -248,7 +248,7 @@ class InlineHandlers(object):
                         if not i_value:
                             continue
 
-                if i_value and not isinstance(i_value, (str, unicode)):
+                if i_value and not isinstance(i_value, basestring):
                     i_value = i_value.text
 
                 if not flag_do_not_strip and i_value:
@@ -263,7 +263,7 @@ class InlineHandlers(object):
         length = len(value)
         while length:
             length -= 1
-            if isinstance(value[length], (str, unicode)):
+            if isinstance(value[length], basestring):
                 value[length] = cls.html_parser.unescape(value[length])
 
         if flag_allow_empty_list or value:
@@ -540,7 +540,7 @@ class InlineHandlers(object):
         get map equivalent for string items
         """
         def _f(v):
-            if not isinstance(v, (str, unicode)):
+            if not isinstance(v, basestring):
                 raise InlineHandlersException({
                     "msg" : "expected only string or unicode format",
                     "got" : repr(v)

@@ -455,7 +455,7 @@ class DomParser(object):
 
                     if isinstance(for_, dict):
                         for k_for, v_for in for_.iteritems():
-                            if not isinstance(v_for, (str, unicode)):
+                            if not isinstance(v_for, basestring):
                                 raise  DomParserException({
                                     "msg" : "wrong type for `*` rule",
                                     "got" : repr(v_for),
@@ -469,7 +469,7 @@ class DomParser(object):
 
                     elif isinstance(for_, list):
                         for item in for_:
-                            if not isinstance(item, (str, unicode)):
+                            if not isinstance(item, basestring):
                                 raise  DomParserException({
                                     "msg" : "wrong type for `*` rule",
                                     "got" : repr(item),
@@ -504,7 +504,7 @@ class DomParser(object):
                 if v_len not in [2, 3]:
                     raise NotImplemented
 
-                if not isinstance(v[0], (str, unicode)):
+                if not isinstance(v[0], basestring):
                     raise DomParserException({
                         "msg"           : "invalid data type for configs chain rule",
                         "chain_rule"    : v[0],
@@ -512,7 +512,7 @@ class DomParser(object):
                         "key_path"      : tmp_key_path
                     })
 
-                if v_len == 3 and isinstance(v[2], (str, unicode)):
+                if v_len == 3 and isinstance(v[2], basestring):
                     if v[2].startswith("=>"):
                         blocks_ref_key = v[2][2:]
                         if blocks_ref_key not in configs["blocks"]:
@@ -526,7 +526,7 @@ class DomParser(object):
                     elif not v[2].startswith("#"):
                         raise NotImplemented
 
-                if v_len == 2 or (v_len == 3 and isinstance(v[2], (str, unicode))):
+                if v_len == 2 or (v_len == 3 and isinstance(v[2], basestring)):
                     self._check_primitives_chain_rules(v[0])
 
                 elif v_len == 3 and isinstance(v[2], dict):
@@ -549,7 +549,7 @@ class DomParser(object):
         -save changes
         -increment current version number
         """
-        if isinstance(js, (str, unicode)):
+        if isinstance(js, basestring):
             # transform into object
             obj = json.loads(js)
         else:
@@ -662,7 +662,7 @@ class DomParser(object):
 
                 comments = False
 
-                if (len(v_rule) == 3 and isinstance(v_rule[2], (str, unicode))) or len(v_rule) == 2 :
+                if (len(v_rule) == 3 and isinstance(v_rule[2], basestring)) or len(v_rule) == 2 :
                     comments = True
 
                 # TODO remove try/except after fix bug in checking
