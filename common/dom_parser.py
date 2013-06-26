@@ -791,9 +791,9 @@ class DomParser(object):
             self.xpath = self.get_version()
 
         etree_xml = None
-        if isinstance(xml, (str, unicode)):
+        if isinstance(xml, basestring):
             try:
-                etree_xml = etree.XML(xml)
+                etree_xml = etree.fromstring(xml)
             except XMLSyntaxError, e:
                 raise DomParserException({
                     "msg" : e.message,
@@ -813,7 +813,12 @@ class DomParser(object):
                 "val_xml"  : xml
             })
 
-        result = self._dive_root_level(xpath_result=etree_xml)
+        xp_result = etree_xml.xpath(
+            _path=self.xpath["config.xpath.root"],
+            namespaces=self.xpath["config.xpath.namespaces"]
+        )
+
+        result = self._dive_root_level(xpath_result=xp_result)
         return result
 
 
@@ -825,7 +830,7 @@ class DomParser(object):
         if not self.xpath:
             self.xpath = self.get_version()
 
-        if isinstance(html, (str, unicode)):
+        if isinstance(html, basestring):
             if to_clean: # TODO fix unicode corrupted conversion
                 html = clean_html(html)
 
