@@ -191,6 +191,17 @@ class InlineHandlers(object):
         return True
 
 
+    @staticmethod
+    def set(casting_rule, value):
+
+        if isinstance(value, list):
+            value = [i for i in value if not (isinstance(i, _Element) and i.text == None)] # do not optimise
+
+        if not value: # None
+            return value
+
+        return list(set(value))
+
     @classmethod
     def text(cls, casting_rule, value):
         # TODO add doctest

@@ -72,6 +72,9 @@ class DomParser(object):
         // accept only a list with one element
         bool.
 
+        // remove duplicates from list
+        set.
+
         // accept list, str, unicode, float, int, long, bool
         // accept a list or one element
         text.
@@ -194,11 +197,12 @@ class DomParser(object):
             "bool.",
             "mandatory",
             "mandatory.skip",
-            "optional"
+            "optional",
+            "set."
         ]
 
         diff_rules = set(chain_rules.split("|")) - set(rule_list)
-        r_tmp = [ ]
+        r_tmp = []
         for i_rule in diff_rules:
             if i_rule.startswith("float."):
                 m = re.search("^float\.(round_\d+|has_comma_sep)$", i_rule)
@@ -241,7 +245,6 @@ class DomParser(object):
                 "diff"                : list(diff_rules)
             })
 
-
     @staticmethod
     def _check_nodes_chain_rules(chain_rules):
         rules_list = ["ensure_list", "mandatory", "optional"]
@@ -249,13 +252,11 @@ class DomParser(object):
         diff_rules = list(set(chain_rules.split("|")) - set(rules_list))
         if diff_rules:
             raise DomParserException({
-                "msg"                 : "invalid configs chain rule for nodes",
-                "chain_rule"          : chain_rules,
-                "expected_chain_rule" : rules_list,
-                "diff"                : diff_rules
+                "msg": "invalid configs chain rule for nodes",
+                "chain_rule": chain_rules,
+                "expected_chain_rule": rules_list,
+                "diff": diff_rules
             })
-
-
 
     def validate_configs(self, configs):
         # TODO: check if comments have mandatory `#` preposition
@@ -605,7 +606,7 @@ class DomParser(object):
         handle nodes
         """
         flag_ensure_list = False
-        flag_mandatory   = False
+        flag_mandatory = False
         for i_cast in casting_rule.split("|"):
             if i_cast == "ensure_list":
                 flag_ensure_list = True
@@ -614,7 +615,7 @@ class DomParser(object):
             if i_cast == "optional":
                 pass
 
-        tmp_list = [ ]
+        tmp_list = []
         for i_value in value:
             tmp = self._dive_next_level([i_value], children_rule, key_path)
             if tmp:
@@ -695,8 +696,8 @@ class DomParser(object):
                         elif i_casting_chain == "optional":
                             pass
 
-                        elif str_startswith(i_casting_chain, ["text.", "int.", "float.", "bool."]): # do not optimise here !
-                            method_name = str_startswith(i_casting_chain, ["text.", "int.", "float.", "bool."])[:-1]
+                        elif str_startswith(i_casting_chain, ["text.", "int.", "float.", "bool.", "set."]): # do not optimise here !
+                            method_name = str_startswith(i_casting_chain, ["text.", "int.", "float.", "bool.", "set."])[:-1]
                             value = getattr(InlineHandlers, method_name)(i_casting_chain, value)
 
                         elif i_casting_chain.startswith("^"):
@@ -719,11 +720,11 @@ class DomParser(object):
 
                         if error_message:
                             raise DomParserException({
-                                "key_path"        : key_path,
-                                "msg"             : error_message,
-                                "i_casting_chain" : i_casting_chain,
-                                "casting_chain"   : casting_chain,
-                                "code"            : "DomParser._dive_next_level"
+                                "key_path": key_path,
+                                "msg": error_message,
+                                "i_casting_chain": i_casting_chain,
+                                "casting_chain": casting_chain,
+                                "code": "DomParser._dive_next_level"
                             })
 
                     tmp = value
@@ -740,10 +741,8 @@ class DomParser(object):
 
         return m
 
-
     def set_handlers(self, handlers):
         self.handlers = dict([ (i.__name__, i) for i in handlers])
-
 
     def _reformat(self, result):
         # TODO add more description
