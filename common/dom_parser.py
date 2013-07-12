@@ -279,7 +279,8 @@ class DomParser(object):
 
         if not configs:
             raise DomParserException({
-                "msg" : "Cant find config or config is null"
+                "msg": "Cant find config or config is null",
+                "source": self.source
             })
 
         configs = AdvancedDictDomParser(configs)
