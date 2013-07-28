@@ -31,9 +31,11 @@ class InlineHandlers(object):
 
         if isinstance(value, list):
             value = [i for i in value if not (isinstance(i, _Element) and i.text == None)] # do not optimise
+            print "1111"
 
         if not value: # None
             return value
+
 
         if isinstance(value, (float, long, int, str, unicode, bool)):
             try:
@@ -61,9 +63,10 @@ class InlineHandlers(object):
             except ValueError, e:
                 if e.message.startswith("invalid literal for int() with base 0:"):
                     raise InlineHandlersException({
-                        "msg"        : e.message,
-                        "suggestion" : "tried to make convert for more than one item and expected to be int",
-                        "code"       : "InlineHandlers.int"
+                        "msg": e.message,
+                        "suggestion": "tried to make convert for more than one item and expected to be int",
+                        "code": "InlineHandlers.int",
+                        "i_value": i_value
                     })
                 else:
                     raise
@@ -252,7 +255,7 @@ class InlineHandlers(object):
                 i_value = str(i_value)
 
             else:
-                if not isinstance(i_value, (_ElementStringResult, _ElementUnicodeResult)):
+                if not isinstance(i_value, basestring):
                     if flag_tail:
                         i_value = i_value.tail
                     else:
