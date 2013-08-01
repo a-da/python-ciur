@@ -162,6 +162,8 @@ class DomParser(object):
         - http://www.w3.org/TR/xpath/
         - http://www.w3schools.com/xpath/xpath_operators.asp
         - http://xpath.alephzarro.com/content/cheatsheet.html#chRegExp
+        - http://infocenter.sybase.com/help/index.jsp?topic=/com.sybase.help.ase_15.0.xmlb/html/xmlb/xmlb32.htm
+        TODO look at to toUpper and union,
 
     """
     # context
