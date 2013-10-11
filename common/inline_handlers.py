@@ -31,7 +31,6 @@ class InlineHandlers(object):
 
         if isinstance(value, list):
             value = [i for i in value if not (isinstance(i, _Element) and i.text == None)] # do not optimise
-            print "1111"
 
         if not value: # None
             return value
