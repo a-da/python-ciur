@@ -5,7 +5,6 @@ import decimal
 from HTMLParser import HTMLParser
 from lxml.etree import _Element
 from lxml.etree import _ElementStringResult, _ElementUnicodeResult
-
 from lxml.etree import tostring
 
 from ciur.common import JsonException
@@ -15,7 +14,16 @@ class InlineHandlersException(JsonException):
     pass
 
 
+class HttpRaiseException(JsonException):
+    """
+    raise http error if found some match in html
+    http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
+    """
+    pass
+
+
 class InlineHandlers(object):
+    rec_round = re.compile("round_(\d)")
     html_parser = HTMLParser()
 
     @staticmethod
@@ -36,17 +44,16 @@ class InlineHandlers(object):
             return value
 
 
-        if isinstance(value, (float, long, int, str, unicode, bool)):
+        if isinstance(value, (float, long, int, basestring, bool)):
             try:
                 value = int(value)
                 return value
             except ValueError, e:
                 raise InlineHandlersException({
-                    "msg"        : e.message,
-                    "suggestion" : "tried to make convert for only one item and expected to be int",
-                    "code"       : "InlineHandlers.int"
+                    "msg": e.message,
+                    "suggestion": "tried to make convert for only one item and expected to be int",
+                    "code": "InlineHandlers.int"
                 })
-
 
         v_len = len(value)
 
@@ -85,8 +92,8 @@ class InlineHandlers(object):
         return value
 
 
-    @staticmethod
-    def float(casting_rule, value):
+    @classmethod
+    def float(cls, casting_rule, value):
         # TODO casting_rule
         # TODO float.positive
         # TODO float.negative
@@ -102,7 +109,7 @@ class InlineHandlers(object):
         if not value: # None
             return value
 
-        if isinstance(value, (float, long, int, str, unicode, bool)):
+        if isinstance(value, (float, long, int, basestring, bool)):
             value = float(decimal.Decimal(value))
             return value
 
@@ -112,8 +119,8 @@ class InlineHandlers(object):
 
         if v_len > 1:
             raise InlineHandlersException({
-                "msg"  : "undesired behavior, xpath int should have only one item but have `%d` items" %v_len,
-                "code" : "InlineHandlers._float"
+                "msg": "undesired behavior, xpath int should have only one item but have `%d` items" % v_len,
+                "code": "InlineHandlers._float"
             })
 
         casting_rule = casting_rule[len("float."):]
@@ -123,9 +130,9 @@ class InlineHandlers(object):
         if casting_rule == "has_comma_sep":
             if "." in value:
                 raise InlineHandlersException({
-                    "msg"        : "^float.has_comma_sep expect to have comma separator instead of dot separator",
-                    "suggestion" : "review/update jxpath rules",
-                    "got"        : value
+                    "msg": "^float.has_comma_sep expect to have comma separator instead of dot separator",
+                    "suggestion": "review/update jxpath rules",
+                    "got": value
                 })
             value = value.replace(",", ".")
 
@@ -135,12 +142,12 @@ class InlineHandlers(object):
             value = float(value)
         except decimal.InvalidOperation, e:
             raise InlineHandlersException({
-                "msg"        : e.message,
-                "suggestion" : "failed float casting",
-                "code"       : "InlineHandlers.float"
+                "msg": e.message,
+                "suggestion": "failed float casting",
+                "code": "InlineHandlers.float"
             })
 
-        m = re.search("round_(\d)", casting_rule)
+        m = cls.rec_round.search(casting_rule)
         if m:
             value = round(value, int(m.group(1)))
 
@@ -154,8 +161,6 @@ class InlineHandlers(object):
         casting into int
         """
 
-
-
         if isinstance(value, list):
             value = [i for i in value if not (isinstance(i, _Element) and i.text == None)] # do not optimise
 
@@ -167,7 +172,7 @@ class InlineHandlers(object):
             value = bool(value)
             return value
 
-        elif isinstance(value, (unicode, str)):
+        elif isinstance(value, basestring):
             value = value.strip()
             if value.lower() == "false" or value == "":
                 return False
@@ -418,8 +423,8 @@ class InlineHandlers(object):
             open_tag = m.group(1)
         else:
             raise InlineHandlersException({
-                "msg"        : "can't find open tag",
-                "tags_block" : block
+                "msg": "can't find open tag",
+                "tags_block": block
             })
 
         m = end_tag.search(block)
@@ -427,16 +432,16 @@ class InlineHandlers(object):
             close_tag = m.group(1)
         else:
             raise InlineHandlersException({
-                "msg"        : "can't find close tag",
-                "tags_block" : block
+                "msg": "can't find close tag",
+                "tags_block": block
             })
 
         if open_tag != close_tag:
             raise InlineHandlersException({
-                "msg"        : "open and close tag are different",
-                "tags_block" : block,
-                "open_tag"   : open_tag,
-                "close_tag"  : close_tag
+                "msg": "open and close tag are different",
+                "tags_block": block,
+                "open_tag": open_tag,
+                "close_tag": close_tag
             })
 
         block = beg_tag.sub("", block)
@@ -512,6 +517,16 @@ class InlineHandlers(object):
 
         return value
 
+    @staticmethod
+    def http_raise(rule, value):
+        if value:
+            raise HttpRaiseException({
+                "msg": "found http error match",
+                "status_code": rule["status_code"],
+                "message": rule["message"],
+                "value": value
+            })
+        return value
 
     @staticmethod
     def date(rule, value):
@@ -531,17 +546,17 @@ class InlineHandlers(object):
                     return v
 
             raise InlineHandlersException({
-                "msg" : "cant convert time",
-                "exc" : str(exception_)
+                "msg": "cant convert time",
+                "exc": str(exception_)
             })
 
         if not value:
-            pass # skip
+            pass  # skip
 
         elif isinstance(value, list):
             value = map(_f, value)
 
-        else: #str
+        else:  # str
             value = _f(value)
 
         return value
@@ -556,8 +571,8 @@ class InlineHandlers(object):
         def _f(v):
             if not isinstance(v, basestring):
                 raise InlineHandlersException({
-                    "msg" : "expected only string or unicode format",
-                    "got" : repr(v)
+                    "msg": "expected only string or unicode format",
+                    "got": repr(v)
                 })
 
             map_ = rule["map"]
@@ -569,15 +584,15 @@ class InlineHandlers(object):
                 # check in key name by separators
                 # remove after implement TODO
                 operator = rule.get("operator")
-                sep      = rule["separator"]
-                if operator not in ["in", "startswith", "endswith"]:
+                sep = rule["separator"]
+                if operator not in ("in", "startswith", "endswith"):
                     raise InlineHandlersException({
-                        "msg" : "expected hash_map.operator in [in, startswith, endswith]",
-                        "got" : repr(operator)
+                        "msg": "expected hash_map.operator in [in, startswith, endswith]",
+                        "got": repr(operator)
                     })
 
                 if operator == "in":
-                    for  k_map in map_:
+                    for k_map in map_:
                         if v in k_map.split(sep):
                             return map_[k_map]
 

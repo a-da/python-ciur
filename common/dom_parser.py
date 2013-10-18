@@ -1,20 +1,20 @@
 # -*- coding: utf-8 -*-
 
 import re
+import datetime
 import json
 import time
-import html5lib
-import datetime
 import sre_constants
 
-from lxml            import etree
+import html5lib
+from lxml import etree
 from lxml.html.clean import clean_html
-from ciur.common     import str_startswith
-from lxml.etree      import XMLSyntaxError, XPathEvalError
+from lxml.etree import XMLSyntaxError, XPathEvalError
 
-from ciur.util   import AdvancedDictDomParser
+from ciur.util import AdvancedDictDomParser
 from ciur.common import JsonException
 from ciur.common import InlineHandlers
+from ciur.common import str_startswith
 
 
 class DomParserException(JsonException):
@@ -173,7 +173,7 @@ class DomParser(object):
     # xpath
     # handlers
 
-    def __init__(self, name, source, debug = False):
+    def __init__(self, name, source, debug=False):
         self.name = name
         self.source = source
         self.debug = debug
@@ -241,10 +241,10 @@ class DomParser(object):
         diff_rules = list(diff_rules - set(r_tmp))
         if diff_rules:
             raise DomParserException({
-                "msg"                 : "invalid configs chain rule for primitives",
-                "chain_rule"          : chain_rules,
-                "expected_chain_rule" : rule_list,
-                "diff"                : list(diff_rules)
+                "msg": "invalid configs chain rule for primitives",
+                "chain_rule": chain_rules,
+                "expected_chain_rule": rule_list,
+                "diff": list(diff_rules)
             })
 
     @staticmethod
@@ -320,17 +320,18 @@ class DomParser(object):
 
             if not isinstance(configs[k], v):
                 raise DomParserException({
-                    "msg" : "wrong datatype initialization for key",
-                    "key_name" : k,
-                    "expected" : mandatory_keys
+                    "msg": "wrong datatype initialization for key",
+                    "key_name": k,
+                    "expected": mandatory_keys
                 })
 
         #-[2]------------------------------------
         # check light_handlers
         # key_name, allowed type
         for lh_key, lh_value in configs["light_handlers"].iteritems():
-            allowed_ruled = [
+            allowed_ruled = (
                 "^html:",
+                "^http_raise:",
                 "^xml:",
                 "^inner_html:",
                 "^replace:",
@@ -338,12 +339,12 @@ class DomParser(object):
                 "^date:",
                 "^hash_map:",
                 "^default:"
-            ]
-            if not str_startswith(lh_key, allowed_ruled):
+            )
+            if not str_startswith(lh_key, *allowed_ruled):
                 raise DomParserException({
-                    "msg"          : "this rule are not allowed",
-                    "key_name"     : lh_key,
-                    "allowed_rule" : allowed_ruled
+                    "msg": "this rule are not allowed",
+                    "key_name": lh_key,
+                    "allowed_rule": allowed_ruled
                 })
 
             if lh_key.startswith("^replace:"):
@@ -423,20 +424,20 @@ class DomParser(object):
                 })
 
             try:
-                etree_object.xpath(expression, namespaces = namespaces)
+                etree_object.xpath(expression, namespaces=namespaces)
             except XPathEvalError, e:
                 if e.message in ("Invalid expression", "Invalid predicate", "Unfinished literal"):
                     raise DomParserException({
-                        "msg" : e.message,
-                        "xpath" : expression,
-                        "key_path" : key_path
+                        "msg": e.message,
+                        "xpath": expression,
+                        "key_path": key_path
                     })
                 elif e.message == "Undefined namespace prefix":
                     raise DomParserException({
-                        "msg" : "Undefined namespace prefix",
-                        "xpath" : expression,
-                        "key_path" : key_path,
-                        "namespaces" : namespaces
+                        "msg": "Undefined namespace prefix",
+                        "xpath": expression,
+                        "key_path": key_path,
+                        "namespaces": namespaces
                     })
                 else:
                     raise
@@ -461,9 +462,9 @@ class DomParser(object):
                         for k_for, v_for in for_.iteritems():
                             if not isinstance(v_for, basestring):
                                 raise  DomParserException({
-                                    "msg" : "wrong type for `*` rule",
-                                    "got" : repr(v_for),
-                                    "expected" : ["str", "unicode"]
+                                    "msg": "wrong type for `*` rule",
+                                    "got": repr(v_for),
+                                    "expected": "basestring"
                                 })
 
                             if len_v == 3:
@@ -475,9 +476,9 @@ class DomParser(object):
                         for item in for_:
                             if not isinstance(item, basestring):
                                 raise  DomParserException({
-                                    "msg" : "wrong type for `*` rule",
-                                    "got" : repr(item),
-                                    "expected" : ["str", "unicode"]
+                                    "msg": "wrong type for `*` rule",
+                                    "got": repr(item),
+                                    "expected": basestring
                                 })
 
                             if len_v == 3:
@@ -638,15 +639,15 @@ class DomParser(object):
 
         if not tmp and flag_mandatory:
             raise DomParserException({
-                "key_path" : key_path,
-                "msg" : "Require mandatory elements from children",
-                "code" : "DomParser._dive_next_level"
+                "key_path": key_path,
+                "msg": "Require mandatory elements from children",
+                "code": "DomParser._dive_next_level"
             })
 
         return tmp
 
 
-    def _dive_next_level(self, xp_root_node, rules, parent_key = ""):
+    def _dive_next_level(self, xp_root_node, rules, parent_key=""):
         """
         `casting_chain`
         mandatory|optional
@@ -656,7 +657,7 @@ class DomParser(object):
             for k_rule, v_rule in rules.iteritems():
                 key_path = parent_key + "." + k_rule
 
-                if k_rule.startswith("#"): # skip commented field
+                if k_rule.startswith("#"):  # skip commented field
                     continue
 
                 casting_chain = v_rule[0]
@@ -674,9 +675,9 @@ class DomParser(object):
                     value = xp_result_item.xpath(xpath_express, namespaces = self.xpath["config.xpath.namespaces"])
                 except XPathEvalError, e:
                     raise DomParserException({
-                        "msg" : e.message,
-                        "xpath" : xpath_express,
-                        "key_path" : key_path
+                        "msg": e.message,
+                        "xpath": xpath_express,
+                        "key_path": key_path
                     })
 
                 if comments: # have no children nodes
@@ -686,9 +687,9 @@ class DomParser(object):
                         if i_casting_chain == "mandatory":
                             if not (isinstance(value, (bool, int, float, long)) or value): #! do not change (ignore bool)
                                 raise DomParserException({
-                                    "key_path" : key_path,
-                                    "msg"      : "Require mandatory elements from data type",
-                                    "code"     : "DomParser._dive_next_level"
+                                    "key_path": key_path,
+                                    "msg": "Require mandatory elements from data type",
+                                    "code": "DomParser._dive_next_level"
                                 })
                                 # else: is ok
 
@@ -699,8 +700,8 @@ class DomParser(object):
                         elif i_casting_chain == "optional":
                             pass
 
-                        elif str_startswith(i_casting_chain, ["text.", "int.", "float.", "bool.", "set."]): # do not optimise here !
-                            method_name = str_startswith(i_casting_chain, ["text.", "int.", "float.", "bool.", "set."])[:-1]
+                        elif str_startswith(i_casting_chain, "text.", "int.", "float.", "bool.", "set."): # do not optimise here !
+                            method_name = str_startswith(i_casting_chain, "text.", "int.", "float.", "bool.", "set.")[:-1]
                             value = getattr(InlineHandlers, method_name)(i_casting_chain, value)
 
                         elif i_casting_chain.startswith("^"):
@@ -709,13 +710,23 @@ class DomParser(object):
                                 value = self.handlers[i_casting_chain[1:]](value)
 
                             elif i_casting_chain in self.xpath["light_handlers"]:
-                                method_name = str_startswith(i_casting_chain, [
-                                    "^replace:", "^drain:", "^date:", "^hash_map:", "^default:", "^xml:", "^html:"
-                                ])
+                                method_name = str_startswith(
+                                    i_casting_chain,
+                                    "^replace:",
+                                    "^drain:",
+                                    "^date:",
+                                    "^hash_map:",
+                                    "^default:",
+                                    "^xml:",
+                                    "^html:",
+                                    "^http_raise:"
+                                )
 
                                 if method_name:
                                     method_name = method_name[1:-1]
-                                    value = getattr(InlineHandlers, method_name)(self.xpath["light_handlers"][i_casting_chain], value)
+                                    value = getattr(InlineHandlers, method_name)(
+                                        self.xpath["light_handlers"][i_casting_chain], value
+                                    )
 
                                 else: error_message = "unknown light handler function prefix"
                             else: error_message = "unknown data type/rule from inline functions"
@@ -752,11 +763,11 @@ class DomParser(object):
         a = AdvancedDictDomParser()
         for reformat in self.xpath["reformat"]:
             if "update" in reformat:
-                from_, to_ =  reformat["update"]
+                from_, to_ = reformat["update"]
                 a.update()
                 result[from_].update(result[to_])
             elif "rename" in reformat:
-                from_, to_ =  reformat["rename"]
+                from_, to_ = reformat["rename"]
                 result.rename_key(from_, to_)
             elif "delete" in reformat:
                 for i in reformat["delete"]:
@@ -770,9 +781,9 @@ class DomParser(object):
 
         if len(xpath_result) != 1:
             raise DomParserException({
-                "msg"              : "Failed root detection",
-                "xpath_expression" : self.xpath["config.xpath.root"],
-                "roots_numbers"    : len_xp_result
+                "msg": "Failed root detection",
+                "xpath_expression": self.xpath["config.xpath.root"],
+                "roots_numbers": len_xp_result
             })
 
         result = self._dive_next_level(xpath_result, self.xpath["rules"])
@@ -810,9 +821,9 @@ class DomParser(object):
 
         if not len(etree_xml):
             raise DomParserException({
-                "msg"      : "xml is not str or unicode or failed initialisation",
-                "type_xml" : type(xml),
-                "val_xml"  : xml
+                "msg": "xml is not str or unicode or failed initialisation",
+                "type_xml": type(xml),
+                "val_xml": xml
             })
 
         xp_result = etree_xml.xpath(

@@ -1,0 +1,33 @@
+{
+    "name": "",
+    "test_url" : "JustinBieber_ru.html",
+    "version": 0,
+    "versions": [{
+        "version" : 0,
+        "timestamp" : 0,
+        "config" : {
+            "xpath" : {
+                "root" : "//body",
+                "namespaces" : {}
+            },
+            "anomaly" : {
+                "root" : "//body",
+                "namespaces" : {}
+            }
+        },
+        "anomaly" : {},
+        "light_handlers" : {
+            "^html:" : {},
+            "^http_raise:best_news" : {
+                "status_code": 404,
+                "message": "Justin Bieber Must Die"
+            }
+        },
+        "rules" : {
+            "h1": ["text.|^http_raise:best_news" ,
+                ".//h1[contains(text(), 'Сирийские хакеры объявили Джастина Бибера геем')]"]
+        },
+        "blocks" : { },
+        "reformat" : []
+    }]
+}

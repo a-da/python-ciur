@@ -27,7 +27,7 @@ class JsonException(Exception):
         return repr(self.value)
 
 
-def str_startswith(text, list_starts):
+def str_startswith(text, *args):
     """
     Return Matched item else return False
     >>> str_startswith("banana", ['xr', 'ge', 'bi', 'ba', 'ad'])
@@ -35,7 +35,7 @@ def str_startswith(text, list_starts):
     >>> str_startswith("not banana", ['xr', 'ge', 'bi', 'bo', 'ad'])
     False
     """
-    for i in list_starts:
+    for i in args:
         if text.startswith(i):
             return i
     return False
@@ -46,19 +46,19 @@ def _dt_handler(obj):
     convert all data fields in json intro string format
     """
     if isinstance(obj, re.compile("").__class__):
-        return "SRE_Pattern(%s)" %obj.pattern
+        return "SRE_Pattern(%s)" % obj.pattern
 
     if isinstance(obj, decimal.Decimal):
-        return "Decimal(%s)" %obj
+        return "Decimal(%s)" % obj
 
     if isinstance(obj, unicode):
         return obj.encode("utf-8")
 
     if isinstance(obj, datetime.datetime):
-        return "Date(%s)" %obj.isoformat()
+        return "Date(%s)" % obj.isoformat()
 
     if isinstance(obj, ObjectId):
-        return "ObjectId('%s')" %str(obj)
+        return "ObjectId('%s')" % str(obj)
 
     if isinstance(obj, type):
         return str(obj)

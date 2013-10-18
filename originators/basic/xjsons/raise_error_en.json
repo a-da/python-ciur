@@ -1,0 +1,32 @@
+{
+    "name": "",
+    "test_url" : "JustinBieber_en.html",
+    "version": 0,
+    "versions": [{
+        "version" : 0,
+        "timestamp" : 0,
+        "config" : {
+            "xpath" : {
+                "root" : "//body",
+                "namespaces" : {}
+            },
+            "anomaly" : {
+                "root" : "//body",
+                "namespaces" : {}
+            }
+        },
+        "anomaly" : {},
+        "light_handlers" : {
+            "^html:" : {},
+            "^http_raise:bad_news" : {
+                "status_code": 404,
+                "message": "Justin Bieber Must Die"
+            }
+        },
+        "rules" : {
+            "h1": ["^http_raise:bad_news" , ".//h1[contains(text(), 'Justin Bieber did not spit on fans over balcony in Toronto, says rep')]"]
+        },
+        "blocks" : { },
+        "reformat" : []
+    }]
+}
