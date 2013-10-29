@@ -60,7 +60,7 @@ class InlineHandlers(object):
         if not v_len:
             return None
 
-        tmp_value = [ ]
+        tmp_value = []
         for i_value in value:
             if isinstance(i_value, _Element):
                 i_value = i_value.text

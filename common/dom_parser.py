@@ -217,17 +217,28 @@ class DomParser(object):
                     r_tmp.append(i_rule)
 
             elif i_rule.startswith("text."):
-                m = re.search("text\.("
-                              "allow_empty_item|"
-                              "allow_empty_list|"
-                              "force_list|"
-                              "join_by_space|"
-                              "join_by_new_line|"
-                              "with_tail|"
-                              "tail"
-                              ")?$", i_rule)
-                if m:
-                    r_tmp.append(i_rule)
+                text_dot_list = [
+                    "allow_empty_item",
+                    "allow_empty_list",
+                    "force_list",
+                    "join_by_space",
+                    "join_by_new_line",
+                    "with_tail",
+                    "tail"
+                ]
+
+                postfix = i_rule[len("text."):]
+                for i_postfix in text_dot_list:
+                    if postfix == i_postfix:
+                        r_tmp.append(i_rule)
+                        break
+                else:
+                    raise DomParserException({
+                        "msg": "NotImplemented",
+                        "rule": i_rule,
+                        "expect": text_dot_list
+                    })
+
 
             elif i_rule.startswith("^") and len(i_rule) > 1:
                 r_tmp.append(i_rule)
@@ -368,6 +379,13 @@ class DomParser(object):
                             })
 
             if lh_key.startswith("^drain:"):
+                if not isinstance(lh_value, dict):
+                    raise DomParserException({
+                        "msg": "wrong data type in `^drain`",
+                        "got": lh_value,
+                        "expect" : dict
+                    })
+
                 diff = set(lh_value.keys()) - {"re", "group"}
                 if diff:
                     raise DomParserException({
@@ -719,6 +737,7 @@ class DomParser(object):
                                     "^default:",
                                     "^xml:",
                                     "^html:",
+                                    "^inner_html:",
                                     "^http_raise:"
                                 )
 
@@ -728,9 +747,12 @@ class DomParser(object):
                                         self.xpath["light_handlers"][i_casting_chain], value
                                     )
 
-                                else: error_message = "unknown light handler function prefix"
-                            else: error_message = "unknown data type/rule from inline functions"
-                        else: error_message = "unknown data type/rule from inline functions"
+                                else:
+                                    error_message = "unknown light handler function prefix"
+                            else:
+                                error_message = "unknown data type/rule from inline functions"
+                        else:
+                            error_message = "unknown data type/rule from inline functions"
 
                         if error_message:
                             raise DomParserException({
@@ -745,10 +767,10 @@ class DomParser(object):
 
                 else: # have children nodes
                     tmp = self._children_nodes(
-                        casting_rule  = casting_chain,
-                        value         = value,
-                        children_rule = v_rule[2],
-                        key_path      = key_path
+                        casting_rule=casting_chain,
+                        value=value,
+                        children_rule=v_rule[2],
+                        key_path=key_path
                     )
 
                 m.dom_push(k_rule, tmp)
@@ -756,7 +778,8 @@ class DomParser(object):
         return m
 
     def set_handlers(self, handlers):
-        self.handlers = dict([ (i.__name__, i) for i in handlers])
+        # TODO set generators
+        self.handlers = dict([(i.__name__, i) for i in handlers])
 
     def _reformat(self, result):
         # TODO add more description
