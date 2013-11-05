@@ -589,6 +589,24 @@ class InlineHandlers(object):
         return value
 
     @staticmethod
+    def decode(rule, value):
+        # TODO write doctests
+
+        def _f(v):
+            return v.decode(encoding=rule.get("encoding", "utf-8"), errors=rule.get("errors", "strict"))
+
+        if not value:
+            pass  # skip
+
+        elif isinstance(value, list):
+            value = map(_f, value)
+
+        else:
+            value = _f(value)
+
+        return value
+
+    @staticmethod
     def http_raise(rule, value):
         if value:
             raise HttpRaiseException({

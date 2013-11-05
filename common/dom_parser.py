@@ -315,10 +315,10 @@ class DomParser(object):
         diff = set(mandatory_keys.keys()) ^ set(configs.keys())
         if diff:
             raise DomParserException({
-                "msg" : "symmetric difference by keys",
-                "expected_keys" : mandatory_keys.keys(),
-                "config_keys" : configs.keys(),
-                "diff" : list(diff)
+                "msg": "symmetric difference by keys",
+                "expected_keys": mandatory_keys.keys(),
+                "config_keys": configs.keys(),
+                "diff": list(diff)
             })
 
         for k, v in mandatory_keys.iteritems():
@@ -340,18 +340,8 @@ class DomParser(object):
         # check light_handlers
         # key_name, allowed type
         for lh_key, lh_value in configs["light_handlers"].iteritems():
-            allowed_ruled = (
-                "^html:",
-                "^http_raise:",
-                "^xml:",
-                "^inner_html:",
-                "^replace:",
-                "^drain:",
-                "^date:",
-                "^hash_map:",
-                "^default:",
-                "^json:"
-            )
+            allowed_ruled = InlineHandlers._get_methods()
+
             if not str_startswith(lh_key, *allowed_ruled):
                 raise DomParserException({
                     "msg": "this rule are not allowed",
