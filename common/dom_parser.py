@@ -349,7 +349,8 @@ class DomParser(object):
                 "^drain:",
                 "^date:",
                 "^hash_map:",
-                "^default:"
+                "^default:",
+                "^json:"
             )
             if not str_startswith(lh_key, *allowed_ruled):
                 raise DomParserException({
@@ -723,36 +724,30 @@ class DomParser(object):
                             value = getattr(InlineHandlers, method_name)(i_casting_chain, value)
 
                         elif i_casting_chain.startswith("^"):
-
                             if i_casting_chain[1:] in self.handlers:
                                 value = self.handlers[i_casting_chain[1:]](value)
 
-                            elif i_casting_chain in self.xpath["light_handlers"]:
+                            elif i_casting_chain in self.xpath["light_handlers"] or \
+                                i_casting_chain in InlineHandlers._get_methods():
+
                                 method_name = str_startswith(
                                     i_casting_chain,
-                                    "^replace:",
-                                    "^drain:",
-                                    "^date:",
-                                    "^hash_map:",
-                                    "^default:",
-                                    "^xml:",
-                                    "^html:",
-                                    "^inner_html:",
-                                    "^http_raise:"
+                                    *InlineHandlers._get_methods()
                                 )
 
                                 if method_name:
                                     method_name = method_name[1:-1]
+
                                     value = getattr(InlineHandlers, method_name)(
-                                        self.xpath["light_handlers"][i_casting_chain], value
+                                        self.xpath["light_handlers"].get(i_casting_chain), value
                                     )
 
                                 else:
                                     error_message = "unknown light handler function prefix"
                             else:
-                                error_message = "unknown data type/rule from inline functions"
+                                error_message = "unknown data type/rule from inline functions1"
                         else:
-                            error_message = "unknown data type/rule from inline functions"
+                            error_message = "unknown data type/rule from inline functions2"
 
                         if error_message:
                             raise DomParserException({

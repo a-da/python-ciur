@@ -1,6 +1,7 @@
-import re
 import datetime
 import decimal
+import re
+import json
 
 from HTMLParser import HTMLParser
 from lxml.etree import _Element
@@ -184,8 +185,8 @@ class InlineHandlers(object):
 
         if v_len > 1:
             raise InlineHandlersException({
-                "msg"  : "undesired behavior, xpath bool should have only one item but have `%d` items" %v_len,
-                "code" : "InlineHandlers.bool"
+                "msg": "undesired behavior, xpath bool should have only one item but have `%d` items" % v_len,
+                "code": "InlineHandlers.bool"
             })
 
         value = value[0]
@@ -202,10 +203,10 @@ class InlineHandlers(object):
     def set(casting_rule, value):
 
         if isinstance(value, list):
-            value = [i for i in value if not (isinstance(i, _Element) and i.text == None)] # do not optimise
-            value = [i for i in value if i] # remove null elements
+            value = [i for i in value if not (isinstance(i, _Element) and i.text == None)]  # do not optimise
+            value = [i for i in value if i]  # remove null elements
 
-        if not value: # None
+        if not value:  # None
             return value
 
         return list(set(value))
@@ -253,7 +254,7 @@ class InlineHandlers(object):
         if not isinstance(value, list):
             value = [value]
 
-        value_list = [ ]
+        value_list = []
         for i_value in value:
             if isinstance(i_value, (float, long, int, bool)):
                 i_value = str(i_value)
@@ -326,7 +327,7 @@ class InlineHandlers(object):
         if isinstance(value, list):
             value = map(_f, value)
 
-        else: #str
+        else:  # str
             value = _f(value)
 
         return value
@@ -338,13 +339,13 @@ class InlineHandlers(object):
         handle `xml` inline function declarations from jxpath
         """
         def _f(v):
-            v = tostring(v, method="html", pretty_print = rule.get("pretty_print"))
+            v = tostring(v, method="html", pretty_print=rule.get("pretty_print"))
             return v
 
         if isinstance(value, list):
             value = map(_f, value)
 
-        else: #str
+        else:  # str
             value = _f(value)
 
         return value
@@ -366,6 +367,8 @@ class InlineHandlers(object):
 
         if type(res) == list:
             res = map(_f, res)
+            if len(res) == 1:
+                return res[0]
         else:
             res = _f(res)
 
@@ -381,6 +384,8 @@ class InlineHandlers(object):
         value = cls.html(rule, value)
         if isinstance(value, list):
             value = map(cls._extract_content_tags, value)
+            if len(value) == 1:
+                return value[0]
         else:
             value = cls._extract_content_tags(value)
 
@@ -409,6 +414,8 @@ class InlineHandlers(object):
 
     @classmethod
     def _extract_content_tags(cls, block):
+        #print "---0", block
+
         #TODO doctest
         """
         inner function for _inner_html_by_light_handlers
@@ -444,8 +451,16 @@ class InlineHandlers(object):
                 "close_tag": close_tag
             })
 
+        #print "0---", open_tag
+        #print "1---", close_tag
+
         block = beg_tag.sub("", block)
+        #print "a---", repr(block)
         block = end_tag.sub("", block)
+        #print "b---", repr(block)
+
+
+        #print "---1", block
         return block
 
 
@@ -479,12 +494,12 @@ class InlineHandlers(object):
             return v
 
         if not value:
-            pass # skip
+            pass  # skip
 
         elif isinstance(value, list):
             value = map(_f, value)
 
-        else: #str
+        else:  # str
             value = _f(value)
 
         return value
@@ -514,6 +529,62 @@ class InlineHandlers(object):
 
         else: #str
             value = _f(value)
+
+        return value
+
+    @staticmethod
+    def json(rule, value):
+        # TODO write doctests
+        """
+        TODO write doc
+        >>> InlineHandlers.json("", '{"a": 123}')
+        {u'a': 123}
+        >>> InlineHandlers.json("", '{"a": "/profile/profile\\u002dv2\\u002dpymk"}')
+        {u'a': u'/profile/profile-v2-pymk'}
+        """
+        if not value:
+            pass  # skip
+
+        elif isinstance(value, list):
+            value = map(unicode, value)
+            value = map(json.loads, value)
+
+        else:  # str
+            #print repr(value)
+            #value = unicode(value)
+            value = json.loads(value)
+
+        return value
+
+    @staticmethod
+    def lower(rule, value):
+        # TODO write doctests
+        """
+        """
+        if not value:
+            pass  # skip
+
+        elif isinstance(value, list):
+            value = [i.lower() for i in value]
+
+        else:
+            value = value.lower()
+
+        return value
+
+    @staticmethod
+    def upper(rule, value):
+        # TODO write doctests
+        """
+        """
+        if not value:
+            pass  # skip
+
+        elif isinstance(value, list):
+            value = [i.upper() for i in value]
+
+        else:
+            value = value.upper()
 
         return value
 
@@ -615,12 +686,16 @@ class InlineHandlers(object):
                     return default
 
         if not value:
-            pass # skip
+            pass  # skip
 
         elif isinstance(value, list):
             value = map(_f, value)
 
-        else: #str
+        else:  # str
             value = _f(value)
 
         return value
+
+    @classmethod
+    def _get_methods(cls):
+        return ["^%s:" % i for i in cls.__dict__.keys() if not i.startswith("_")]
