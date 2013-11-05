@@ -783,7 +783,6 @@ class DomParser(object):
 
         return result
 
-
     def _dive_root_level(self, xpath_result):
         len_xp_result = len(xpath_result)
 
