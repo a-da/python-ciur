@@ -335,11 +335,12 @@ class InlineHandlers(object):
 
     @staticmethod
     def xml(rule, value):
-        if not rule:
-            rule = {}
         """
         handle `xml` inline function declarations from jxpath
         """
+        if not rule:
+            rule = {}
+
         def _f(v):
             v = tostring(v, method="html", pretty_print=rule.get("pretty_print"))
             return v
