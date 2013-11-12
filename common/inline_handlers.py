@@ -335,6 +335,8 @@ class InlineHandlers(object):
 
     @staticmethod
     def xml(rule, value):
+        if not rule:
+            rule = {}
         """
         handle `xml` inline function declarations from jxpath
         """
