@@ -183,11 +183,9 @@ class DomParser(object):
         if self.debug:
             print "[INFO] constructor DOMParser"
 
-
     def __del__(self):
         if self.debug:
             print "[INFO] destructor DOMParser"
-
 
     @staticmethod
     def _check_primitives_chain_rules(chain_rules):
@@ -302,14 +300,15 @@ class DomParser(object):
         # check json key configuration
         # key_name, allowed type
         mandatory_keys = {
-            "blocks" : dict,
-            "version" : int,
-            "timestamp" : int,
-            "config" : dict,
-            "anomaly" : dict,
-            "rules" : dict,
-            "reformat" : list,
-            "light_handlers" : dict
+            "blocks": dict,
+            "version": int,
+            "timestamp": int,
+            "config": dict,
+            "anomaly": dict,
+            "rules": dict,
+            "reformat": list,
+            "light_handlers": dict,
+            "bad_character_list": list
         }
 
         diff = set(mandatory_keys.keys()) ^ set(configs.keys())
@@ -451,9 +450,7 @@ class DomParser(object):
                 else:
                     raise
 
-
         def recursive_check(root, key_path = ""):
-
             # astrix handling `for_each`
             if "*" in root:
                 v = root["*"]
@@ -841,9 +838,7 @@ class DomParser(object):
         result = self._dive_root_level(xpath_result=xp_result)
         return result
 
-
-    def dive_html_root_level(self, html, to_clean = False, handlers = None, disable_br = True, disable_hr = False):
-
+    def dive_html_root_level(self, html, to_clean=False, handlers=None, disable_br=True, disable_hr=False):
         if handlers:
             self.set_handlers(handlers)
 
@@ -851,33 +846,68 @@ class DomParser(object):
             self.xpath = self.get_version()
 
         if isinstance(html, basestring):
-            if to_clean: # TODO fix unicode corrupted conversion
+            if to_clean:  # TODO fix unicode corrupted conversion
                 html = clean_html(html)
 
             if disable_br:
-                html = re.sub("(?i)\s*<\s*br\s*/?\s*>\s*", "\n", html)
+                html = re.sub("(?i)\s*<\s*br\s*/?\s*>\s*", "\n", html)  # TODO replace from lxml
 
             if disable_hr:
-                html = re.sub("(?i)\s*<\s*hr\s*/?\s*>\s*", "\n", html)
+                html = re.sub("(?i)\s*<\s*hr\s*/?\s*>\s*", "\n", html)  # TODO replace from lxml
 
             try:
-                xp_root = html5lib.parse(html, treebuilder = "lxml", namespaceHTMLElements=self.xpath["config"]["xpath"]["namespaces"])
-            except ValueError,e:
-                if self.debug:
-                    print "[WARNING] html5lib->", e.message
-                html = html.decode("utf-8")
-                for i_char_code in [31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19,
-                                    18, 17, 16, 15, 14, 11, 8, 7, 6, 5, 4, 3, 2, 1]:
-                    if unichr(i_char_code) in html:
-                        if self.debug:
-                            print "[WARNING] remove BAD char code `%d` from html" %i_char_code
-                        html = html.replace(unichr(i_char_code), "")
+                xp_root = html5lib.parse(
+                    html,
+                    treebuilder="lxml",
+                    namespaceHTMLElements=self.xpath["config"]["xpath"]["namespaces"]
+                )
+            except ValueError, e:
+                if e.message == "All strings must be XML compatible: Unicode or ASCII, no NULL bytes or control characters":
+                    xp_root = None
+                    bad_character_list = self.xpath.get("bad_character_list")
+                    if bad_character_list:
+                        e = None
 
-                xp_root = html5lib.parse(html, treebuilder = "lxml", namespaceHTMLElements=self.xpath["config"]["xpath"]["namespaces"])
+                        for i_replace in bad_character_list:
+                            i_replace = i_replace.decode("unicode-escape").encode("utf-8")
+                            html = html.replace(i_replace, "")
+
+                            try:
+                                xp_root = html5lib.parse(
+                                    html,
+                                    treebuilder="lxml",
+                                    namespaceHTMLElements=self.xpath["config"]["xpath"]["namespaces"]
+                                )
+                                break
+                            except ValueError, skip:
+                                e = skip
+                        else:
+                            raise e
+
+                    if not xp_root:
+                        if self.debug:
+                            print "[WARNING] html5lib->", e.message
+                        html = html.decode("utf-8")
+
+                        for i_char_code in [31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19,
+                                18, 17, 16, 15, 14, 11, 8, 7, 6, 5, 4, 3, 2, 1]:
+                            if unichr(i_char_code) in html:
+                                if self.debug:
+                                    print "[WARNING] remove BAD char code `%d` from html" % i_char_code
+                                html = html.replace(unichr(i_char_code), "")
+
+                        xp_root = html5lib.parse(
+                            html,
+                            treebuilder="lxml",
+                            namespaceHTMLElements=self.xpath["config"]["xpath"]["namespaces"]
+                        )
+
+                else:
+                    raise
 
             xp_result = xp_root.xpath(
-                _path = self.xpath["config.xpath.root"],
-                namespaces = self.xpath["config.xpath.namespaces"]
+                _path=self.xpath["config.xpath.root"],
+                namespaces=self.xpath["config.xpath.namespaces"]
             )
         else:
             xp_result = html
