@@ -9,7 +9,8 @@ import sre_constants
 import html5lib
 from lxml import etree
 from lxml.html.clean import clean_html
-from lxml.etree import XMLSyntaxError, XPathEvalError
+from lxml.etree import XMLSyntaxError
+from lxml.etree import XPathEvalError
 
 from ciur.util import AdvancedDictDomParser
 from ciur.common import JsonException
@@ -410,8 +411,8 @@ class DomParser(object):
         diff = set(self.handlers) &  {i[1:] for i in configs["light_handlers"]}
         if diff:
             raise DomParserException({
-                "msg" : "the same names was used in handlers and light_handlers",
-                "diff" : list(diff)
+                "msg": "the same names was used in handlers and light_handlers",
+                "diff": list(diff)
             })
 
 
@@ -798,7 +799,6 @@ class DomParser(object):
         result = self._reformat(result)
 
         return result
-
 
     def dive_xml_root_level(self, xml,  handlers = None):
         if handlers:

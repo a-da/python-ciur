@@ -5,7 +5,7 @@ import json
 
 from HTMLParser import HTMLParser
 from lxml.etree import _Element
-from lxml.etree import _ElementStringResult, _ElementUnicodeResult
+from lxml.etree import _ElementStringResult
 from lxml.etree import tostring
 
 from ciur.common import JsonException
@@ -39,6 +39,7 @@ class InlineHandlers(object):
         """
 
         if isinstance(value, list):
+            # noinspection PyComparisonWithNone
             value = [i for i in value if not (isinstance(i, _Element) and i.text == None)] # do not optimise
 
         if not value: # None
@@ -105,6 +106,7 @@ class InlineHandlers(object):
         """
 
         if isinstance(value, list):
+            # noinspection PyComparisonWithNone
             value = [i for i in value if not (isinstance(i, _Element) and i.text == None)] # do not optimise
 
         if not value: # None
@@ -163,6 +165,7 @@ class InlineHandlers(object):
         """
 
         if isinstance(value, list):
+            # noinspection PyComparisonWithNone
             value = [i for i in value if not (isinstance(i, _Element) and i.text == None)] # do not optimise
 
         if not value and not isinstance(value, (float, int, long, bool)):
@@ -203,6 +206,7 @@ class InlineHandlers(object):
     def set(casting_rule, value):
 
         if isinstance(value, list):
+            # noinspection PyComparisonWithNone
             value = [i for i in value if not (isinstance(i, _Element) and i.text == None)]  # do not optimise
             value = [i for i in value if i]  # remove null elements
 

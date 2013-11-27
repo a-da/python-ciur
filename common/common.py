@@ -4,9 +4,10 @@ import decimal
 import datetime
 
 try:
+    # noinspection PyUnresolvedReferences
     from pymongo.objectid import ObjectId
-except Exception:
-    pass
+except ImportError:
+    from bson.objectid import ObjectId
 
 
 class JsonException(Exception):
