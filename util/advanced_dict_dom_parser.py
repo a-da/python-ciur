@@ -3,6 +3,7 @@
 
 from advanced_dict import AdvancedDict
 
+
 class AdvancedDictDomParser(AdvancedDict):
     """
     AdvancedDict implementation for DomParser

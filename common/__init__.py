@@ -7,3 +7,4 @@ from inline_handlers import HttpRaiseException
 from dom_parser import DomParser
 from dom_parser import DomParserException
 from dom_parser_file import DomParserFile
+from dom_parser_str_json import DomParserStrJson
