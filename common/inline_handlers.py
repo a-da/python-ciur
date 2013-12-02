@@ -478,6 +478,9 @@ class InlineHandlers(object):
         do replace in text based on string and regular expressions
         """
         def _f(v):
+            if not v:
+                return v
+
             for i_replace in rule:
                 v = v.strip()
                 if not v: break
@@ -552,14 +555,24 @@ class InlineHandlers(object):
         if not value:
             pass  # skip
 
-        elif isinstance(value, list):
-            value = map(unicode, value)
-            value = map(json.loads, value)
+        if not isinstance(value, list):
+            value = [value]
 
-        else:  # str
-            #print repr(value)
-            #value = unicode(value)
-            value = json.loads(value)
+        # TODO move to xjson
+        # http://stackoverflow.com/questions/9295439/python-json-loads-error
+        value = [unicode(i.replace('\r', '\\r').replace('\n', '\\n').replace('\t', '\\t')) for i in value if i]
+
+        try:
+            value = map(json.loads, value)
+        except ValueError, e:
+            raise InlineHandlersException({
+                "rule": rule,
+                "value": value,
+                "msg": str(e)
+            })
+
+        if len(value) == 1:
+            return value[0]
 
         return value
 
@@ -600,6 +613,8 @@ class InlineHandlers(object):
         # TODO write doctests
 
         def _f(v):
+            if not v:
+                return v
             return v.decode(encoding=rule.get("encoding", "utf-8"), errors=rule.get("errors", "strict"))
 
         if not value:
