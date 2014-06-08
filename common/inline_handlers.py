@@ -222,6 +222,7 @@ class InlineHandlers(object):
         # TODO text.upper
         # TODO text.capitalize
         # TODO text.title
+        # TODO use only one one flag nu pot fi in acelasi tim mai multe flaguri!
         """
         casting into text
         text.(allow_empty_item?|allow_empty_list?|force_list?)?
@@ -239,6 +240,7 @@ class InlineHandlers(object):
         flag_join_by_space = False
         flag_join_by_new_line = False
         flag_tail = False
+        flag_with_tail = False
         for flag in casting_rule.split(".")[1:]:
             if flag == "allow_empty_item":
                 flag_allow_empty_item = True
@@ -254,6 +256,8 @@ class InlineHandlers(object):
                 flag_join_by_new_line = True
             if flag == "tail":
                 flag_tail = True
+            if flag == "with_tail":
+                flag_with_tail = True
 
         if not isinstance(value, list):
             value = [value]
@@ -267,6 +271,11 @@ class InlineHandlers(object):
                 if not isinstance(i_value, basestring):
                     if flag_tail:
                         i_value = i_value.tail
+                    elif flag_with_tail:
+                        if i_value.tail:
+                            i_value = i_value.text + i_value.tail
+                        else:
+                            i_value = i_value.text
                     else:
                         i_value = i_value.text
                         if not i_value:

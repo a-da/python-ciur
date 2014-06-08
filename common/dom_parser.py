@@ -864,25 +864,25 @@ class DomParser(object):
             except ValueError, e:
                 if e.message == "All strings must be XML compatible: Unicode or ASCII, no NULL bytes or control characters":
                     xp_root = None
-                    bad_character_list = self.xpath.get("bad_character_list")
-                    if bad_character_list:
-                        e = None
-
-                        for i_replace in bad_character_list:
-                            i_replace = i_replace.decode("unicode-escape").encode("utf-8")
-                            html = html.replace(i_replace, "")
-
-                            try:
-                                xp_root = html5lib.parse(
-                                    html,
-                                    treebuilder="lxml",
-                                    namespaceHTMLElements=self.xpath["config"]["xpath"]["namespaces"]
-                                )
-                                break
-                            except ValueError, skip:
-                                e = skip
-                        else:
-                            raise e
+                    # bad_character_list = self.xpath.get("bad_character_list")
+                    # if bad_character_list:
+                    #     e = None
+                    #
+                    #     for i_replace in bad_character_list:
+                    #         i_replace = i_replace.decode("unicode-escape").encode("utf-8")
+                    #         html = html.replace(i_replace, "")
+                    #
+                    #         try:
+                    #             xp_root = html5lib.parse(
+                    #                 html,
+                    #                 treebuilder="lxml",
+                    #                 namespaceHTMLElements=self.xpath["config"]["xpath"]["namespaces"]
+                    #             )
+                    #             break
+                    #         except ValueError, skip:
+                    #             e = skip
+                    #     else:
+                    #         raise e
 
                     if not xp_root:
                         if self.debug:
