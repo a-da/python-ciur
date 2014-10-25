@@ -26,7 +26,8 @@
         "rules" : {
             "h1": ["^http_raise:bad_news" , ".//h1[contains(text(), 'Justin Bieber rocks')]"]
         },
-        "blocks" : { },
-        "reformat" : []
+        "blocks" : {},
+        "reformat" : [],
+        "bad_character_list": []
     }]
 }

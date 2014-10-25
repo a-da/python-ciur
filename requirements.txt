@@ -1,0 +1,5 @@
+pip
+pymongo
+html5lib
+lxml
+git+https://bitbucket.org/ada/advanced_types.git#egg=advanced-types

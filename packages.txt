@@ -1,0 +1,10 @@
+python-pip
+git
+libxml2-dev
+libxslt1-dev
+python-dev
+cython
+zlib1g-dev
+
+## optional
+#mongodb-org

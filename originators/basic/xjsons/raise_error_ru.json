@@ -28,6 +28,7 @@
                 ".//h1[contains(text(), 'Сирийские хакеры объявили Джастина Бибера геем')]"]
         },
         "blocks" : { },
-        "reformat" : []
+        "reformat" : [],
+        "bad_character_list": []
     }]
 }

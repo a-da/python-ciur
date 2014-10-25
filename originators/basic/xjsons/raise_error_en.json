@@ -27,6 +27,7 @@
             "h1": ["^http_raise:bad_news" , ".//h1[contains(text(), 'Justin Bieber did not spit on fans over balcony in Toronto, says rep')]"]
         },
         "blocks" : { },
-        "reformat" : []
+        "reformat" : [],
+        "bad_character_list": []
     }]
 }
