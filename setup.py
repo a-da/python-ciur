@@ -17,7 +17,11 @@ setup(
     description="Advanced python dict",
     license="TODO",
     long_description=open("README.rst").read(),
-    packages=[],
+    packages=[
+        "ciur",
+        "ciur.common",
+        "ciur.util"
+    ],
     package_data={
         "": ["*.py", "requirements.txt"]
     },
