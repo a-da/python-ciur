@@ -388,7 +388,7 @@ class DomParser(object):
 
                 try:
                     lh_value["re"] = re.compile(lh_value["re"]) # compile regexp
-                except sre_constants.error, e:
+                except (sre_constants.error, ) as e:
                     raise DomParserException({
                         "msg" : "corrupted regexp in light_handlers",
                         "key" : lh_key,
@@ -435,7 +435,7 @@ class DomParser(object):
 
             try:
                 etree_object.xpath(expression, namespaces=namespaces)
-            except XPathEvalError, e:
+            except (XPathEvalError, ) as e:
                 if e.message in ("Invalid expression", "Invalid predicate", "Unfinished literal"):
                     raise DomParserException({
                         "msg": e.message,
@@ -681,7 +681,7 @@ class DomParser(object):
                 # TODO remove try/except after fix bug in checking
                 try:
                     value = xp_result_item.xpath(xpath_express, namespaces = self.xpath["config.xpath.namespaces"])
-                except XPathEvalError, e:
+                except (XPathEvalError, ) e:
                     raise DomParserException({
                         "msg": e.message,
                         "xpath": xpath_express,
