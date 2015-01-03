@@ -68,7 +68,7 @@ class InlineHandlers(object):
                 i_value = i_value.text
             try:
                 i_value = int(i_value, 0)
-            except ValueError, e:
+            except (ValueError, ) as e:
                 if e.message.startswith("invalid literal for int() with base 0:"):
                     raise InlineHandlersException({
                         "msg": e.message,
