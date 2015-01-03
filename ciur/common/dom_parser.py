@@ -681,7 +681,7 @@ class DomParser(object):
                 # TODO remove try/except after fix bug in checking
                 try:
                     value = xp_result_item.xpath(xpath_express, namespaces = self.xpath["config.xpath.namespaces"])
-                except (XPathEvalError, ) e:
+                except (XPathEvalError, ) as e:
                     raise DomParserException({
                         "msg": e.message,
                         "xpath": xpath_express,

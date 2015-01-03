@@ -143,7 +143,7 @@ class InlineHandlers(object):
         try:
             value = decimal.Decimal(value)
             value = float(value)
-        except (decimal.InvalidOperation, ) ad e:
+        except (decimal.InvalidOperation, ) as e:
             raise InlineHandlersException({
                 "msg": e.message,
                 "suggestion": "failed float casting",
