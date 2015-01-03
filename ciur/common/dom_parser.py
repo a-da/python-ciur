@@ -362,7 +362,7 @@ class DomParser(object):
                     if "from_re" in i_r:
                         try:
                             i_r["from_re"] = re.compile(i_r["from_re"]) # compile regexp
-                        except sre_constants.error, e:
+                        except (sre_constants.error,) as e:
                             raise DomParserException({
                                 "msg" : "corrupted regexp in light_handler `^replace:`",
                                 "key" : lh_key,
