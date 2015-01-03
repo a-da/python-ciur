@@ -50,7 +50,7 @@ class InlineHandlers(object):
             try:
                 value = int(value)
                 return value
-            except ValueError, e:
+            except (ValueError, ) as e:
                 raise InlineHandlersException({
                     "msg": e.message,
                     "suggestion": "tried to make convert for only one item and expected to be int",
