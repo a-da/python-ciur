@@ -573,7 +573,7 @@ class InlineHandlers(object):
 
         try:
             value = map(json.loads, value)
-        except ValueError, e:
+        except (ValueError, ) as e:
             raise InlineHandlersException({
                 "rule": rule,
                 "value": value,
@@ -660,7 +660,7 @@ class InlineHandlers(object):
             for i_date in rule:
                 try:
                     v = datetime.datetime.strptime(v, i_date)
-                except ValueError, e:
+                except (ValueError, ) as e:
                     exception_ = e
                 else:
                     return v

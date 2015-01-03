@@ -812,7 +812,7 @@ class DomParser(object):
         if isinstance(xml, basestring):
             try:
                 etree_xml = etree.fromstring(xml)
-            except XMLSyntaxError, e:
+            except (XMLSyntaxError, ) as e:
                 raise DomParserException({
                     "msg" : e.message,
                     "xml" : xml,
@@ -862,7 +862,7 @@ class DomParser(object):
                     treebuilder="lxml",
                     namespaceHTMLElements=self.xpath["config"]["xpath"]["namespaces"]
                 )
-            except ValueError, e:
+            except (ValueError, ) as e:
                 if e.message == "All strings must be XML compatible: Unicode or ASCII, no NULL bytes or control characters":
                     xp_root = None
                     # bad_character_list = self.xpath.get("bad_character_list")
@@ -887,14 +887,14 @@ class DomParser(object):
 
                     if not xp_root:
                         if self.debug:
-                            print "[WARNING] html5lib->", e.message
+                            print("[WARNING] html5lib->", e.message)
                         html = html.decode("utf-8")
 
                         for i_char_code in [31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19,
                                 18, 17, 16, 15, 14, 11, 8, 7, 6, 5, 4, 3, 2, 1]:
                             if unichr(i_char_code) in html:
                                 if self.debug:
-                                    print "[WARNING] remove BAD char code `%d` from html" % i_char_code
+                                    print("[WARNING] remove BAD char code `%d` from html" % i_char_code)
                                 html = html.replace(unichr(i_char_code), "")
 
                         xp_root = html5lib.parse(
