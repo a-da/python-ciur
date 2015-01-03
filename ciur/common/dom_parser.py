@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 
 import re
 import datetime
@@ -182,11 +183,11 @@ class DomParser(object):
         self.xpath = None
 
         if self.debug:
-            print "[INFO] constructor DOMParser"
+            print("[INFO] constructor DOMParser")
 
     def __del__(self):
         if self.debug:
-            print "[INFO] destructor DOMParser"
+            print("[INFO] destructor DOMParser")
 
     @staticmethod
     def _check_primitives_chain_rules(chain_rules):
