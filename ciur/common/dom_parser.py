@@ -17,19 +17,7 @@ from ciur.util import AdvancedDictDomParser
 from ciur.common import JsonException
 from ciur.common import InlineHandlers
 from ciur.common import str_startswith
-
-import sys
-if sys.version > '3':
-    long = int
-    basestring = str
-
-    def _iteritems(dict_):
-        for key, val in dict_.items():
-            yield key, val
-else:
-    def _iteritems(dict_):
-        for key, val in dict_.iteritems():
-            yield key, val
+from ciur.python_compatible_2_and_3 import *
 
 
 class DomParserException(JsonException):
@@ -335,7 +323,7 @@ class DomParser(object):
                 "diff": list(diff)
             })
 
-        for k, v in _iteritems(mandatory_keys):
+        for k, v in iteritems23(mandatory_keys):
             if k not in configs:
                 raise DomParserException({
                     "msg" : "missing mandatory key",
@@ -353,7 +341,7 @@ class DomParser(object):
         #-[2]------------------------------------
         # check light_handlers
         # key_name, allowed type
-        for lh_key, lh_value in _iteritems(configs["light_handlers"]):
+        for lh_key, lh_value in iteritems23(configs["light_handlers"]):
             allowed_ruled = InlineHandlers._get_methods()
 
             if not str_startswith(lh_key, *allowed_ruled):
@@ -480,7 +468,7 @@ class DomParser(object):
                         })
 
                     if isinstance(for_, dict):
-                        for k_for, v_for in _iteritems(for_):
+                        for k_for, v_for in iteritems23(for_):
                             if not isinstance(v_for, basestring):
                                 raise  DomParserException({
                                     "msg": "wrong type for `*` rule",
@@ -511,7 +499,7 @@ class DomParser(object):
 
                     del root["*"]
             else:
-                for k, v in _iteritems(root):
+                for k, v in iteritems23(root):
                     if isinstance(v[1], dict):
                         raise DomParserException({
                             "msg" : "expect to be astrix notation in key",
@@ -520,7 +508,7 @@ class DomParser(object):
                         })
 
 
-            for k, v in _iteritems(root):
+            for k, v in iteritems23(root):
                 if k.startswith("#"): # ignore commented configs
                     continue
 
@@ -675,7 +663,7 @@ class DomParser(object):
         """
         m = AdvancedDictDomParser()
         for xp_result_item in xp_root_node:
-            for k_rule, v_rule in _iteritems(rules):
+            for k_rule, v_rule in iteritems23(rules):
                 key_path = parent_key + "." + k_rule
 
                 if k_rule.startswith("#"):  # skip commented field

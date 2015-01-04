@@ -13,6 +13,7 @@ from lxml.etree import _ElementStringResult
 from lxml.etree import tostring
 
 from ciur.common import JsonException
+from ciur.python_compatible_2_and_3 import *
 
 
 class InlineHandlersException(JsonException):
