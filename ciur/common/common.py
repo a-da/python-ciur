@@ -13,7 +13,7 @@ import datetime
 class JsonException(Exception):
     """
     Exception that raise with dictionary explication
-    >>> raise JsonException({"key_name1" : "val1", "key_name2" : "val2"})
+    >> raise JsonException({"key_name1" : "val1", "key_name2" : "val2"})
     Traceback (most recent call last):
         ...
     JsonException: {'key_name2': 'val2', 'key_name1': 'val1'}

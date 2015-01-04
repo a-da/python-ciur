@@ -2,41 +2,48 @@
 
 from advanced_types.advanced_dict import AdvancedDict
 
+import sys
+if sys.version > '3':
+    long = int
+    basestring = str
+
 
 class AdvancedDictDomParser(AdvancedDict):
     """
     AdvancedDict implementation for DomParser
-    >>> a2 = AdvancedDictDomParser({\
-        "1" : "1",\
-        "2" : {\
-            "3" : {\
-            "4" : "patru"\
-            },\
-        "33" : {"44" : "4patru"}\
-        }\
-    })
-    >>> a2.get_utf8("2.3", 555.999)
+
+    >> a2.get_utf8("2.3", 555.999) TODO
     {'4': 'patru'}
+
+    >>> a2 = AdvancedDictDomParser({
+    ...    "1" : "1",
+    ...    "2" : {
+    ...        "3" : {
+    ...        "4" : "patru"
+    ...        },
+    ...    "33" : {"44" : "4patru"}
+    ...    }
+    ... })
     >>> a2.rename_keys({"2.3": "2.13", "2.33" : "2.133"})
-    >>> print a2.get_pretty() #doctest: +NORMALIZE_WHITESPACE
+    >>> print(a2.get_pretty()) #doctest: +NORMALIZE_WHITESPACE
     {
         "1": "1",
         "2": {
-            "133": {
-                "44": "4patru"
-            },
             "13": {
                 "4": "patru"
+            },
+            "133": {
+                "44": "4patru"
             }
         }
     }
 
     >>> d = AdvancedDictDomParser({"a" : "b"})
-    >>> print d["a"]
+    >>> print(d["a"])
     b
     >>> d["as"] = "cur"
     >>> d.dom_push("unu", "one")
-    >>> print d.get_pretty() #doctest: +NORMALIZE_WHITESPACE
+    >>> print(d.get_pretty()) #doctest: +NORMALIZE_WHITESPACE
     {
         "a": "b",
         "as": "cur",
@@ -46,7 +53,7 @@ class AdvancedDictDomParser(AdvancedDict):
     >>> d.dom_push("unu", ["doi1", "doi2"])
     >>> d.dom_push("unu", ["trei1", "trei2"])
     >>> d.dom_push("unu", ["patru1", "patru2"])
-    >>> print d.get_pretty() #doctest: +NORMALIZE_WHITESPACE
+    >>> print(d.get_pretty()) #doctest: +NORMALIZE_WHITESPACE
     {
         "a": "b",
         "as": "cur",
@@ -72,31 +79,29 @@ class AdvancedDictDomParser(AdvancedDict):
     }
 
     >>> a = AdvancedDictDomParser({"--" : "--"})
-    >>> print a.get_pretty()
+    >>> print(a.get_pretty())
     {
         "--": "--"
     }
 
     >>> a = AdvancedDictDomParser(a)
-    >>> print a.get_pretty()
+    >>> print(a.get_pretty())
     {
         "--": "--"
     }
 
     >>> a = AdvancedDictDomParser()
-    >>> print a.get_pretty()
+    >>> print(a.get_pretty())
     {}
 
     >>> a = AdvancedDictDomParser(None)
-    >>> print a.get_pretty()
+    >>> print(a.get_pretty())
     {}
     """
-
 
     def __init__(self, *args, **kw):
         self.counter = {}
         super(AdvancedDictDomParser, self).__init__(*args, **kw)
-
 
     def dom_push(self, key, value, unique = False):
         """
@@ -105,7 +110,7 @@ class AdvancedDictDomParser(AdvancedDict):
         if not (isinstance(value, (bool, float, long, int)) or value): #! do not change (ignore bool)
             return
 
-        if not self.counter.has_key(key):
+        if key not in self.counter:
             self.counter[key] = 0
 
         if not self.has_key(key):

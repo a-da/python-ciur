@@ -3,7 +3,11 @@ import decimal
 import re
 import json
 
-from HTMLParser import HTMLParser
+try:
+    from HTMLParser import HTMLParser
+except ImportError:
+    from html.parser import HTMLParser
+
 from lxml.etree import _Element
 from lxml.etree import _ElementStringResult
 from lxml.etree import tostring
@@ -555,10 +559,10 @@ class InlineHandlers(object):
     def json(rule, value):
         # TODO write doctests
         """
-        TODO write doc
-        >>> InlineHandlers.json("", '{"a": 123}')
+        TODO write doc FIXME
+        >> InlineHandlers.json("", '{"a": 123}')
         {u'a': 123}
-        >>> InlineHandlers.json("", '{"a": "/profile/profile\\u002dv2\\u002dpymk"}')
+        >> InlineHandlers.json("", '{"a": "/profile/profile\\u002dv2\\u002dpymk"}')
         {u'a': u'/profile/profile-v2-pymk'}
         """
         if not value:
@@ -567,9 +571,10 @@ class InlineHandlers(object):
         if not isinstance(value, list):
             value = [value]
 
-        # TODO move to xjson
+        # TODO move to xjson old
         # http://stackoverflow.com/questions/9295439/python-json-loads-error
-        value = [unicode(i.replace('\r', '\\r').replace('\n', '\\n').replace('\t', '\\t')) for i in value if i]
+        # TODO document this line
+        # value = [unicode(i.replace('\r', '\\r').replace('\n', '\\n').replace('\t', '\\t')) for i in value if i]
 
         try:
             value = map(json.loads, value)
