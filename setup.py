@@ -26,5 +26,12 @@ setup(
         "": ["*.py", "requirements.txt"]
     },
     include_package_data=True,
-    install_requires=[str(ir.req) for ir in parse_requirements("requirements.txt")]
+    install_requires=[str(ir.req) for ir in parse_requirements("requirements.txt")],
+    classifiers=[
+        "Intended Audience :: Developers",
+        "Topic :: Software Development :: Libraries :: Python Modules",
+        "Programming Language :: Python",
+        "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 3",
+    ],
 )
