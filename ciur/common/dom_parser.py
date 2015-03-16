@@ -272,7 +272,7 @@ class DomParser(object):
                 "diff": diff_rules
             })
 
-    def validate_configs(self, configs):
+    def validate_configs(self, configs, strict=True):
         # TODO: check if comments have mandatory `#` preposition
         """
         #1 - check each xpath expression
@@ -283,7 +283,7 @@ class DomParser(object):
                                       "<body>"
                                       "<div>some text hear</div>"
                                       "</body>"
-                                      "</html>", treebuilder = "lxml")
+                                      "</html>", treebuilder="lxml")
 
         # TODO debug error for checking, after that decide to remove this is it needed
         #                                                               .xpath("/html:html/html:body",
@@ -314,29 +314,31 @@ class DomParser(object):
             "bad_character_list": list
         }
 
-        diff = set(mandatory_keys.keys()) ^ set(configs.keys())
-        if diff:
-            raise DomParserException({
-                "msg": "symmetric difference by keys",
-                "expected_keys": mandatory_keys.keys(),
-                "config_keys": configs.keys(),
-                "diff": list(diff)
-            })
-
-        for k, v in iteritems23(mandatory_keys):
-            if k not in configs:
+        if strict:
+            diff = set(mandatory_keys.keys()) ^ set(configs.keys())
+            if diff:
                 raise DomParserException({
-                    "msg" : "missing mandatory key",
-                    "key_name" : k,
-                    "expected" : mandatory_keys
+                    "msg": "symmetric difference by keys",
+                    "expected_keys": mandatory_keys.keys(),
+                    "config_keys": configs.keys(),
+                    "diff": list(diff)
                 })
 
-            if not isinstance(configs[k], v):
-                raise DomParserException({
-                    "msg": "wrong datatype initialization for key",
-                    "key_name": k,
-                    "expected": mandatory_keys
-                })
+        if strict:
+            for k, v in iteritems23(mandatory_keys):
+                if k not in configs:
+                    raise DomParserException({
+                        "msg" : "missing mandatory key",
+                        "key_name": k,
+                        "expected": mandatory_keys
+                    })
+
+                if not isinstance(configs[k], v):
+                    raise DomParserException({
+                        "msg": "wrong datatype initialization for key",
+                        "key_name": k,
+                        "expected": mandatory_keys
+                    })
 
         #-[2]------------------------------------
         # check light_handlers
@@ -453,47 +455,47 @@ class DomParser(object):
                 else:
                     raise
 
-        def recursive_check(root, key_path = ""):
+        def recursive_check(root, key_path=""):
             # astrix handling `for_each`
             if "*" in root:
-                v = root["*"]
-                if isinstance(v[1], dict):
-                    len_v = len(v)
-                    for_ = v[1]["for"]
+                v_ = root["*"]
+                if isinstance(v_[1], dict):
+                    len_v = len(v_)
+                    for_ = v_[1]["for"]
 
-                    if "{0}" not in v[1]["in"]:
-                        raise  DomParserException({
-                            "msg" : "astrix patter should contain at least on `{0}` symbol",
-                            "got" : v[1]["in"]
+                    if "{0}" not in v_[1]["in"]:
+                        raise DomParserException({
+                            "msg": "astrix patter should contain at least on `{0}` symbol",
+                            "got": v_[1]["in"]
                         })
 
                     if isinstance(for_, dict):
                         for k_for, v_for in iteritems23(for_):
                             if not isinstance(v_for, basestring):
-                                raise  DomParserException({
+                                raise DomParserException({
                                     "msg": "wrong type for `*` rule",
                                     "got": repr(v_for),
                                     "expected": "basestring"
                                 })
 
                             if len_v == 3:
-                                root[k_for.lower()] = [v[0], v[1]["in"].format(v_for), v[2]]
-                            else: # len_v == 2
-                                root[k_for.lower()] = [v[0], v[1]["in"].format(v_for)]
+                                root[k_for.lower()] = [v_[0], v_[1]["in"].format(v_for), v_[2]]
+                            else:  # len_v == 2
+                                root[k_for.lower()] = [v_[0], v_[1]["in"].format(v_for)]
 
                     elif isinstance(for_, list):
                         for item in for_:
                             if not isinstance(item, basestring):
-                                raise  DomParserException({
+                                raise DomParserException({
                                     "msg": "wrong type for `*` rule",
                                     "got": repr(item),
                                     "expected": basestring
                                 })
 
                             if len_v == 3:
-                                root[item.lower()] = [v[0], v[1]["in"].format(item), v[2]]
-                            else: # len_v == 2
-                                root[item.lower()] = [v[0], v[1]["in"].format(item)]
+                                root[item.lower()] = [v_[0], v_[1]["in"].format(item), v_[2]]
+                            else:  # len_v == 2
+                                root[item.lower()] = [v_[0], v_[1]["in"].format(item)]
                     else:
                         raise NotImplemented
 
@@ -502,11 +504,10 @@ class DomParser(object):
                 for k, v in iteritems23(root):
                     if isinstance(v[1], dict):
                         raise DomParserException({
-                            "msg" : "expect to be astrix notation in key",
-                            "v" : v,
-                            "k" : k
+                            "msg": "expect to be astrix notation in key",
+                            "v": v,
+                            "k": k
                         })
-
 
             for k, v in iteritems23(root):
                 if k.startswith("#"): # ignore commented configs
@@ -600,10 +601,10 @@ class DomParser(object):
         if version is not specified then get active
         """
 
-        version_number = self.context["version"] if version == "default" else version
+        version_number = self.context.get("version", 1) if version == "default" else version
 
         tmp = None
-        if self.context["versions"]:
+        if self.context.get("versions"):
             tmp = self.context["versions"][version_number - 1]
             tmp = AdvancedDictDomParser(tmp)
 
@@ -612,7 +613,6 @@ class DomParser(object):
 
     def get_version_size(self):
         return self.context["versions"].__len__()
-
 
     def _children_nodes(self, casting_rule, value, children_rule, key_path):
         """
@@ -655,7 +655,6 @@ class DomParser(object):
 
         return tmp
 
-
     def _dive_next_level(self, xp_root_node, rules, parent_key=""):
         """
         `casting_chain`
@@ -680,25 +679,40 @@ class DomParser(object):
                     comments = True
 
                 # TODO remove try/except after fix bug in checking
+                # TODO use strict and not
                 try:
-                    value = xp_result_item.xpath(xpath_express, namespaces = self.xpath["config.xpath.namespaces"])
+                    value = xp_result_item.xpath(
+                        xpath_express,
+                        namespaces=self.xpath.get("config.xpath.namespaces", {})
+                    )
                 except (XPathEvalError, ) as e:
                     raise DomParserException({
                         "msg": e.message,
                         "xpath": xpath_express,
                         "key_path": key_path
                     })
+                except (Exception, ) as e:
+                    raise DomParserException({
+                        "msg": e.message,
+                        "xpath": xpath_express,
+                        #"key_path": key_path
+                        "parent_key": "%s%s%s" % (self.xpath["config.xpath.root"], parent_key, xpath_express)
+                    })
 
-                if comments: # have no children nodes
+                if comments:  # have no children nodes
                     for i_casting_chain in casting_chain.lower().split("|"):
                         error_message = ""
 
                         if i_casting_chain == "mandatory":
-                            if not (isinstance(value, (bool, int, float, long)) or value): #! do not change (ignore bool)
+                            # ! do not change (ignore bool)
+                            if not (isinstance(value, (bool, int, float, long)) or value):
+
+
                                 raise DomParserException({
                                     "key_path": key_path,
                                     "msg": "Require mandatory elements from data type",
-                                    "code": "DomParser._dive_next_level"
+                                    "code": "DomParser._dive_next_level",
+                                    "_": etree.ElementTree(xp_result_item).getpath(xp_result_item)
                                 })
                                 # else: is ok
 
@@ -750,7 +764,7 @@ class DomParser(object):
 
                     tmp = value
 
-                else: # have children nodes
+                else:  # have children nodes
                     tmp = self._children_nodes(
                         casting_rule=casting_chain,
                         value=value,
@@ -769,7 +783,7 @@ class DomParser(object):
     def _reformat(self, result):
         # TODO add more description
         a = AdvancedDictDomParser()
-        for reformat in self.xpath["reformat"]:
+        for reformat in self.xpath.get("reformat", {}):  # TODO use strict
             if "update" in reformat:
                 from_, to_ = reformat["update"]
                 a.update()
@@ -857,11 +871,12 @@ class DomParser(object):
             if disable_hr:
                 html = re.sub("(?i)\s*<\s*hr\s*/?\s*>\s*", "\n", html)  # TODO replace from lxml
 
+            # TODO use 2 mode strict=false or true for self.xpath["config"]["xpath"]["namespaces"]
             try:
                 xp_root = html5lib.parse(
                     html,
                     treebuilder="lxml",
-                    namespaceHTMLElements=self.xpath["config"]["xpath"]["namespaces"]
+                    namespaceHTMLElements=self.xpath["config"]["xpath"].get("namespaces", {})
                 )
             except (ValueError, ) as e:
                 if e.message == "All strings must be XML compatible: Unicode or ASCII, no NULL bytes or control characters":
@@ -909,7 +924,7 @@ class DomParser(object):
 
             xp_result = xp_root.xpath(
                 _path=self.xpath["config.xpath.root"],
-                namespaces=self.xpath["config.xpath.namespaces"]
+                namespaces=self.xpath.get("config.xpath.namespaces", {})
             )
         else:
             xp_result = html

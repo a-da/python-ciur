@@ -19,18 +19,16 @@ class DomParserFile(DomParser):
         super(DomParserFile, self).__init__(name, source, debug)
         self.context = AdvancedOrderedDict().load_json(self.source)
 
-        if not self.context: # create new one
+        if not self.context:  # create new one
             self.context = {
                 "name": self.name,
                 "version": 0,
                 "versions": [ ]
             }
 
-
     def __del__(self):
         s = super(DomParserFile, self)
         s.__del__()
-
 
     def save(self, js):
         super(DomParserFile, self).save(js)
