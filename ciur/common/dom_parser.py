@@ -419,7 +419,6 @@ class DomParser(object):
                 "diff": list(diff)
             })
 
-
         def check_xpath_expression(expression, namespaces, key_path):
             # TODO fix bug for ignoring ./html:li[contain(text(), 'km')] instead of ./html:li[contain(text(), 'km')]
             """
@@ -609,7 +608,6 @@ class DomParser(object):
             tmp = AdvancedDictDomParser(tmp)
 
         return tmp
-
 
     def get_version_size(self):
         return self.context["versions"].__len__()
