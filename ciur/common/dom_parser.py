@@ -6,6 +6,7 @@ import datetime
 import json
 import time
 import sre_constants
+import warnings
 
 import html5lib
 from lxml import etree
@@ -182,6 +183,7 @@ class DomParser(object):
         self.debug = debug
         self.handlers = {}
         self.xpath = None
+        self.http_content = ""
 
         if self.debug:
             print("[INFO] constructor DOMParser")
@@ -189,6 +191,16 @@ class DomParser(object):
     def __del__(self):
         if self.debug:
             print("[INFO] destructor DOMParser")
+
+    @classmethod
+    def _html5lib_parse(cls, *args, **kwargs):
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            return html5lib.parse(*args, **kwargs)
+
+    @classmethod
+    def _get_xpath(cls, element):
+        return etree.ElementTree(element).getpath(element)
 
     @staticmethod
     def _check_primitives_chain_rules(chain_rules):
@@ -239,7 +251,6 @@ class DomParser(object):
                         "rule": i_rule,
                         "expect": text_dot_list
                     })
-
 
             elif i_rule.startswith("^") and len(i_rule) > 1:
                 r_tmp.append(i_rule)
@@ -520,10 +531,10 @@ class DomParser(object):
 
                 if not isinstance(v[0], basestring):
                     raise DomParserException({
-                        "msg"           : "invalid data type for configs chain rule",
-                        "chain_rule"    : v[0],
-                        "expected_type" : "string",
-                        "key_path"      : tmp_key_path
+                        "msg": "invalid data type for configs chain rule",
+                        "chain_rule": v[0],
+                        "expected_type": "string",
+                        "key_path": tmp_key_path
                     })
 
                 if v_len == 3 and isinstance(v[2], basestring):
@@ -531,9 +542,9 @@ class DomParser(object):
                         blocks_ref_key = v[2][2:]
                         if blocks_ref_key not in configs["blocks"]:
                             raise DomParserException({
-                                "msg"            : "missed blocks_ref_key",
-                                "blocks_ref_key" : blocks_ref_key,
-                                "key_path"       : tmp_key_path
+                                "msg": "missed blocks_ref_key",
+                                "blocks_ref_key": blocks_ref_key,
+                                "key_path": tmp_key_path
                             })
 
                         v[2] = configs["blocks"][blocks_ref_key]
@@ -549,9 +560,9 @@ class DomParser(object):
 
                 else:
                     check_xpath_expression(
-                        expression = v[1],
-                        namespaces = configs["config.xpath.namespaces"],
-                        key_path   = tmp_key_path
+                        expression= v[1],
+                        namespaces= configs["config.xpath.namespaces"],
+                        key_path=tmp_key_path
                     )
 
         recursive_check(configs["rules"])
@@ -612,7 +623,7 @@ class DomParser(object):
     def get_version_size(self):
         return self.context["versions"].__len__()
 
-    def _children_nodes(self, casting_rule, value, children_rule, key_path):
+    def _children_nodes(self, casting_rule, value, children_rule, key_path, xpath_object):
         """
         handle nodes
         """
@@ -648,7 +659,10 @@ class DomParser(object):
             raise DomParserException({
                 "key_path": key_path,
                 "msg": "Require mandatory elements from children",
-                "code": "DomParser._dive_next_level"
+                "code": "DomParser._dive_next_level",
+                "xpath": self._get_xpath(xpath_object),
+                "children_rule": children_rule,
+                "+": self
             })
 
         return tmp
@@ -704,13 +718,12 @@ class DomParser(object):
                         if i_casting_chain == "mandatory":
                             # ! do not change (ignore bool)
                             if not (isinstance(value, (bool, int, float, long)) or value):
-
-
                                 raise DomParserException({
                                     "key_path": key_path,
                                     "msg": "Require mandatory elements from data type",
                                     "code": "DomParser._dive_next_level",
-                                    "_": etree.ElementTree(xp_result_item).getpath(xp_result_item)
+                                    "xpath": self._get_xpath(xp_result_item),
+                                    "+": self
                                 })
                                 # else: is ok
 
@@ -767,7 +780,8 @@ class DomParser(object):
                         casting_rule=casting_chain,
                         value=value,
                         children_rule=v_rule[2],
-                        key_path=key_path
+                        key_path=key_path,
+                        xpath_object=xp_result_item
                     )
 
                 m.dom_push(k_rule, tmp)
@@ -852,27 +866,29 @@ class DomParser(object):
         result = self._dive_root_level(xpath_result=xp_result)
         return result
 
-    def dive_html_root_level(self, html, to_clean=False, handlers=None, disable_br=True, disable_hr=False):
+    def dive_html_root_level(self, http_content, to_clean=False, handlers=None, disable_br=True, disable_hr=False):
+        self.http_content = http_content
+
         if handlers:
             self.set_handlers(handlers)
 
         if not self.xpath:
             self.xpath = self.get_version()
 
-        if isinstance(html, basestring):
+        if isinstance(http_content, basestring):
             if to_clean:  # TODO fix unicode corrupted conversion
-                html = clean_html(html)
+                http_content = clean_html(http_content)
 
             if disable_br:
-                html = re.sub("(?i)\s*<\s*br\s*/?\s*>\s*", "\n", html)  # TODO replace from lxml
+                http_content = re.sub("(?i)\s*<\s*br\s*/?\s*>\s*", "\n", http_content)  # TODO replace from lxml
 
             if disable_hr:
-                html = re.sub("(?i)\s*<\s*hr\s*/?\s*>\s*", "\n", html)  # TODO replace from lxml
+                http_content = re.sub("(?i)\s*<\s*hr\s*/?\s*>\s*", "\n", http_content)  # TODO replace from lxml
 
             # TODO use 2 mode strict=false or true for self.xpath["config"]["xpath"]["namespaces"]
             try:
-                xp_root = html5lib.parse(
-                    html,
+                xp_root = self._html5lib_parse(
+                    http_content,
                     treebuilder="lxml",
                     namespaceHTMLElements=self.xpath["config"]["xpath"].get("namespaces", {})
                 )
@@ -902,17 +918,17 @@ class DomParser(object):
                     if not xp_root:
                         if self.debug:
                             print("[WARNING] html5lib->", e.message)
-                        html = html.decode("utf-8")
+                        http_content = http_content.decode("utf-8")
 
                         for i_char_code in [31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19,
                                 18, 17, 16, 15, 14, 11, 8, 7, 6, 5, 4, 3, 2, 1]:
                             if unichr(i_char_code) in html:
                                 if self.debug:
                                     print("[WARNING] remove BAD char code `%d` from html" % i_char_code)
-                                html = html.replace(unichr(i_char_code), "")
+                                http_content = http_content.replace(unichr(i_char_code), "")
 
-                        xp_root = html5lib.parse(
-                            html,
+                        xp_root = self._html5lib_parse(
+                            http_content,
                             treebuilder="lxml",
                             namespaceHTMLElements=self.xpath["config"]["xpath"]["namespaces"]
                         )
@@ -925,8 +941,14 @@ class DomParser(object):
                 namespaces=self.xpath.get("config.xpath.namespaces", {})
             )
         else:
-            xp_result = html
+            xp_result = http_content
 
         result = self._dive_root_level(xp_result)
 
         return result
+
+    def __repr__(self):
+        return {
+            "test_url": self.context.get("test_url"),
+            #"http_content": self.http_content,
+        }.__str__()
