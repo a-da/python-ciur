@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 from setuptools import setup
+import re
 
 def parse_requirements(filename, editable=False):
     _ = []
