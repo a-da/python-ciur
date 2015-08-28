@@ -1,6 +1,28 @@
 #!/usr/bin/env python
 from setuptools import setup
-from pip.req import parse_requirements
+
+def parse_requirements(filename, editable=False):
+    _ = []
+    for line in open(filename, "r"):
+        if re.search("^\s*(#|-)", line):
+            continue
+        line = re.search("^\s*(.*)\s*", line).group(1)
+
+        if not line:
+            continue
+
+        if not editable:
+            m = re.search("#egg=(...*)", line)
+            if m:
+                line = m.group(1)
+
+        m = re.search("(.+) #.*", line)
+        if m:
+            line = m.group(1)
+
+        _.append(line)
+
+    return _
 
 name = "ciur"
 version = __import__(name).VERSION
@@ -26,7 +48,7 @@ setup(
         "": ["*.py", "requirements.txt"]
     },
     include_package_data=True,
-    install_requires=[str(ir.req) for ir in parse_requirements("requirements.txt")],
+    install_requires=parse_requirements("requirements.txt"),
     classifiers=[
         "Intended Audience :: Developers",
         "Topic :: Software Development :: Libraries :: Python Modules",
