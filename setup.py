@@ -46,10 +46,10 @@ setup(
         "ciur.util"
     ],
     package_data={
-        "": ["*.py", "requirements.txt"]
+        "": ["*.py", "requirements-pip.txt"]
     },
     include_package_data=True,
-    install_requires=parse_requirements("requirements.txt"),
+    install_requires=parse_requirements("requirements-pip.txt"),
     classifiers=[
         "Intended Audience :: Developers",
         "Topic :: Software Development :: Libraries :: Python Modules",

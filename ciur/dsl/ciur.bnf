@@ -1,0 +1,11 @@
+url: https://stackoverflow.com/questions/12565098/python-how-to-check-if-a-string-is-a-valid-iri?a=1
+name: exam plepage
+root = /h3.1 | node # root commenter
+    name = .//h1[contains(text(), 'Justin')] | str # text
+    count_list = .//h2[contains(text(), 'Andrei')]/p | list | int # lala
+    user = .//h5[contains(text(), 'Andrei')]/p | node
+        name = ./spam | str
+        sure_name = ./bold | str
+        age = ./it | int
+        hobby = ./li | list | str
+        indexes = ./li/bold | list | int
