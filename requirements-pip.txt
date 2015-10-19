@@ -6,3 +6,4 @@ lxml
 git+https://bitbucket.org/ada/advanced_types.git#egg=advanced-types
 pyparsing
 rfc3987
+sh # for test only

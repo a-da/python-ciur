@@ -44,12 +44,18 @@ def checkPeerIndent(s,l,t):
             raise ParseFatalException(s,l,"illegal nesting")
         raise ParseException(s,l,"not a peer entry")
 
+
 def checkSubIndent(s,l,t):
+    print ">>s_", s
+    print ">>l_", l
+    print ">>t_", t
     curCol = col(l,s)
     if curCol > indentStack[-1]:
         indentStack.append( curCol )
     else:
         raise ParseException(s,l,"not a subentry")
+
+    exit(1)
 
 def checkUnindent(s,l,t):
     if l >= len(s): return
@@ -61,8 +67,7 @@ def doUnindent():
     indentStack.pop()
     
 INDENT = lineEnd.suppress() + empty + empty.copy().setParseAction(checkSubIndent)
-UNDENT = FollowedBy(empty).setParseAction(checkUnindent)
-UNDENT.setParseAction(doUnindent)
+UNDENT = FollowedBy(empty).setParseAction(checkUnindent).setParseAction(doUnindent)
 
 stmt = Forward()
 suite = Group( OneOrMore( empty + stmt.setParseAction( checkPeerIndent ) )  )
@@ -77,8 +82,9 @@ rvalue << (funcCall | identifier | Word(nums))
 assignment = Group(identifier + "=" + rvalue)
 stmt << ( funcDef | assignment | identifier )
 
-print (data)
-parseTree = suite.parseString(data)
+#print (data)
+parseTree = suite.parseString(data, parseAll=True)
 
+#print(suite)
 import pprint
 pprint.pprint( parseTree.asList() )

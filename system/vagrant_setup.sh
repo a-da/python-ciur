@@ -38,7 +38,7 @@ function install_virtualenv {
     #install virtualenv
     pip install --upgrade pip virtualenv
     virtualenv /opt/python-env/ciur
-    /opt/python-env/ciur/bin/pip install --upgrade -r requirements.txt
+    /opt/python-env/ciur/bin/pip install --upgrade -r requirements-pip.txt
 }
 
 case "${#}" in
