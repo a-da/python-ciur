@@ -9,30 +9,12 @@
 from pyparsing import *
 
 data = """\
-def A(z):
+hhh
   A1
   B = 100
   G = A2
   A2
   A3
-B
-def BB(a,b,c):
-  BB1
-  def BBA():
-    bba1
-    bba2
-    bba3
-    def BBAAAAAAAAAAAAAAAAA():
-                    bba1
-                    bba2
-                    bba3
-C
-D
-def spam(x,y):
-     def eggs(z):
-         pass
-
-ccc
 """
 
 indentStack = [1]
@@ -46,16 +28,11 @@ def checkPeerIndent(s,l,t):
 
 
 def checkSubIndent(s,l,t):
-    print ">>s_", s
-    print ">>l_", l
-    print ">>t_", t
     curCol = col(l,s)
     if curCol > indentStack[-1]:
         indentStack.append( curCol )
     else:
         raise ParseException(s,l,"not a subentry")
-
-    exit(1)
 
 def checkUnindent(s,l,t):
     if l >= len(s): return
@@ -80,7 +57,7 @@ rvalue = Forward()
 funcCall = Group(identifier + "(" + Optional(delimitedList(rvalue)) + ")")
 rvalue << (funcCall | identifier | Word(nums))
 assignment = Group(identifier + "=" + rvalue)
-stmt << ( funcDef | assignment | identifier )
+stmt << ( identifier)
 
 #print (data)
 parseTree = suite.parseString(data, parseAll=True)

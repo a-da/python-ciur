@@ -3,18 +3,20 @@ from pyparsing import lineEnd, empty, FollowedBy
 import rfc3987
 import StringIO
 
-_input_data = """
+_input_data = """\
 url: https://stackoverflow.com/questions/12565098/python-how-to-check-if-a-string-is-a-valid-iri?a=1
 name: exam plepage
-root = /h3.1 | node # root commenter
+root = /h3.1 | node # root commenter {
     name = .//h1[contains(text(), 'Justin')] | str # text
     count_list = .//h2[contains(text(), 'Andrei')]/p | list | int # lala
-    user = .//h5[contains(text(), 'Andrei')]/p | node
+    user = .//h5[contains(text(), 'Andrei')]/p | node {
         name = ./spam | str
         sure_name = ./bold | str
         age = ./it | int
         hobby = ./li | list | str
         indexes = ./li/bold | list | int
+    }
+}
 """
 
 indentStack = [1]
@@ -90,6 +92,6 @@ def get_bnf():
     comment = pyparsing.Optional(hash + pyparsing.restOfLine)
 
     type_ = pyparsing.Group(pyparsing.OneOrMore(pipe + pyparsing.oneOf("str int bool node list")))
-    rule = key + eq + xpath + type_ + comment
+    rule = pyparsing.Group(key + eq + xpath + type_ + comment + pyparsing.Optional("{"))
 
-    return pyparsing.Group(meta) + pyparsing.OneOrMore(pyparsing.Group(rule))
+    return pyparsing.Group(meta) + pyparsing.OneOrMore(rule)
