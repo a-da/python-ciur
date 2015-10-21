@@ -37,9 +37,7 @@ class Rule(ciur2.CommonEqualityMixin):
             },
             {
                 "xpath": ".//h5[contains(text(), 'Andrei')]/p",
-                "type_list": [
-                    "node"
-                ],
+                "type_list": "node",
                 "name": "user",
                 "rule": [
                     {
@@ -83,13 +81,28 @@ class Rule(ciur2.CommonEqualityMixin):
     >>> rule1 == rule2
     True
     """
-    _ = []
 
     def __init__(self, name, xpath, type_list, *rule):
         self.name = name
         self.xpath = xpath
-        self.type_list = type_list
         self.rule = rule
+
+        self.type_list = self._2complex(type_list)
+
+    @classmethod
+    def _2complex(cls, value):
+        if not isinstance(value, list):
+            return value,
+
+        return value
+
+    @classmethod
+    def _2simple(cls, value):
+        if isinstance(value, list):
+            if len(value) == 1:
+                return value[0]
+
+        return value
 
     @staticmethod
     def from_dict(dict_):
@@ -101,6 +114,8 @@ class Rule(ciur2.CommonEqualityMixin):
         return Rule(dict_["name"], dict_["xpath"], dict_["type_list"], *rule)
 
     def to_dict(self):
+        self.type_list = self._2simple(self.type_list)
+
         ret = {
             "name": self.name,
             "xpath": self.xpath,

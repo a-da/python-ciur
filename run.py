@@ -12,6 +12,7 @@ response = requests.get("http://example.com")
 # print type(data)
 
 
-rule = ciur2.Rule("root", "/html/body", [_Element], ciur2.Rule("name", ".//h1", [_Element]), ciur2.Rule("paragrapth", ".//p", [_Element]))
+rule = ciur2.Rule("root", "/html/body", 1,
+                  ciur2.Rule("name", ".//h1", [str, 1]), ciur2.Rule("paragrapth", ".//p", [str, 0]))
 data = ciur2.page_html(response.content, rule)
-print type(data)
+print data

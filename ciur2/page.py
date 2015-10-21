@@ -1,19 +1,61 @@
 import warnings
+from lxml.etree import _Element
 
-import requests
 import html5lib
-from lxml import etree
 
-import ciur2
 
-# import requests
-#
-# s = requests.Session()
-# #print s.get("http://example.org").content
-# print s.get("file:///etc/debian_version").content
+def size(got, expect):
+    assert got == expect, "expect size `%s`, got `%s`" % (expect, got)
 
-class PageXml(ciur2.CommonEqualityMixin):
-    pass
+
+def ceva(value, *args):
+    return value
+
+
+def _str(value):
+    return value.text
+
+
+def recursive_parse(context_, rule):
+    res = context_.xpath(rule.xpath)
+
+    type_list_ = list(rule.type_list)
+
+    _size = 0
+    if isinstance(type_list_[-1], int):
+        _size = type_list_.pop()
+
+    for type_i in type_list_:
+        tmp = []
+        for res_i in res:
+            if type_i is str:
+                fun = _str
+            else:
+                fun = ceva
+
+            res_i = fun(res_i)
+
+            if res_i is not None:
+                tmp.append(res_i)
+        res = tmp
+
+    if _size:  # check if for expected size
+        size(len(res), _size)
+
+        if _size == 1:
+            res = res[0]
+
+    if isinstance(res, _Element):
+        tmp = {}
+        for rule_i in rule.rule[:]:
+            _ = recursive_parse(res, rule_i)
+            tmp[rule_i.name] = _
+
+        return {
+            rule.name: tmp
+        }
+
+    return res
 
 
 def page_html(doc, rule, warn=None, treebuilder="lxml", namespace=None):
@@ -22,24 +64,6 @@ def page_html(doc, rule, warn=None, treebuilder="lxml", namespace=None):
             warnings.simplefilter("ignore")
 
     context = html5lib.parse(doc, treebuilder=treebuilder, namespaceHTMLElements=namespace)
-
-    def recursive_parse(context_, rule_):
-        is_list = False
-        for type_i in rule_.type_list:
-            if type_i == list:
-                is_list = True
-
-        res = context_.xpath(rule_.xpath)
-
-        if not is_list:
-            if len(res) > 1:
-                assert True, "something bad"
-            elif len(res) == 0:
-                res = None
-            else:
-                res = res[0]
-
-        return res
 
     return recursive_parse(context, rule)
 
