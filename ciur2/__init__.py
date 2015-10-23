@@ -1,10 +1,12 @@
+import json
+
 from common_equality_mixin import CommonEqualityMixin
 from page import page_html
 from rule import Rule
 
 
-def sieve(page, rule):
-    pass
+def pretty_json(dict_):
+    return json.dumps(dict_, indent=4, ensure_ascii=False).encode("utf-8")
 
 
 

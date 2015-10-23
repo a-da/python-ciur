@@ -87,7 +87,31 @@ class Rule(ciur2.CommonEqualityMixin):
         self.xpath = xpath
         self.rule = rule
 
-        self.type_list = self._2complex(type_list)
+        import ciur2.cast
+        tmp = []
+
+        for type_i in self._2complex(type_list):
+            assert isinstance(type_i, str)
+            import re
+            m = re.search("^([\*\+])(\d+)?$", type_i)
+            if m:
+                func_name = "size"
+                args = (
+                    "mandatory" if m.group(1) == "+" else "optional",
+                    int(m.group(2) or 0),
+                )
+            else:
+                if isinstance(type_i, list):
+                    func_name = type_i[:1]
+                    args = type_i[1:]
+                else:
+                    func_name = type_i
+                    args = tuple()
+
+            tmp.append([getattr(ciur2.cast, func_name + "_"), args])
+
+        self.type_list = tuple(tmp)
+
 
     @classmethod
     def _2complex(cls, value):

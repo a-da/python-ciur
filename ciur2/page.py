@@ -1,19 +1,8 @@
+from collections import OrderedDict
 import warnings
 from lxml.etree import _Element
 
 import html5lib
-
-
-def size(got, expect):
-    assert got == expect, "expect size `%s`, got `%s`" % (expect, got)
-
-
-def ceva(value, *args):
-    return value
-
-
-def _str(value):
-    return value.text
 
 
 def recursive_parse(context_, rule):
@@ -21,39 +10,45 @@ def recursive_parse(context_, rule):
 
     type_list_ = list(rule.type_list)
 
-    _size = 0
-    if isinstance(type_list_[-1], int):
-        _size = type_list_.pop()
-
-    for type_i in type_list_:
+    for fun, args in type_list_[:-1]:
         tmp = []
         for res_i in res:
-            if type_i is str:
-                fun = _str
-            else:
-                fun = ceva
-
-            res_i = fun(res_i)
+            res_i = fun(res_i, *args)
 
             if res_i is not None:
                 tmp.append(res_i)
         res = tmp
 
-    if _size:  # check if for expected size
-        size(len(res), _size)
+    size, args = type_list_[-1]
+    try:
+        size(len(res), *args)
+    except Exception, e:
+        raise e
 
-        if _size == 1:
-            res = res[0]
+    if len(res) == 1:
+        res = res[0]
 
     if isinstance(res, _Element):
-        tmp = {}
+        ordered_dict = OrderedDict()
         for rule_i in rule.rule[:]:
             _ = recursive_parse(res, rule_i)
-            tmp[rule_i.name] = _
+            ordered_dict[rule_i.name] = _
 
         return {
-            rule.name: tmp
+            rule.name: ordered_dict
         }
+    elif isinstance(res, list) and len(res) and isinstance(res[0], _Element):
+        tmp_list = []
+        for res_i in res:
+            tmp_ordered_dict = OrderedDict()
+            for rule_i in rule.rule:
+                data = recursive_parse(res_i, rule_i)
+                if data:
+                    tmp_ordered_dict[rule_i.name] = data
+
+            tmp_list.append(tmp_ordered_dict)
+
+        return tmp_list
 
     return res
 
@@ -65,15 +60,5 @@ def page_html(doc, rule, warn=None, treebuilder="lxml", namespace=None):
 
     context = html5lib.parse(doc, treebuilder=treebuilder, namespaceHTMLElements=namespace)
 
-    return recursive_parse(context, rule)
-
-
-
-
-
-
-
-
-# page = PageHtml()
-# dict_ = page.parse("http://example.org")
-
+    ret = recursive_parse(context, rule)
+    return ret
