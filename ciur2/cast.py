@@ -9,11 +9,17 @@ def str_(value, *args):
 
 
 def size_(got, mandatory_or_optional, expect):
-    if mandatory_or_optional == "mandatory" and not got:
-        assert False, "expect mandatory 1"
-
-    if expect:
-        assert got, "expect mandatory 2"
-
-    if expect:
-        assert got == expect, "expect size `%s`, got `%s`" % (expect, got)
+    if mandatory_or_optional == "mandatory":
+        if not got:  # + got 0
+            assert False, "expect mandatory"
+        elif expect is 0:  # +0 got 1
+            pass
+        else:  # +10 got 1
+            assert got == expect, "expect size `%s`, got `%s`" % (expect, got)
+    else:
+        if not got:  # * got 0
+            pass
+        elif expect is 0:  # * got 19
+            pass
+        else:  # *5 got 5
+            assert got == expect, "expect size `%s`, got `%s`" % (expect, got)

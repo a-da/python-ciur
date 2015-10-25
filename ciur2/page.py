@@ -1,6 +1,7 @@
 from collections import OrderedDict
 import warnings
 from lxml.etree import _Element
+from lxml import etree
 
 import html5lib
 
@@ -15,7 +16,7 @@ def recursive_parse(context_, rule):
         for res_i in res:
             res_i = fun(res_i, *args)
 
-            if res_i is not None:
+            if res_i not in [None, ""]:
                 tmp.append(res_i)
         res = tmp
 
@@ -23,7 +24,7 @@ def recursive_parse(context_, rule):
     try:
         size(len(res), *args)
     except Exception, e:
-        raise e
+        raise Exception("[ERROR] %s, %s %s, but got %s" % (e.message, rule.name, args, len(res)))
 
     if len(res) == 1:
         res = res[0]
@@ -32,7 +33,8 @@ def recursive_parse(context_, rule):
         ordered_dict = OrderedDict()
         for rule_i in rule.rule[:]:
             _ = recursive_parse(res, rule_i)
-            ordered_dict[rule_i.name] = _
+            if _:
+                ordered_dict[rule_i.name] = _
 
         return {
             rule.name: ordered_dict
@@ -59,6 +61,13 @@ def page_html(doc, rule, warn=None, treebuilder="lxml", namespace=None):
             warnings.simplefilter("ignore")
 
     context = html5lib.parse(doc, treebuilder=treebuilder, namespaceHTMLElements=namespace)
+
+    ret = recursive_parse(context, rule)
+    return ret
+
+
+def page_xml(doc, rule):
+    context = etree.fromstring(doc)
 
     ret = recursive_parse(context, rule)
     return ret

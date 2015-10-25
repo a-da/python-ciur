@@ -1,7 +1,7 @@
 import json
 
 from common_equality_mixin import CommonEqualityMixin
-from page import page_html
+from page import page_html, page_xml
 from rule import Rule
 
 
