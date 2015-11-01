@@ -2,7 +2,7 @@
 >>> import requests
 
 >>> requests = requests.Session()
->>> response = requests.get("https://import.io/~ourjobs")
+>>> response = requests.get("http://import.io/~ourjobs")
 
 >>> rule = Rule("root", "/jobs/job", "+",
 ...            Rule("title", "./title", ["str", "+"]),

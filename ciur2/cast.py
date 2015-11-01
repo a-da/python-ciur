@@ -1,6 +1,3 @@
-from lxml.etree import _ElementStringResult
-
-
 def str_(value, *args):
     if isinstance(value, str):
         return value
