@@ -10,39 +10,63 @@ root /jobs/job +
         zip ./postalcode str *1
 """
 
-bnf = {
-    "xpath": "(\.?(?:/\w+)*)",
-    "type_list": "((?:str|int) )*[\+\*]\d+?)"
+input_data2 = """\
+root ./jobs/job
+    title ./title
+    url ./url
+    location .
+        country ./country
+        city ./city
+        zip ./postalcode
+"""
+
+
+BNF = {
+    "xpath": ".?(?:/\w+)*",
+    "name": "\w+",
 }
+BNF["line"] = "%(name)s %(xpath)s" % BNF
 
 
 def parse(data):
-    def _line(string, tab, parent):
-        print "[INFO] string `%s`" % string
-        if string == "":
-            print "[INFO] ignore"
-        else:
-            # if start with indent then this is child
-
-            pattern = "^%s([a-z]+) " % tab
-
-            m = re.search(pattern, string)
-            if not m:
-                print string
-                print "[ERROR] expect label on %s, see pattern `%s`" % ((number, 0), pattern)
-                exit(1)
-            name = m.group(1)
-
-            return {
-                "name": name,
+    """
+    {
+        "root": {
+            "xpath": "/jobs/job",
+            "type_list": ["+"],
+            "rule": {
+                "title" : {
+                    "xpath": "./title",
+                    "type_list": ["str", "+"]
+                },
+                "url" : {
+                    "xpath": "./url",
+                    "type_list": ["str", "+"]
+                },
+                "location" : {
+                    "xpath": ".",
+                    "type_list": ["*"],
+                    "rule": {
+                        "country" : {
+                            "xpath": "./country",
+                            "type_list": ["str", "+1"]
+                        },
+                        "city" : {
+                            "xpath": "./city",
+                            "type_list": ["str", "+1"]
+                        },
+                        "zip" : {
+                            "xpath": "./postalcode",
+                            "type_list": ["str", "*1"]
+                        }
+                    }
+                }
             }
-
-    rule = {}
-    ret = None
-    tab_ = ""
-    for number, line in enumerate(data.splitlines(), 1):
-        ret = _line(line, parent=ret, tab=tab_)
-        rule["name"] = rule
+        }
+    }
+    """
+    m = re.search("^%(line)s(\n {4}%(line)s)*" % BNF, data, re.DOTALL)
+    print m.group(0)
 
 
-parse(input_data)
+parse(input_data2)
