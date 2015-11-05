@@ -10,14 +10,45 @@ from pyparsing import *
 
 data = """\
 root /jobs/job +
+
     title ./title str +
     url ./url str +1
     location . *
         country ./country str +1
         city ./city str +1
         zip ./postalcode str *1
-        efe
 """
+
+_data = """\
+root /jobs/job@ +
+
+    url ./url str +1
+    location . *
+        country ./country str +1
+        city ./city str +1
+        zip ./postalcode str *1
+"""
+
+_data = """
+root /html/body +1
+    name .//h1 str +1
+    paragrapth .//p str +1
+"""
+
+data = """\
+company_list .//div[@class='company-box'] +
+    name .//span[@class='highlight'] str +
+    company_url ./a/@href str +1
+    blog_url ./p/a/@href str *
+    logo ./a/img/@src str +
+
+"""
+
+#
+# data = """\
+# root re +
+#     title re +
+# """
 
 indentStack = [1]
 
@@ -54,10 +85,12 @@ INDENT = lineEnd.suppress() + empty + empty.copy().setParseAction(check_sub_inde
 UNDENT = FollowedBy(empty).setParseAction(check_unindent).setParseAction(do_unindent)
 
 
-identifier = Word(alphas, alphanums)
-xpath = Regex("\.?(/\w+)*")
-type_list = Optional(Literal("str") | Literal("int")) + Regex("[+*]\d*")  # oneOf("str int +")
-line = identifier + xpath + Group(ZeroOrMore(type_list))
+identifier = Word(alphas, alphanums + "_")
+xpath = Word(printables)
+
+type_list = Optional(Literal("str") | Literal("int")) + Regex("[\+*]\d*")  # oneOf("str int +")
+#type_list_ = Group(ZeroOrMore(type_list)) #.setResultsName("_type_list")
+line = (identifier + xpath + type_list)
 
 stmt = Forward()
 suite = OneOrMore(stmt.setParseAction(check_peer_indent))
@@ -65,6 +98,7 @@ suite = OneOrMore(stmt.setParseAction(check_peer_indent))
 funcDef = Group(line + Optional(INDENT + suite + UNDENT))
 
 stmt << funcDef
+
 
 
 def uuu(in_):
@@ -83,5 +117,16 @@ parseTree = uuu(data)
 import pprint
 
 
-pprint.pprint( parseTree.asList() )
+pprint.pprint(parseTree.asList())
+# d = parseTree.asDict()
+# print(d)
+# tab = ""
+# for k, v in d.iteritems():
+#     print k
+#     tab = ""
+#     for k1, v1 in v.iteritems():
+#         tab += "    "
+#         print tab, k1, ":", v1
+
+
 
