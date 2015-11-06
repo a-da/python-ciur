@@ -21,9 +21,11 @@ Ciur is an romanian word that means in english `Sieve <https://en.wikipedia.org/
 
 It has the same purpose "device for separating wanted elements from unwanted material".
 
-License
+Ciur use MIT License
 =======
-MIT-licensed code may be included in proprietary code without any additional restrictions.
+This means that code may be included in proprietary code without any additional restrictions.
+
+Please see `LICENSE <./LICENSE>`_.
 
 Install
 =======
