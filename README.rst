@@ -9,6 +9,9 @@ THEN you also are annoyed from xpath/css code inside crawler.
 
 Ciur give you additional possibility to fix previous headache with adding additional layer.
 
+License
+---
+---
 
 ## Install
 
