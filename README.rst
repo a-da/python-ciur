@@ -41,8 +41,21 @@ Command Line Interface
         }
     }
 
+Python ciur API
+----------------------
+
+   >>> import ciur
+   >>> ciur.parse(url="http://example.org", rules="example.org.ciur")
+   {
+        "root": {
+            "name": "Example Domain",
+            "paragrapth": "This domain is established to be used for illustrative examples in documents. You may use this\n    domain in examples without prior coordination or asking for permission."
+        }
+    }
+
 Developer Guide
 ===============
+
 
 Install
 =======
