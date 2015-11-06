@@ -7,7 +7,8 @@ Ciur
    :alt: PyPI Version
    
 Ciur is a scrapper layer for developing.
-Move all scrapper code into separate layer.
+
+Export all scrapper related code into separate layer.
 
 If you are annoyed from sql spaghetti inside php and inline css inside html
 THEN you also are annoyed from xpath/css code inside crawler.
