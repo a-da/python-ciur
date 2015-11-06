@@ -28,6 +28,9 @@ This means that code may be included in proprietary code without any additional 
 
 Please see `LICENSE <./LICENSE>`_.
 
+End-User Documentation
+=======
+
 Install
 =======
 
