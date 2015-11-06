@@ -19,6 +19,8 @@ What does “Ciur” mean?
 ======================
 Ciur is an romanian word that means in english `Sieve <https://en.wikipedia.org/wiki/Sieve>`_.
 
+It has the same purpose "device for separating wanted elements from unwanted material".
+
 License
 =======
 MIT-licensed code may be included in proprietary code without any additional restrictions.
