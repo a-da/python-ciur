@@ -6,8 +6,7 @@ Ciur
    :target: https://bitbucket.org/ada/ciur
    :alt: Ciur
    
-Ciur is a scrapper layer in developing process.
-----------------------------------------
+*Ciur is a scrapper layer in developing process.*
 
 Export all scrapper related code into separate layer.
 
@@ -23,13 +22,20 @@ Ciur is an romanian word that means in english `Sieve <https://en.wikipedia.org/
 It has the same purpose "device for separating wanted elements from unwanted material".
 
 Ciur use MIT License
-=======
+====================
 This means that code may be included in proprietary code without any additional restrictions.
 
 Please see `LICENSE <./LICENSE>`_.
 
 End-User Documentation
-=======
+======================
+
+Command Line Interface
+----------------------
+>>> ciur --url "http://example.org" --rules="example.org.ciur"
+
+Developer Guide
+===============
 
 Install
 =======
