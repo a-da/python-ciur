@@ -7,7 +7,7 @@ Ciur
    :alt: Ciur
    
 Ciur is a scrapper layer for developing.
---------------
+----------------------------------------
 
 Export all scrapper related code into separate layer.
 
