@@ -6,7 +6,7 @@ Ciur
    :target: https://bitbucket.org/ada/ciur
    :alt: Ciur
    
-Ciur is a scrapper layer for developing.
+Ciur is a scrapper layer in developing process.
 ----------------------------------------
 
 Export all scrapper related code into separate layer.
