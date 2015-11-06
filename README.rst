@@ -16,14 +16,14 @@ THEN you also are annoyed from xpath/css code inside crawler.
 Ciur give you additional possibility to fix previous headache with adding additional layer.
 
 What does “Ciur” mean?
----
+======================
 Ciur is an romanian word that means in english `Sieve <https://en.wikipedia.org/wiki/Sieve>`_.
 
-
 License
----
+=======
+MIT-licensed code may be included in proprietary code without any additional restrictions.
 
-
-## Install
+Install
+=======
 
 >>> pip install git+https://bitbucket.org/ada/ciur.git#egg=ciur
