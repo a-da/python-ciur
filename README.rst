@@ -6,7 +6,7 @@ Ciur
    :target: https://bitbucket.org/ada/ciur
    :alt: Ciur
    
-Ciur is a scrapper layer for developing.
+*Ciur is a scrapper layer in developing process.*
 
 Export all scrapper related code into separate layer.
 
@@ -22,10 +22,40 @@ Ciur is an romanian word that means in english `Sieve <https://en.wikipedia.org/
 It has the same purpose "device for separating wanted elements from unwanted material".
 
 Ciur use MIT License
-=======
+====================
 This means that code may be included in proprietary code without any additional restrictions.
 
 Please see `LICENSE <./LICENSE>`_.
+
+End-User Documentation
+======================
+
+Command Line Interface
+----------------------
+
+    >>> ciur --url "http://example.org" --rules="example.org.ciur"
+    {
+        "root": {
+            "name": "Example Domain",
+            "paragrapth": "This domain is established to be used for illustrative examples in documents. You may use this\n    domain in examples without prior coordination or asking for permission."
+        }
+    }
+
+Python ciur API
+----------------------
+
+   >>> import ciur
+   >>> ciur.parse(url="http://example.org", rules="example.org.ciur")
+   {
+        "root": {
+            "name": "Example Domain",
+            "paragrapth": "This domain is established to be used for illustrative examples in documents. You may use this\n    domain in examples without prior coordination or asking for permission."
+        }
+    }
+
+Developer Guide
+===============
+
 
 Install
 =======
