@@ -5,6 +5,10 @@ def str_(value, *args):
     return value.text
 
 
+def int_(value, *args):
+    return int(value)
+
+
 def size_(got, mandatory_or_optional, expect):
     if mandatory_or_optional == "mandatory":
         if not got:  # + got 0

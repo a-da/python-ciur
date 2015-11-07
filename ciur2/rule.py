@@ -1,80 +1,83 @@
+from collections import OrderedDict
+from types import FunctionType
 import ciur2
 import json
 
 
 class Rule(ciur2.CommonEqualityMixin):
     """
-    >>> rule1 = Rule("root", "/h3", "dict",
+    >>> rule1 = Rule("root", "/h3", "+",
     ...  Rule("name", ".//h1[contains(text(), 'Justin')]", "str"),
-    ...  Rule("count_list", ".//h2[contains(text(), 'Andrei')]/p", ["list", "int"]),
-    ...  Rule("user", ".//h5[contains(text(), 'Andrei')]/p", ["node"],
+    ...  Rule("count_list", ".//h2[contains(text(), 'Andrei')]/p", ["int", "+"]),
+    ...  Rule("user", ".//h5[contains(text(), 'Andrei')]/p", "+",
     ...         Rule("name", "./spam", "str"),
     ...         Rule("sure_name", "./bold", "str"),
     ...         Rule("age", "./it", "int"),
-    ...         Rule("hobby", "./li", ["list", "str"]),
-    ...         Rule("indexes", "./li/bold", ["list", "int"])
+    ...         Rule("hobby", "./li", ["str", "+"]),
+    ...         Rule("indexes", "./li/bold", ["int", "+"])
     ...       )
     ... )
     >>> res1 = json.dumps(rule1.to_dict(), indent=4)
     >>> print res1  # doctest: +NORMALIZE_WHITESPACE
     {
-        "xpath": "/h3",
-        "type_list": "dict",
         "name": "root",
+        "xpath": "/h3",
+        "type_list": "+",
         "rule": [
             {
+                "name": "name",
                 "xpath": ".//h1[contains(text(), 'Justin')]",
-                "type_list": "str",
-                "name": "name"
+                "type_list": "str"
             },
             {
+                "name": "count_list",
                 "xpath": ".//h2[contains(text(), 'Andrei')]/p",
                 "type_list": [
-                    "list",
-                    "int"
-                ],
-                "name": "count_list"
+                    "int",
+                    "+"
+                ]
             },
             {
-                "xpath": ".//h5[contains(text(), 'Andrei')]/p",
-                "type_list": "node",
                 "name": "user",
+                "xpath": ".//h5[contains(text(), 'Andrei')]/p",
+                "type_list": "+",
                 "rule": [
                     {
+                        "name": "name",
                         "xpath": "./spam",
-                        "type_list": "str",
-                        "name": "name"
+                        "type_list": "str"
                     },
                     {
+                        "name": "sure_name",
                         "xpath": "./bold",
-                        "type_list": "str",
-                        "name": "sure_name"
+                        "type_list": "str"
                     },
                     {
+                        "name": "age",
                         "xpath": "./it",
-                        "type_list": "int",
-                        "name": "age"
+                        "type_list": "int"
                     },
                     {
+                        "name": "hobby",
                         "xpath": "./li",
                         "type_list": [
-                            "list",
-                            "str"
-                        ],
-                        "name": "hobby"
+                            "str",
+                            "+"
+                        ]
                     },
                     {
+                        "name": "indexes",
                         "xpath": "./li/bold",
                         "type_list": [
-                            "list",
-                            "int"
-                        ],
-                        "name": "indexes"
+                            "int",
+                            "+"
+                        ]
                     }
                 ]
             }
         ]
     }
+
     >>> rule2 = Rule.from_dict(res1)
     >>> rule1.to_dict() == rule2.to_dict()
     True
@@ -91,7 +94,7 @@ class Rule(ciur2.CommonEqualityMixin):
         tmp = []
 
         for type_i in self._2complex(type_list):
-            assert isinstance(type_i, str)
+            assert isinstance(type_i, basestring)
             import re
             m = re.search("^([\*\+])(\d+)?$", type_i)
             if m:
@@ -122,7 +125,24 @@ class Rule(ciur2.CommonEqualityMixin):
 
     @classmethod
     def _2simple(cls, value):
-        if isinstance(value, list):
+        if isinstance(value, (list, tuple)):
+            tmp = []
+            for value_i in value:
+                tmp_i = value_i
+                if isinstance(value_i[0], FunctionType):
+                    function = value_i[0].__name__
+                    if function == "size_":
+                        tmp_i = "%s%s" % (
+                            "+" if value_i[1][0] == "mandatory" else "*",
+                            "" if value_i[1][1] == 0 else value_i[1][1]
+                        )
+                    else:
+                        if not value_i[1]:
+                            tmp_i = ("%s" % function[:-1]).encode("utf-8")
+
+                tmp.append(tmp_i)
+            value = tmp
+
             if len(value) == 1:
                 return value[0]
 
@@ -140,11 +160,10 @@ class Rule(ciur2.CommonEqualityMixin):
     def to_dict(self):
         self.type_list = self._2simple(self.type_list)
 
-        ret = {
-            "name": self.name,
-            "xpath": self.xpath,
-            "type_list": self.type_list
-        }
+        ret = OrderedDict()
+        ret["name"] = self.name
+        ret["xpath"] = self.xpath
+        ret["type_list"] = self.type_list
 
         rule = [i.to_dict() for i in self.rule]
         if rule:

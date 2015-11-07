@@ -1,10 +1,8 @@
 python-pip
-git
 libxml2-dev
 libxslt1-dev
 python-dev
-cython
+cython # for lxml
 zlib1g-dev
+git # for vcs (code repository)
 
-## optional
-#mongodb-org
