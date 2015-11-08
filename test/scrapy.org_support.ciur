@@ -1,0 +1,5 @@
+company_list .//div[@class='company-box'] +
+    name .//span[@class='highlight'] str +
+    company_url ./a/@href str +1
+    blog_url ./p/a/@href str *
+    logo ./a/img/@src str +

@@ -1,4 +1,13 @@
+"""
+basic function for casting or type conversion/transformation
+"""
+
+
 def str_(value, *args):
+    """
+    convert data into string
+    :rtype: str
+    """
     if isinstance(value, str):
         return value
 
@@ -6,10 +15,17 @@ def str_(value, *args):
 
 
 def int_(value, *args):
+    """
+    convert data into integer
+    :rtype: int
+    """
     return int(value)
 
 
 def size_(got, mandatory_or_optional, expect):
+    """
+    check if expected size match result size
+    """
     if mandatory_or_optional == "mandatory":
         if not got:  # + got 0
             assert False, "expect mandatory"

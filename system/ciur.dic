@@ -1,6 +1,13 @@
+# ciur
+Ciur
+
 # parser dict
 undent
 subentry
 
 # test pages
 scrapy
+
+# lxml
+lxml
+treebuilder

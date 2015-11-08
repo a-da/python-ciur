@@ -1,12 +1,21 @@
+"""
+parse page based on ciur rules and page type (xml, html ...)
+"""
+
 from collections import OrderedDict
 import warnings
-from lxml.etree import _Element
-from lxml import etree
 
+# noinspection PyProtectedMember
+from lxml.etree import _Element
+
+from lxml import etree
 import html5lib
 
 
-def recursive_parse(context_, rule):
+def _recursive_parse(context_, rule):
+    """
+    recursive parse embedded rules
+    """
     res = context_.xpath(rule.xpath)
 
     type_list_ = list(rule.type_list)
@@ -32,7 +41,7 @@ def recursive_parse(context_, rule):
     if isinstance(res, _Element):
         ordered_dict = OrderedDict()
         for rule_i in rule.rule[:]:
-            _ = recursive_parse(res, rule_i)
+            _ = _recursive_parse(res, rule_i)
             if _:
                 ordered_dict[rule_i.name] = _
 
@@ -44,7 +53,7 @@ def recursive_parse(context_, rule):
         for res_i in res:
             tmp_ordered_dict = OrderedDict()
             for rule_i in rule.rule:
-                data = recursive_parse(res_i, rule_i)
+                data = _recursive_parse(res_i, rule_i)
                 if data:
                     tmp_ordered_dict[rule_i.name] = data
 
@@ -55,19 +64,25 @@ def recursive_parse(context_, rule):
     return res
 
 
-def page_html(doc, rule, warn=None, treebuilder="lxml", namespace=None):
+def html(doc, rule, warn=None, treebuilder="lxml", namespace=None):
+    """
+    use this function if page is html
+    """
     if warn:
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
 
     context = html5lib.parse(doc, treebuilder=treebuilder, namespaceHTMLElements=namespace)
 
-    ret = recursive_parse(context, rule)
+    ret = _recursive_parse(context, rule)
     return ret
 
 
-def page_xml(doc, rule):
+def xml(doc, rule):
+    """
+    use this function if page is xml
+    """
     context = etree.fromstring(doc)
 
-    ret = recursive_parse(context, rule)
+    ret = _recursive_parse(context, rule)
     return ret

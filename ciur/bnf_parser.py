@@ -1,4 +1,6 @@
 """
+ciur external dsl
+
 >>> import pprint
 >>> bnf = get_bnf()
 
@@ -40,7 +42,7 @@ import.io_jobs.doctest
      ['city', './city', ['str', '+1']],
      ['zip', './postalcode', ['str', '*1']]]]]]]
 
->>> to_json(rules)  # doctest: +NORMALIZE_WHITESPACE
+>>> print to_json(rules)  # doctest: +NORMALIZE_WHITESPACE
 [
     {
         "name": "root",
@@ -121,7 +123,7 @@ scrapy.org_support.doctest
    ['blog_url', './p/a/@href', ['str', '*']],
    ['logo', './a/img/@src', ['str', '+']]]]]
 
->>> to_json(rules)  # doctest: +NORMALIZE_WHITESPACE
+>>> print to_json(rules)  # doctest: +NORMALIZE_WHITESPACE
 [
     {
         "name": "company_list",
@@ -166,7 +168,7 @@ scrapy.org_support.doctest
     }
 ]
 
->>> to_json(rules)  # doctest: +NORMALIZE_WHITESPACE
+>>> print to_json(rules)  # doctest: +NORMALIZE_WHITESPACE
 [
     {
         "name": "company_list",
@@ -212,6 +214,7 @@ scrapy.org_support.doctest
 ]
 """
 from collections import OrderedDict
+import json
 
 from pyparsing import (
     col,
@@ -272,7 +275,7 @@ def get_bnf():
     undent = FollowedBy(empty).setParseAction(_check_unindent).setParseAction(do_unindent)
 
     identifier = Word(alphas, alphanums + "_")  # <url> ./url str +1 => label of rule
-    xpath = Word(printables)  # url <./url> str +1 => xpath query
+    xpath = Word(printables+" ")  # url <./url> str +1 => xpath query
 
     type_list = Group(
         Optional(Literal("str") | Literal("int")) +  # url ./url <str> +1 => functions chains for transformation
@@ -294,25 +297,33 @@ def get_list(rules):
     return parse_tree.asList()
 
 
+def _to_dict(rule_list):
+    rule_list_out = []
+
+    for rule_i in rule_list:
+        d = OrderedDict()
+        d["name"] = rule_i[0]
+        d["xpath"] = rule_i[1]
+        d["type_list"] = rule_i[2]
+        if len(rule_i) == 4:
+            d["rule"] = _to_dict(rule_i[3])
+
+        rule_list_out.append(d)
+
+    return rule_list_out
+
+
 def to_json(rules):
     list_ = get_list(rules)
 
-    def _to_json(rule_list):
-        rule_list_out = []
+    data = _to_dict(list_)
 
-        for rule_i in rule_list:
-            d = OrderedDict()
-            d["name"] = rule_i[0]
-            d["xpath"] = rule_i[1]
-            d["type_list"] = rule_i[2]
-            if len(rule_i) == 4:
-                d["rule"] = _to_json(rule_i[3])
+    return json.dumps(data, indent=4)
 
-            rule_list_out.append(d)
 
-        return rule_list_out
+def to_dict(rules):
+    list_ = get_list(rules)
 
-    data = _to_json(list_)
+    data = _to_dict(list_)
 
-    import json
-    print json.dumps(data, indent=4)
+    return data[0]

@@ -1,17 +1,34 @@
->>> from ciur2 import Rule, page_html, pretty_json
+>>> from ciur import parse, pretty_json
+>>> from ciur.rule import Rule
 >>> import requests
 
 >>> requests = requests.Session()
 >>> response = requests.get("http://example.com")
 
+test internal dsl
+-----------------
 >>> rule = Rule("root", "/html/body", "+1",
 ...              Rule("name", ".//h1", ["str", "+1"]), Rule("paragrapth", ".//p", ["str", "+1"]))
->>> data = page_html(response.content, rule)
+
+>>> data = parse.html(response.content, rule)
 >>> print pretty_json(data)  # doctest: +NORMALIZE_WHITESPACE
 {
-        "root": {
-            "name": "Example Domain",
-            "paragrapth": "This domain is established to be used for illustrative examples in documents. You may use this\n    domain in examples without prior coordination or asking for permission."
-        }
+    "root": {
+        "name": "Example Domain",
+        "paragrapth": "This domain is established to be used for illustrative examples in documents. You may use this\n    domain in examples without prior coordination or asking for permission."
     }
+}
 
+test external dsl
+------------------
+>>> from ciur import bnf_parser
+>>> res = bnf_parser.to_dict(open("example.com.ciur").read())
+>>> rule = Rule.from_dict(res)  # doctest: +NORMALIZE_WHITESPACE
+>>> data = parse.html(response.content, rule)
+>>> print pretty_json(data)  # doctest: +NORMALIZE_WHITESPACE
+{
+    "root": {
+        "name": "Example Domain",
+        "paragrapth": "This domain is established to be used for illustrative examples in documents. You may use this\n    domain in examples without prior coordination or asking for permission."
+    }
+}

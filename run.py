@@ -7,8 +7,8 @@ requests = requests.Session()
 response = requests.get("http://example.com")
 
 # print "INFO:", response.content
-# rule = ciur2.Rule("title", "//h1", [_Element])
-# data = ciur2.page_html(response.content, rule)
+# rule = ciur.Rule("title", "//h1", [_Element])
+# data = ciur.page_html(response.content, rule)
 # print type(data)
 
 

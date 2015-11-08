@@ -1,10 +1,15 @@
+"""
+ciur internal dsl (python api)
+"""
 from collections import OrderedDict
 from types import FunctionType
-import ciur2
 import json
 
+import ciur
+import ciur.cast
 
-class Rule(ciur2.CommonEqualityMixin):
+
+class Rule(ciur.CommonEqualityMixin):
     """
     >>> rule1 = Rule("root", "/h3", "+",
     ...  Rule("name", ".//h1[contains(text(), 'Justin')]", "str"),
@@ -90,7 +95,7 @@ class Rule(ciur2.CommonEqualityMixin):
         self.xpath = xpath
         self.rule = rule
 
-        import ciur2.cast
+
         tmp = []
 
         for type_i in self._2complex(type_list):
@@ -111,7 +116,7 @@ class Rule(ciur2.CommonEqualityMixin):
                     func_name = type_i
                     args = tuple()
 
-            tmp.append([getattr(ciur2.cast, func_name + "_"), args])
+            tmp.append([getattr(ciur.cast, func_name + "_"), args])
 
         self.type_list = tuple(tmp)
 
@@ -172,4 +177,4 @@ class Rule(ciur2.CommonEqualityMixin):
         return ret
 
     def __repr__(self):
-        return "ciur3.Rule(%s)" % self.to_dict()
+        return "%s.%s(%s)" % (self.__class__.__module__, self.__class__.__name__, self.to_dict())

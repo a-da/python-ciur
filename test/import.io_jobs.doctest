@@ -1,9 +1,12 @@
->>> from ciur2 import Rule, page_xml, pretty_json
+>>> from ciur import parse, pretty_json
+>>> from ciur.rule import Rule
 >>> import requests
 
 >>> requests = requests.Session()
 >>> response = requests.get("http://import.io/~ourjobs")
 
+test internal dsl
+-----------------
 >>> rule = Rule("root", "/jobs/job", "+",
 ...            Rule("title", "./title", ["str", "+"]),
 ...            Rule("url", "./url", ["str", "+1"]),
@@ -13,20 +16,100 @@
 ...                 Rule("zip", "./postalcode", ["str", "*1"])
 ...            )
 ...        )
->>> data = page_xml(response.content, rule)
+>>> data = parse.xml(response.content, rule)
 >>> print pretty_json(data)  # doctest: +NORMALIZE_WHITESPACE
-[
+    [
         {
-            "title": "Machine Learning Engineer",
-            "url": "http://importio.applytojob.com/apply/KQm7H9/Machine-Learning-Engineer",
+            "title": "Speculative Applications",
+            "url": "http://importio.applytojob.com/apply/U0m6DF/Speculative-Applications",
             "location": {
                 "location": {
                     "country": "United Kingdom",
-                    "city": "London",
-                    "zip": "N1 6LA"
+                    "city": "London"
                 }
             }
         },
+        {
+            "title": "Devops Engineer",
+            "url": "http://importio.applytojob.com/apply/RzzNAq/Devops-Engineer",
+            "location": {
+                "location": {
+                    "country": "United Kingdom",
+                    "city": "London"
+                }
+            }
+        },
+        {
+            "title": "Customer Support Manager",
+            "url": "http://importio.applytojob.com/apply/n9EbEZ/Customer-Support-Manager",
+            "location": {
+                "location": {
+                    "country": "United Kingdom",
+                    "city": "London"
+                }
+            }
+        },
+        {
+            "title": "Customer Support Analyst",
+            "url": "http://importio.applytojob.com/apply/p9HWeb/Customer-Support-Analyst",
+            "location": {
+                "location": {
+                    "country": "United States",
+                    "city": "San Francisco"
+                }
+            }
+        },
+        {
+            "title": "Head of Demand Generation",
+            "url": "http://importio.applytojob.com/apply/JKlikE/Head-Of-Demand-Generation",
+            "location": {
+                "location": {
+                    "country": "United States",
+                    "city": "San Francisco",
+                    "zip": "94103"
+                }
+            }
+        },
+        {
+            "title": "Customer Success Manager",
+            "url": "http://importio.applytojob.com/apply/mxrGTN/Customer-Success-Manager",
+            "location": {
+                "location": {
+                    "country": "United Kingdom",
+                    "city": "London"
+                }
+            }
+        },
+        {
+            "title": "Customer Support Analyst",
+            "url": "http://importio.applytojob.com/apply/Ke9ywq/Customer-Support-Analyst",
+            "location": {
+                "location": {
+                    "country": "United Kingdom",
+                    "city": "London"
+                }
+            }
+        },
+        {
+            "title": "Accounting Assistant",
+            "url": "http://importio.applytojob.com/apply/wL2pdf/Accounting-Assistant",
+            "location": {
+                "location": {
+                    "country": "United Kingdom",
+                    "city": "London"
+                }
+            }
+        }
+    ]
+
+test external dsl
+------------------
+>>> from ciur import bnf_parser
+>>> res = bnf_parser.to_dict(open("import.io_jobs.ciur").read())
+>>> rule = Rule.from_dict(res)  # doctest: +NORMALIZE_WHITESPACE
+>>> data = parse.xml(response.content, rule)
+>>> print pretty_json(data)  # doctest: +NORMALIZE_WHITESPACE
+    [
         {
             "title": "Speculative Applications",
             "url": "http://importio.applytojob.com/apply/U0m6DF/Speculative-Applications",
