@@ -222,7 +222,8 @@ from pyparsing import (
     empty,
     alphas,
     alphanums,
-    printables
+    printables,
+    pythonStyleComment
 )
 
 from pyparsing import (
@@ -235,7 +236,8 @@ from pyparsing import (
     Forward,
     OneOrMore,
     Group,
-    Literal
+    Literal,
+    Suppress
 )
 
 _indent_stack = [1]
@@ -246,7 +248,7 @@ def _check_peer_indent(s, l, t):
     if cur_col != _indent_stack[-1]:
         if (not _indent_stack) or cur_col > _indent_stack[-1]:
             raise ParseFatalException(s, l, "illegal nesting")
-        raise ParseException(s, l, "not a peer entry")
+        raise ParseException(s, l, "not a peer entry ????")
 
 
 def _check_sub_indent(s, l, t):
@@ -271,22 +273,27 @@ def do_unindent():
 
 
 def get_bnf():
+    grave = Suppress("`")
     indent = lineEnd.suppress() + empty + empty.copy().setParseAction(_check_sub_indent)
     undent = FollowedBy(empty).setParseAction(_check_unindent).setParseAction(do_unindent)
 
     identifier = Word(alphas, alphanums + "_")  # <url> ./url str +1 => label of rule
-    xpath = Word(printables+" ")  # url <./url> str +1 => xpath query
+
+    # url <./url> str +1 => xpath query
+    xpath = grave + Word(alphas+"./", printables + " ", excludeChars="`") + grave
 
     type_list = Group(
         Optional(Literal("str") | Literal("int")) +  # url ./url <str> +1 => functions chains for transformation
-        Regex("[\+*]\d*")  # url ./url str <+1>  => size match: + mandatory, * optional, \d+ exact len
+        Regex("[\+*]\d*")   # url ./url str <+1>  => size match: + mandatory, * optional, \d+ exact len
     )
+
     rule = (identifier + xpath + type_list)  # <url ./url str +1> => rule line
 
     stmt = Forward().setParseAction(_check_peer_indent)
     bnf = OneOrMore(stmt)
 
-    stmt << Group(rule + Optional(Group(indent + bnf + undent)))  # check for children
+    children = Group(indent + bnf + undent).ignore(pythonStyleComment)
+    stmt << Group(rule + Optional(children))  # check for children
 
     return bnf
 
@@ -326,4 +333,4 @@ def to_dict(rules):
 
     data = _to_dict(list_)
 
-    return data[0]
+    return data

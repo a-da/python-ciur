@@ -18,7 +18,7 @@ def _recursive_parse(context_, rule):
     """
     res = context_.xpath(rule.xpath)
 
-    type_list_ = list(rule.type_list)
+    type_list_ = rule.type_list
 
     for fun, args in type_list_[:-1]:
         tmp = []

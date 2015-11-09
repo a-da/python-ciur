@@ -7,6 +7,9 @@ import json
 
 import ciur
 import ciur.cast
+from ciur import pretty_json
+
+JSON = basestring
 
 
 class Rule(ciur.CommonEqualityMixin):
@@ -90,15 +93,14 @@ class Rule(ciur.CommonEqualityMixin):
     True
     """
 
-    def __init__(self, name, xpath, type_list, *rule):
+    def __init__(self, name, xpath, type_list_, *rule):
         self.name = name
         self.xpath = xpath
         self.rule = rule
 
-
         tmp = []
 
-        for type_i in self._2complex(type_list):
+        for type_i in self._2complex(type_list_):
             assert isinstance(type_i, basestring)
             import re
             m = re.search("^([\*\+])(\d+)?$", type_i)
@@ -118,13 +120,14 @@ class Rule(ciur.CommonEqualityMixin):
 
             tmp.append([getattr(ciur.cast, func_name + "_"), args])
 
-        self.type_list = tuple(tmp)
+        self.type_list = tmp
 
+        i = 100
 
     @classmethod
     def _2complex(cls, value):
         if not isinstance(value, list):
-            return value,
+            return tuple(value)
 
         return value
 
@@ -155,20 +158,32 @@ class Rule(ciur.CommonEqualityMixin):
 
     @staticmethod
     def from_dict(dict_):
-        if isinstance(dict_, str):
+        # TODO: check load root list
+
+        assert isinstance(dict_, (dict, JSON))
+
+        if isinstance(dict_, JSON):
             dict_ = json.loads(dict_)
 
+        # check for children [] means no children
         rule = [Rule.from_dict(rule) for rule in dict_.get("rule", [])]
 
         return Rule(dict_["name"], dict_["xpath"], dict_["type_list"], *rule)
 
+    @staticmethod
+    def from_list(list_):
+        # for i in list_:
+        #     yield Rule.from_dict(i)
+        return ListOfT(Rule.from_dict(i) for i in list_)
+        # return ListOfDict(list_)
+        #return ListOfRule(list_)
+
     def to_dict(self):
-        self.type_list = self._2simple(self.type_list)
 
         ret = OrderedDict()
         ret["name"] = self.name
         ret["xpath"] = self.xpath
-        ret["type_list"] = self.type_list
+        ret["type_list"] = self._2simple(self.type_list)
 
         rule = [i.to_dict() for i in self.rule]
         if rule:
@@ -178,3 +193,35 @@ class Rule(ciur.CommonEqualityMixin):
 
     def __repr__(self):
         return "%s.%s(%s)" % (self.__class__.__module__, self.__class__.__name__, self.to_dict())
+
+    def __str__(self):
+        pretty = pretty_json(self.to_dict())
+        return "%s.%s(%s)" % (self.__class__.__module__, self.__class__.__name__, pretty)
+
+
+class ListOfT(list):
+    """
+    wrapper for List Of Dict
+    The purpose is to have pretty print option for that complex type
+    """
+    @classmethod
+    def _callback(cls, x):
+        return x
+
+    def __str__(self):
+        name = "%s.%s:" % (self.__class__.__module__, self.__class__.__name__)
+        res = name + "".join(
+            "\n-----------%d-\n%s" % (index, self._callback(t)) for index, t in enumerate(self, 1)
+        ).replace("\n", "\n    ")
+
+        return res
+
+
+class ListOfDict(ListOfT):
+    """
+    wrapper for List Of Dict
+    The purpose is to have pretty print option for that complex type
+    """
+    @classmethod
+    def _callback(cls, x):
+        return pretty_json(x)
