@@ -1,1 +1,4 @@
+# Runtime requirements
+--requirement requirements-pip.txt
+
 requests

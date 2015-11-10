@@ -7,10 +7,11 @@ ciur external dsl
 example.com.doctest
 ===================
 >>> rules = '''
-... root /html/body +1
-...    name .//h1 str +1
-...    paragrapth .//p str +1
+... root `/html/body` +1
+...    name `.//h1` str +1
+...    paragrapth `.//p` str +1
 ... '''
+
 >>> pprint.pprint(get_list(rules))
 [['root',
   '/html/body',
@@ -20,14 +21,14 @@ example.com.doctest
 import.io_jobs.doctest
 ======================
 >>> rules = '''
-... root /jobs/job +
+... root `/jobs/job` +
 ...
-...     title ./title str +
-...     url ./url str +1
-...     location . *
-...         country ./country str +1
-...         city ./city str +1
-...         zip ./postalcode str *1
+...     title `./title` str +
+...     url `./url` str +1
+...     location `.` *
+...         country `./country` str +1
+...         city `./city` str +1
+...         zip `./postalcode` str *1
 ... '''
 >>> pprint.pprint(get_list(rules))
 [['root',
@@ -107,11 +108,11 @@ import.io_jobs.doctest
 scrapy.org_support.doctest
 ==========================
 >>> rules = '''
-... company_list .//div[@class='company-box'] +
-...     name .//span[@class='highlight'] str +
-...     company_url ./a/@href str +1
-...     blog_url ./p/a/@href str *
-...     logo ./a/img/@src str +
+... company_list `.//div[@class='company-box']` +
+...     name `.//span[@class='highlight']` str +
+...     company_url `./a/@href` str +1
+...     blog_url `./p/a/@href` str *
+...     logo `./a/img/@src` str +
 ... '''
 
 >>> pprint.pprint(get_list(rules))
@@ -213,6 +214,7 @@ scrapy.org_support.doctest
     }
 ]
 """
+
 from collections import OrderedDict
 import json
 

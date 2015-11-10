@@ -127,7 +127,7 @@ class Rule(ciur.CommonEqualityMixin):
     @classmethod
     def _2complex(cls, value):
         if not isinstance(value, list):
-            return tuple(value)
+            return (value, )
 
         return value
 
