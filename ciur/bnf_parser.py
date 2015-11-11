@@ -2,7 +2,7 @@
 ciur external dsl
 
 >>> import pprint
->>> bnf = get_bnf()
+>>> bnf = _get_bnf()
 
 example.com.doctest
 ===================
@@ -216,7 +216,7 @@ scrapy.org_support.doctest
 """
 
 from collections import OrderedDict
-import json
+import os
 
 from pyparsing import (
     col,
@@ -225,8 +225,8 @@ from pyparsing import (
     alphas,
     alphanums,
     printables,
-    pythonStyleComment
-)
+    pythonStyleComment,
+    ParseBaseException)
 
 from pyparsing import (
     ParseFatalException,
@@ -241,6 +241,8 @@ from pyparsing import (
     Literal,
     Suppress
 )
+
+from ciur import pretty_json
 
 _indent_stack = [1]
 
@@ -274,7 +276,7 @@ def do_unindent():
     _indent_stack.pop()
 
 
-def get_bnf():
+def _get_bnf():
     grave = Suppress("`")
     indent = lineEnd.suppress() + empty + empty.copy().setParseAction(_check_sub_indent)
     undent = FollowedBy(empty).setParseAction(_check_unindent).setParseAction(do_unindent)
@@ -301,8 +303,21 @@ def get_bnf():
 
 
 def get_list(rules):
-    bnf = get_bnf()
-    parse_tree = bnf.parseString(rules, parseAll=True)
+
+    if isinstance(rules, file):
+        parse_tree = BNF.parseFile(rules, parseAll=True)
+    elif isinstance(rules, basestring):
+        if os.path.exists(rules):
+            try:
+                parse_tree = BNF.parseFile(rules, parseAll=True)
+            except ParseBaseException, e:
+                raise Exception("rules %s" % rules)
+        else:
+            parse_tree = BNF.parseString(rules, parseAll=True)
+    else:
+        raise TypeError("expect file cursor, file_name, or string contents of file")
+
+
     return parse_tree.asList()
 
 
@@ -327,7 +342,7 @@ def to_json(rules):
 
     data = _to_dict(list_)
 
-    return json.dumps(data, indent=4)
+    return pretty_json(data)
 
 
 def to_dict(rules):
@@ -336,3 +351,6 @@ def to_dict(rules):
     data = _to_dict(list_)
 
     return data
+
+
+BNF = _get_bnf()

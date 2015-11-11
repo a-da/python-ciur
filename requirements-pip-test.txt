@@ -1,4 +1,10 @@
 # Runtime requirements
 --requirement requirements-pip.txt
 
+# test
 requests
+pytest
+
+# interactive command line fro debugging
+bpython
+

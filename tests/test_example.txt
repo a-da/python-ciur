@@ -22,6 +22,8 @@ test internal dsl
 test external dsl
 ------------------
 >>> from ciur import bnf_parser
+>>> import os
+
 >>> res = bnf_parser.to_dict(open("example.com.ciur").read())
 >>> rule = Rule.from_dict(res)  # doctest: +NORMALIZE_WHITESPACE
 >>> data = parse.html(response.content, rule)

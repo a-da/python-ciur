@@ -25,7 +25,7 @@ class Rule(ciur.CommonEqualityMixin):
     ...         Rule("indexes", "./li/bold", ["int", "+"])
     ...       )
     ... )
-    >>> res1 = json.dumps(rule1.to_dict(), indent=4)
+    >>> res1 = pretty_json(rule1.to_dict())
     >>> print res1  # doctest: +NORMALIZE_WHITESPACE
     {
         "name": "root",
@@ -172,11 +172,7 @@ class Rule(ciur.CommonEqualityMixin):
 
     @staticmethod
     def from_list(list_):
-        # for i in list_:
-        #     yield Rule.from_dict(i)
         return ListOfT(Rule.from_dict(i) for i in list_)
-        # return ListOfDict(list_)
-        #return ListOfRule(list_)
 
     def to_dict(self):
 

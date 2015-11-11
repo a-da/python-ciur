@@ -8,3 +8,5 @@ git # for vcs (code repository)
 
 python3-dev # if using python 3
 
+libffi-dev # bpython
+
