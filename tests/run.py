@@ -1,4 +1,5 @@
 import pytest
 
-pytest.main("--doctest-modules ../ciur")
+pytest.main("../ciur")
+pytest.main("../tests")
 

@@ -25,18 +25,25 @@ follow: Menu -> Run -> Edit Configuration -> + -> Python tests -> py.test:
     * run doctest from source folder
 
         Name: py.test in ciur
+
         Configuration:
+
             py.tests:
+
                 Target: ./ciur
 
-    * run all posible test from test folder
+    * run all possible test from test folder
 
         Name: py.test in tests
+
         Configuration:
+
             py.tests:
+
                 Target: .
 
             Environment:
+
                 Working directory: ./tests
 
 

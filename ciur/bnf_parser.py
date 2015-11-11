@@ -244,6 +244,24 @@ from pyparsing import (
 
 from ciur import pretty_json
 
+
+class ParseExceptionInCiurFile(ParseBaseException):
+    def __init__(self, file_string, file_name, p):
+        ParseBaseException.__init__(self, p.pstr, p.loc, p.msg, p.parserElement)
+        self._file_string = file_string.splitlines()
+        self._file_name = os.path.abspath(file_name)
+
+    def __str__(self):
+        s = "see file `%s`" % self._file_name if self._file_name else "from string"
+
+        return "%s, %s \n>>> %s\n    %s^" % (
+            ParseBaseException.__str__(self),
+            s,
+            self._file_string[self.lineno - 1],
+            " " * (self.col - 1)
+        )
+
+
 _indent_stack = [1]
 
 
@@ -303,20 +321,21 @@ def _get_bnf():
 
 
 def get_list(rules):
+    """
+    :param rules: file or basestring
+    :return:
+    """
+    assert isinstance(rules, (file, basestring))
 
+    file_name = None
     if isinstance(rules, file):
-        parse_tree = BNF.parseFile(rules, parseAll=True)
-    elif isinstance(rules, basestring):
-        if os.path.exists(rules):
-            try:
-                parse_tree = BNF.parseFile(rules, parseAll=True)
-            except ParseBaseException, e:
-                raise Exception("rules %s" % rules)
-        else:
-            parse_tree = BNF.parseString(rules, parseAll=True)
-    else:
-        raise TypeError("expect file cursor, file_name, or string contents of file")
+        file_name = rules.name
+        rules = rules.read()
 
+    try:
+        parse_tree = BNF.parseString(rules, parseAll=True)
+    except ParseBaseException, e:
+        raise ParseExceptionInCiurFile(rules, file_name, e)
 
     return parse_tree.asList()
 
