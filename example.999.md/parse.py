@@ -11,13 +11,14 @@ res = bnf_parser.to_dict(open("999.md.ciur").read())
 rule = Rule.from_list(res)
 
 import time
-for i in range(500, 1000):
+for i in range(0, 1):
     print i
     response = requests.get("https://999.md/ro/list/household-appliances/hoods?page=%d" % i)
     #print rule
-    data = parse.html(response.content, rule[0])
-    open("%d.json" % i, "w").write(pretty_json(data))
-    time.sleep(0.5)
+    data = parse.html(response.content, rule[0], url=response.url)
+    print pretty_json(data)
+    # open("%d.json" % i, "w").write(pretty_json(data))
+    # time.sleep(0.5)
 
 
 

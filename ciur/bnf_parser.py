@@ -226,7 +226,7 @@ from pyparsing import (
     alphanums,
     printables,
     pythonStyleComment,
-    ParseBaseException)
+    ParseBaseException, ZeroOrMore)
 
 from pyparsing import (
     ParseFatalException,
@@ -249,7 +249,7 @@ class ParseExceptionInCiurFile(ParseBaseException):
     def __init__(self, file_string, file_name, p):
         ParseBaseException.__init__(self, p.pstr, p.loc, p.msg, p.parserElement)
         self._file_string = file_string.splitlines()
-        self._file_name = os.path.abspath(file_name)
+        self._file_name = None if not file_name else os.path.abspath(file_name)
 
     def __str__(self):
         s = "see file `%s`" % self._file_name if self._file_name else "from string"
@@ -305,7 +305,7 @@ def _get_bnf():
     xpath = grave + Word(alphas+"./", printables + " ", excludeChars="`") + grave
 
     type_list = Group(
-        Optional(Literal("str") | Literal("int")) +  # url ./url <str> +1 => functions chains for transformation
+        ZeroOrMore(Literal("url") | Literal("str") | Literal("int")) +  # url ./url <str> +1 => functions chains for transformation
         Regex("[\+*]\d*")   # url ./url str <+1>  => size match: + mandatory, * optional, \d+ exact len
     )
 

@@ -12,7 +12,7 @@ from lxml import etree
 import html5lib
 
 
-def _recursive_parse(context_, rule):
+def _recursive_parse(context_, rule, url=None):
     """
     recursive parse embedded rules
     """
@@ -20,15 +20,21 @@ def _recursive_parse(context_, rule):
 
     type_list_ = rule.type_list
 
+    # ignore size match check to use it later
     for fun, args in type_list_[:-1]:
         tmp = []
         for res_i in res:
-            res_i = fun(res_i, *args)
+            if fun.__name__ == "url_":
+                res_i = fun(res_i, url)
+            else:
+                res_i = fun(res_i, *args)
 
+            # filter null results
             if res_i not in [None, ""]:
                 tmp.append(res_i)
         res = tmp
 
+    # do size match check
     size, args = type_list_[-1]
     try:
         size(len(res), *args)
@@ -41,7 +47,7 @@ def _recursive_parse(context_, rule):
     if isinstance(res, _Element):
         ordered_dict = OrderedDict()
         for rule_i in rule.rule[:]:
-            _ = _recursive_parse(res, rule_i)
+            _ = _recursive_parse(res, rule_i, url)
             if _:
                 ordered_dict[rule_i.name] = _
 
@@ -53,7 +59,7 @@ def _recursive_parse(context_, rule):
         for res_i in res:
             tmp_ordered_dict = OrderedDict()
             for rule_i in rule.rule:
-                data = _recursive_parse(res_i, rule_i)
+                data = _recursive_parse(res_i, rule_i, url)
                 if data:
                     tmp_ordered_dict[rule_i.name] = data
 
@@ -64,7 +70,7 @@ def _recursive_parse(context_, rule):
     return res
 
 
-def html(doc, rule, warn=None, treebuilder="lxml", namespace=None):
+def html(doc, rule, warn=None, treebuilder="lxml", namespace=None, url=None):
     """
     use this function if page is html
     """
@@ -74,7 +80,7 @@ def html(doc, rule, warn=None, treebuilder="lxml", namespace=None):
 
     context = html5lib.parse(doc, treebuilder=treebuilder, namespaceHTMLElements=namespace)
 
-    ret = _recursive_parse(context, rule)
+    ret = _recursive_parse(context, rule, url=url)
     return ret
 
 

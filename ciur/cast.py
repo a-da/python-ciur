@@ -1,6 +1,7 @@
 """
 basic function for casting or type conversion/transformation
 """
+import urlparse
 
 
 def str_(value, *args):
@@ -12,6 +13,10 @@ def str_(value, *args):
         return value
 
     return value.text
+
+
+def url_(value, base):
+    return urlparse.urljoin(base, value)
 
 
 def int_(value, *args):

@@ -1,5 +1,5 @@
 # Runtime requirements
---requirement requirements-pip.txt
+-r requirements-pip.txt
 
 # test
 requests
