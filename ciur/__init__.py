@@ -5,7 +5,17 @@ import json
 
 
 def pretty_json(dict_):
+    """
+    wrapper for long code
+    """
     return json.dumps(dict_, indent=4, ensure_ascii=False).encode("utf-8")
+
+
+class CiurException(BaseException):
+    """
+    exception class used in ciur
+    """
+    pass
 
 
 class CommonEqualityMixin(object):

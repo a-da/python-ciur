@@ -1,7 +1,0 @@
-root `//*[@id='js-pjax-container']` +1
-   list `.//*[@class='items__list']//li[@class='ads-list-photo-item']` +
-        title `.//div[@class='ads-list-photo-item-title ']//a` str *
-        id `.//div[@class='ads-list-photo-item-thumb']//a/@href` str url *
-        img `.//div[@class='ads-list-photo-item-thumb']//a/img/@src` str url *
-
-root `//*[@id='js-pjax-container']` +1

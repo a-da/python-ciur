@@ -18,6 +18,9 @@ def _recursive_parse(context_, rule, url=None):
     """
     res = context_.xpath(rule.xpath)
 
+    if isinstance(res, (bool, float)):
+        return res
+
     type_list_ = rule.type_list
 
     # ignore size match check to use it later
@@ -41,14 +44,15 @@ def _recursive_parse(context_, rule, url=None):
     except Exception, e:
         raise Exception("[ERROR] %s, %s %s, but got %s" % (e.message, rule.name, args, len(res)))
 
-    if len(res) == 1:
+    if not rule.name.endswith("_list") and len(res) == 1:
         res = res[0]
 
     if isinstance(res, _Element):
         ordered_dict = OrderedDict()
         for rule_i in rule.rule[:]:
             _ = _recursive_parse(res, rule_i, url)
-            if _:
+
+            if _ or _ is False:
                 ordered_dict[rule_i.name] = _
 
         return {

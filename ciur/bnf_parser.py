@@ -226,7 +226,8 @@ from pyparsing import (
     alphanums,
     printables,
     pythonStyleComment,
-    ParseBaseException, ZeroOrMore)
+    ParseBaseException, ZeroOrMore
+)
 
 from pyparsing import (
     ParseFatalException,
@@ -241,6 +242,7 @@ from pyparsing import (
     Literal,
     Suppress
 )
+from lxml import etree
 
 from ciur import pretty_json
 
@@ -252,20 +254,23 @@ class ParseExceptionInCiurFile(ParseBaseException):
         self._file_name = None if not file_name else os.path.abspath(file_name)
 
     def __str__(self):
-        s = "see file `%s`" % self._file_name if self._file_name else "from string"
+        s = "|from file `%s`" % self._file_name if self._file_name else "from string"
 
-        return "%s, %s \n>>> %s\n    %s^" % (
+        line = "%s" % self.lineno
+
+        return "%s,\n    %s \n    |%s: %s\n    %s^" % (
             ParseBaseException.__str__(self),
             s,
+            line,
             self._file_string[self.lineno - 1],
-            " " * (self.col - 1)
+            " " * (self.col + 1 + len(line))
         )
 
 
 _indent_stack = [1]
 
 
-def _check_peer_indent(s, l, t):
+def _check_peer_indent(s, l, tock):
     cur_col = col(l, s)
     if cur_col != _indent_stack[-1]:
         if (not _indent_stack) or cur_col > _indent_stack[-1]:
@@ -273,25 +278,37 @@ def _check_peer_indent(s, l, t):
         raise ParseException(s, l, "not a peer entry ????")
 
 
-def _check_sub_indent(s, l, t):
-    cur_col = col(l, s)
+def _check_sub_indent(s, loc, tock):
+    cur_col = col(loc, s)
     if cur_col > _indent_stack[-1]:
         _indent_stack.append(cur_col)
     else:
-        raise ParseException(s, l, "not a subentry")
+        raise ParseException(s, loc, "not a subentry")
 
 
-def _check_unindent(s, l):
-    if l >= len(s):
+def _check_unindent(s, loc):
+    if loc >= len(s):
         return
 
-    cur_col = col(l, s)
+    cur_col = col(loc, s)
     if not(cur_col < _indent_stack[-1] and cur_col <= _indent_stack[-2]):
-        raise ParseException(s, l, "not an unindent")
+        raise ParseException(s, loc, "not an unindent")
 
 
 def do_unindent():
     _indent_stack.pop()
+
+
+def validate_xpath(s, loc, tock):
+    """
+    :type tock: list of str
+    """
+    try:
+        XPATH_EVALUATOR(tock[0])
+        i = 10
+        #TEST_DOM_SAMPLE.xpath(tock[0])
+    except etree.XPathEvalError, e:
+        raise ParseFatalException(s, loc, "validate_xpath->%s" % e)
 
 
 def _get_bnf():
@@ -302,10 +319,10 @@ def _get_bnf():
     identifier = Word(alphas, alphanums + "_")  # <url> ./url str +1 => label of rule
 
     # url <./url> str +1 => xpath query
-    xpath = grave + Word(alphas+"./", printables + " ", excludeChars="`") + grave
+    xpath = grave + Word(printables + " ", excludeChars="`").addParseAction(validate_xpath) + grave
 
     type_list = Group(
-        ZeroOrMore(Literal("url") | Literal("str") | Literal("int")) +  # url ./url <str> +1 => functions chains for transformation
+        ZeroOrMore(Literal("url") | Literal("str") | Literal("int") | Literal("raw") | Literal("iraw")) +  # url ./url <str> +1 => functions chains for transformation
         Regex("[\+*]\d*")   # url ./url str <+1>  => size match: + mandatory, * optional, \d+ exact len
     )
 
@@ -372,4 +389,50 @@ def to_dict(rules):
     return data
 
 
+def matches(context, text, regex):
+    """
+    The function returns true if a matches the regular expression supplied as $pattern as influenced by the value
+    of $flags, if present; otherwise, it returns false.
+
+    see more http://www.w3.org/TR/xpath-functions/#func-matches
+
+    :param context: DOM context
+    :param text: input as string
+    :param regex:
+    :return:
+    """
+    assert isinstance(text, list) and len(text) == 1
+
+    import re
+    return bool(re.search(regex, text[0]))
+
+def matches(context, text, regex):
+    """
+    The function returns true if a matches the regular expression supplied as $pattern as influenced by the value
+    of $flags, if present; otherwise, it returns false.
+
+    see more http://www.w3.org/TR/xpath-functions/#func-matches
+
+    :param context: DOM context
+    :param text: input as string
+    :param regex:
+    :return:
+    """
+    assert isinstance(text, list) and len(text) == 1
+
+    import re
+    return bool(re.search(regex, text[0]))
+
+ns = etree.FunctionNamespace(None)
+ns['matches'] = matches
+
+
+# ------------
+# CONSTANTS
+# ------------
 BNF = _get_bnf()
+
+import lxml_xpath2
+XPATH_EVALUATOR = etree.XPathEvaluator(etree.fromstring("<root></root>"))
+#TEST_DOM_SAMPLE = etree.fromstring("<root></root>")
+
