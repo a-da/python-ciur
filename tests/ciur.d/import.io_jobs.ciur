@@ -1,7 +1,7 @@
-root /jobs/job +
-    title ./title str +
-    url ./url str +1
-    location . *
-        country ./country str +1
-        city ./city str +1
-        zip ./postalcode str *1
+root `/jobs/job` +
+    title `./title` str +
+    url `./url` str +1
+    location `.` *
+        country `./country` str +1
+        city `./city` str +1
+        zip `./postalcode` str *1

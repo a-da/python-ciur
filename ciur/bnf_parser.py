@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 ciur external dsl
 
@@ -217,7 +218,9 @@ scrapy.org_support.doctest
 
 from collections import OrderedDict
 import os
+import re
 
+import pyparsing
 from pyparsing import (
     col,
     lineEnd,
@@ -244,7 +247,8 @@ from pyparsing import (
 )
 from lxml import etree
 
-from ciur import pretty_json
+from ciur import pretty_json, CiurException
+from ciur import cast
 
 
 class ParseExceptionInCiurFile(ParseBaseException):
@@ -319,10 +323,15 @@ def _get_bnf():
     identifier = Word(alphas, alphanums + "_")  # <url> ./url str +1 => label of rule
 
     # url <./url> str +1 => xpath query
-    xpath = grave + Word(printables + " ", excludeChars="`").addParseAction(validate_xpath) + grave
+    xpath = grave + Word(printables + u" şăţ", excludeChars="`").addParseAction(validate_xpath) + grave
+
+    casting_functions = pyparsing.Or(
+        Literal(i[:-1]) for i in dir(cast) if i.endswith("_") and not i.startswith("__")
+
+    )
 
     type_list = Group(
-        ZeroOrMore(Literal("url") | Literal("str") | Literal("int") | Literal("raw") | Literal("iraw")) +  # url ./url <str> +1 => functions chains for transformation
+        ZeroOrMore(casting_functions) +  # url ./url <str> +1 => functions chains for transformation
         Regex("[\+*]\d*")   # url ./url str <+1>  => size match: + mandatory, * optional, \d+ exact len
     )
 
@@ -348,6 +357,9 @@ def get_list(rules):
     if isinstance(rules, file):
         file_name = rules.name
         rules = rules.read()
+
+    if not re.search("\n\s*$", rules):
+        raise CiurException("no new line at the end of file", {"file_name": os.path.abspath(file_name)})
 
     try:
         parse_tree = BNF.parseString(rules, parseAll=True)
@@ -434,5 +446,3 @@ BNF = _get_bnf()
 
 import lxml_xpath2
 XPATH_EVALUATOR = etree.XPathEvaluator(etree.fromstring("<root></root>"))
-#TEST_DOM_SAMPLE = etree.fromstring("<root></root>")
-

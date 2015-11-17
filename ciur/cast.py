@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 basic function for casting or type conversion/transformation
 """
@@ -5,21 +6,16 @@ import HTMLParser
 import urlparse
 
 from lxml.etree import tostring
+from dateutil import parser
+
+from ciur import CiurException
 
 
-def str_(value, *args):
+def url_(url, base_url):
     """
-    convert data into string
-    :rtype: str
+    get absolute url
     """
-    if isinstance(value, str):
-        return value
-
-    return value.text
-
-
-def url_(value, base):
-    return urlparse.urljoin(base, value)
+    return urlparse.urljoin(base_url, url)
 
 
 def int_(value, *args):
@@ -64,5 +60,61 @@ def size_(got, mandatory_or_optional, expect):
             pass
         else:  # *5 got 5
             assert got == expect, "expect size `%s`, got `%s`" % (expect, got)
+
+
+def datetime_(text):
+    """
+    because of exception (bellow) string do datetime CAN NOT be embedded into lxml namespace functions
+        File "extensions.pxi", line 612, in lxml.etree._wrapXPathObject (src/lxml/lxml.etree.c:145847)
+        lxml.etree.XPathResultError: Unknown return type: datetime.datetime
+
+    So this is the reason why it is implemented in type_list casting chain
+    """
+    if not text:
+        return text
+
+    # workaround http://stackoverflow.com/questions/8896038/how-to-use-python-dateutil-1-5-parse-function-to-work-with-unicode
+    languages = {
+        "russian": {
+            u"Янв": "January",
+            u"Февр": "February",
+            u"Март": "March",
+            u"Апр": "April",
+            u"Май": "May",
+            u"Июнь": "June",
+            u"Июль": "July",
+            u"Авг": "August",
+            u"Сент": "September",
+            u"Окт": "October",
+            u"Нояб": "November",
+            u"Дек": "December"
+        },
+        "romanian": {
+            "ianuarie": "January",
+            "februarie": "February",
+            "martie": "March",
+            "aprilie": "April",
+            "mai": "May",
+            "iunie": "June",
+            "iulie": "July",
+            "august": "August",
+            "septembrie": "September",
+            "octombrie": "October",
+            "noiembrie": "November",
+            "decembrie": "December"
+        }
+    }
+
+    for lang_i in languages.values():
+        for k, v in lang_i.iteritems():
+            text = text.replace(k.lower(), v)
+            text = text.replace(k.upper(), v)
+            text = text.replace(k.capitalize(), v)
+
+    try:
+        return parser.parse(text)
+    except ValueError, e:
+        raise CiurException(e, {"text": text})
+
 
 HTML_PARSER = HTMLParser.HTMLParser()

@@ -23,63 +23,58 @@ test internal dsl
 
 >>> data = parse.xml(response.content, rule)
 >>> print pretty_json(data)  # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
-    [
-        {
-            "title": "...",
-            "url": "http://importio.applytojob.com/apply/.../...",
-            "location": {
+{
+        "root": [
+            {
+                "title": "...",
+                "url": "http://importio.applytojob.com/apply/.../...",
                 "location": {
                     "country": "United Kingdom",
                     "city": "London"
                 }
-            }
-        },
-        ...
-        {
-            "title": "Head of Demand Generation",
-            "url": "http://importio.applytojob.com/apply/JKlikE/Head-Of-Demand-Generation",
-            "location": {
+            },
+            ...
+            {
+                "title": "...",
+                "url": "http://importio.applytojob.com/apply/.../...",
                 "location": {
-                    "country": "United States",
-                    "city": "San Francisco",
-                    "zip": "94103"
+                    "country": "United Kingdom",
+                    "city": "London",
+                    "zip": "EC2M 4YD"
                 }
-            }
-        },
-        ...
-    ]
-
+            },
+            ...
+        ]
+    }
 
 test external dsl
 -----------------
 
->> from ciur import bnf_parser
->> res = bnf_parser.to_dict("import.io_jobs.ciur")
->> rule = Rule.from_dict(res[0])  # doctest: +NORMALIZE_WHITESPACE
->> data = parse.xml(response.content, rule)
->> print pretty_json(data) # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
-    [
-        {
-            "title": "...",
-            "url": "http://importio.applytojob.com/apply/.../...",
-            "location": {
+>>> from ciur import bnf_parser
+>>> res = bnf_parser.to_dict(open("ciur.d/import.io_jobs.ciur"))
+>>> rule = Rule.from_dict(res[0])  # doctest: +NORMALIZE_WHITESPACE
+>>> data = parse.xml(response.content, rule)
+>>> print pretty_json(data) # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
+    {
+        "root": [
+            {
+                "title": "...",
+                "url": "http://importio.applytojob.com/apply/.../...",
                 "location": {
                     "country": "United Kingdom",
                     "city": "London"
                 }
-            }
-        },
-        ...
-        {
-            "title": "Head of Demand Generation",
-            "url": "http://importio.applytojob.com/apply/JKlikE/Head-Of-Demand-Generation",
-            "location": {
+            },
+            ...
+            {
+                "title": "...",
+                "url": "http://importio.applytojob.com/apply/.../...",
                 "location": {
-                    "country": "United States",
-                    "city": "San Francisco",
-                    "zip": "94103"
+                    "country": "United Kingdom",
+                    "city": "London",
+                    "zip": "EC2M 4YD"
                 }
-            }
-        },
-        ...
-    ]
+            },
+            ...
+        ]
+    }

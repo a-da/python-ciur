@@ -11,19 +11,16 @@ Testing http://scrapy.org/companies/
 test internal dsl
 -----------------
 
->>> rule = Rule("root", "//div[@class='companies-container']", "+1",
-...             Rule("company_list", ".//div[@class='company-box']", "+",
-...                  Rule("name", ".//span[@class='highlight']", ["str", "+"]),
-...                  Rule("company_url", "./a/@href", ["str", "+1"]),
-...                  Rule("blog_url", "./p/a/@href", ["str", "*"]),
-...                  Rule("logo", "./a/img/@src", ["str", "+"])
-...                 )
+>>> rule = Rule("company_list", ".//div[@class='company-box']", "+",
+...             Rule("name", ".//span[@class='highlight']", ["str", "+"]),
+...             Rule("company_url", "./a/@href", ["str", "+1"]),
+...             Rule("blog_url", "./p/a/@href", ["str", "*"]),
+...             Rule("logo", "./a/img/@src", ["str", "+"])
 ...            )
 
 >>> data = parse.html(response.content, rule)
 >>> print pretty_json(data)  # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
     {
-        "root": {
             "company_list": [
                 {
                     "name": "Scrapinghub:",
@@ -44,7 +41,6 @@ test internal dsl
                     "logo": "../img/sayone-logo.png"
                 }
             ]
-        }
     }
 
 test external dsl
@@ -55,7 +51,8 @@ test external dsl
 >>> rule = Rule.from_dict(res[0])  # doctest: +NORMALIZE_WHITESPACE
 >>> data = parse.html(response.content, rule)
 >>> print pretty_json(data)  # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
-    [
+    {
+        "company_list": [
         {
             "name": "Scrapinghub:",
             "company_url": "http://scrapinghub.com/",
@@ -68,4 +65,5 @@ test external dsl
             "company_url": "http://sayonetech.com/",
             "logo": "../img/sayone-logo.png"
         }
-    ]
+        ]
+    }

@@ -8,14 +8,19 @@ def pretty_json(dict_):
     """
     wrapper for long code
     """
-    return json.dumps(dict_, indent=4, ensure_ascii=False).encode("utf-8")
+    return json.dumps(dict_, indent=4, ensure_ascii=False, default=lambda x: repr(x)).encode("utf-8")
 
 
 class CiurException(BaseException):
     """
     exception class used in ciur
     """
-    pass
+    def __init__(self, data, *args, **kwargs):
+        BaseException.__init__(self, *args, **kwargs)
+        self._data = data
+
+    def __str__(self):
+        return "%s, %s" %(BaseException.__str__(self), self._data)
 
 
 class CommonEqualityMixin(object):
