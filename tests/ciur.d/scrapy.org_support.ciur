@@ -1,5 +1,5 @@
 company_list `//div[@class='company-box']` +
-    name `.//span[@class='highlight']` str +
-    company_url `./a/@href` str +1
-    blog_url `./p/a/@href` str *
-    logo `./a/img/@src` str +
+    name `.//span[@class='highlight']/text()` +
+    company_url `./a/@href` +1
+    blog_url `./p/a/@href` *1
+    logo `./a/img/@src` +

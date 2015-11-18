@@ -5,13 +5,13 @@ import re
 import sre_constants
 
 from lxml.etree import FunctionNamespace
-from py._code.code import getrawcode
 
 from cast import raw_
 from ciur import CiurException
+from ciur.cast import element2text
 
 
-def fn_replace(context, text, pattern, replacement):
+def fn_replace(context, value, pattern, replacement):
     """
     http://www.w3.org/TR/xpath-functions/#func-replace
 
@@ -36,6 +36,8 @@ def fn_replace(context, text, pattern, replacement):
         replace("darted", "^(.*?)d(.*)$", "$1c$2") returns "carted". The first d is replaced.
 
     """
+    text = element2text(value)
+
     if not text:
         return text
 
@@ -55,7 +57,7 @@ def fn_replace(context, text, pattern, replacement):
     return string
 
 
-def fn_matches(context, text, regex):
+def fn_matches(context, value, regex):
     """
     The function returns true if a matches the regular expression supplied as $pattern as influenced by the value
     of $flags, if present; otherwise, it returns false.
@@ -67,6 +69,8 @@ def fn_matches(context, text, regex):
     :param regex:
     :return:
     """
+    text = element2text(value)
+
     if not text:
         return text
 

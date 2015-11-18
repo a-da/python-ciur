@@ -5,10 +5,22 @@ basic function for casting or type conversion/transformation
 import HTMLParser
 import urlparse
 
-from lxml.etree import tostring
+from lxml.etree import tostring, _Element
 from dateutil import parser
 
 from ciur import CiurException
+
+
+def element2text(value):
+    if isinstance(value, _Element):
+        return value.text
+    elif isinstance(value, list) and len(value) > 0:
+        return [element2text(i) for i in value]
+
+    if not value:
+        return value
+
+    return value.strip()
 
 
 def url_(url, base_url):
@@ -24,6 +36,16 @@ def int_(value, *args):
     :rtype: int
     """
     return int(value)
+
+
+def float_(value, *args):
+    """
+    convert data into integer
+    :rtype: int
+    """
+    text = element2text(value)
+
+    return float(text)
 
 
 def raw_(value, *args):
@@ -62,7 +84,7 @@ def size_(got, mandatory_or_optional, expect):
             assert got == expect, "expect size `%s`, got `%s`" % (expect, got)
 
 
-def datetime_(text):
+def datetime_(value):
     """
     because of exception (bellow) string do datetime CAN NOT be embedded into lxml namespace functions
         File "extensions.pxi", line 612, in lxml.etree._wrapXPathObject (src/lxml/lxml.etree.c:145847)
@@ -70,8 +92,10 @@ def datetime_(text):
 
     So this is the reason why it is implemented in type_list casting chain
     """
+    text = element2text(value)
+
     if not text:
-        return text
+        return value
 
     # workaround http://stackoverflow.com/questions/8896038/how-to-use-python-dateutil-1-5-parse-function-to-work-with-unicode
     languages = {

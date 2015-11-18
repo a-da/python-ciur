@@ -12,8 +12,8 @@ test internal dsl
 -----------------
 
 >>> rule = Rule("root", "/html/body", "+1",
-...              Rule("name", ".//h1", ["str", "+1"]),
-...              Rule("paragraph", ".//p", ["str", "+1"])
+...              Rule("name", ".//h1/text()", ["+1"]),
+...              Rule("paragraph", ".//p/text()", ["+1"])
 ... )
 
 >>> data = parse.html(response.content, rule)
@@ -32,6 +32,7 @@ test external dsl
 >>> import os
 
 >>> res = bnf_parser.to_dict(open("ciur.d/example.com.ciur"))
+
 >>> rule = Rule.from_dict(res[0])  # doctest: +NORMALIZE_WHITESPACE
 >>> data = parse.html(response.content, rule)
 >>> print pretty_json(data)  # doctest: +NORMALIZE_WHITESPACE

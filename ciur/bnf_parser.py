@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 ciur external dsl
 
@@ -9,40 +8,40 @@ example.com.doctest
 ===================
 >>> rules = '''
 ... root `/html/body` +1
-...    name `.//h1` str +1
-...    paragrapth `.//p` str +1
+...    name `.//h1/text()` +1
+...    paragrapth `.//p/text()` +1
 ... '''
 
 >>> pprint.pprint(get_list(rules))
 [['root',
   '/html/body',
   ['+1'],
-  [['name', './/h1', ['str', '+1']], ['paragrapth', './/p', ['str', '+1']]]]]
+  [['name', './/h1/text()', ['+1']], ['paragrapth', './/p/text()', ['+1']]]]]
 
 import.io_jobs.doctest
 ======================
 >>> rules = '''
 ... root `/jobs/job` +
 ...
-...     title `./title` str +
-...     url `./url` str +1
+...     title `./title/text()` +
+...     url `./url/text()` +1
 ...     location `.` *
-...         country `./country` str +1
-...         city `./city` str +1
-...         zip `./postalcode` str *1
+...         country `./country/text()` +1
+...         city `./city/text()` +1
+...         zip `./postalcode/text()` *1
 ... '''
 >>> pprint.pprint(get_list(rules))
 [['root',
   '/jobs/job',
   ['+'],
-  [['title', './title', ['str', '+']],
-   ['url', './url', ['str', '+1']],
+  [['title', './title/text()', ['+']],
+   ['url', './url/text()', ['+1']],
    ['location',
     '.',
     ['*'],
-    [['country', './country', ['str', '+1']],
-     ['city', './city', ['str', '+1']],
-     ['zip', './postalcode', ['str', '*1']]]]]]]
+    [['country', './country/text()', ['+1']],
+     ['city', './city/text()', ['+1']],
+     ['zip', './postalcode/text()', ['*1']]]]]]]
 
 >>> print to_json(rules)  # doctest: +NORMALIZE_WHITESPACE
 [
@@ -55,17 +54,15 @@ import.io_jobs.doctest
         "rule": [
             {
                 "name": "title",
-                "xpath": "./title",
+                "xpath": "./title/text()",
                 "type_list": [
-                    "str",
                     "+"
                 ]
             },
             {
                 "name": "url",
-                "xpath": "./url",
+                "xpath": "./url/text()",
                 "type_list": [
-                    "str",
                     "+1"
                 ]
             },
@@ -78,25 +75,22 @@ import.io_jobs.doctest
                 "rule": [
                     {
                         "name": "country",
-                        "xpath": "./country",
+                        "xpath": "./country/text()",
                         "type_list": [
-                            "str",
                             "+1"
                         ]
                     },
                     {
                         "name": "city",
-                        "xpath": "./city",
+                        "xpath": "./city/text()",
                         "type_list": [
-                            "str",
                             "+1"
                         ]
                     },
                     {
                         "name": "zip",
-                        "xpath": "./postalcode",
+                        "xpath": "./postalcode/text()",
                         "type_list": [
-                            "str",
                             "*1"
                         ]
                     }
@@ -110,20 +104,20 @@ scrapy.org_support.doctest
 ==========================
 >>> rules = '''
 ... company_list `.//div[@class='company-box']` +
-...     name `.//span[@class='highlight']` str +
-...     company_url `./a/@href` str +1
-...     blog_url `./p/a/@href` str *
-...     logo `./a/img/@src` str +
+...     name `.//span[@class='highlight']/text()` +
+...     company_url `./a/@href` +1
+...     blog_url `./p/a/@href` *
+...     logo `./a/img/@src` +
 ... '''
 
 >>> pprint.pprint(get_list(rules))
 [['company_list',
   ".//div[@class='company-box']",
   ['+'],
-  [['name', ".//span[@class='highlight']", ['str', '+']],
-   ['company_url', './a/@href', ['str', '+1']],
-   ['blog_url', './p/a/@href', ['str', '*']],
-   ['logo', './a/img/@src', ['str', '+']]]]]
+  [['name', ".//span[@class='highlight']/text()", ['+']],
+   ['company_url', './a/@href', ['+1']],
+   ['blog_url', './p/a/@href', ['*']],
+   ['logo', './a/img/@src', ['+']]]]]
 
 >>> print to_json(rules)  # doctest: +NORMALIZE_WHITESPACE
 [
@@ -136,9 +130,8 @@ scrapy.org_support.doctest
         "rule": [
             {
                 "name": "name",
-                "xpath": ".//span[@class='highlight']",
+                "xpath": ".//span[@class='highlight']/text()",
                 "type_list": [
-                    "str",
                     "+"
                 ]
             },
@@ -146,7 +139,6 @@ scrapy.org_support.doctest
                 "name": "company_url",
                 "xpath": "./a/@href",
                 "type_list": [
-                    "str",
                     "+1"
                 ]
             },
@@ -154,7 +146,6 @@ scrapy.org_support.doctest
                 "name": "blog_url",
                 "xpath": "./p/a/@href",
                 "type_list": [
-                    "str",
                     "*"
                 ]
             },
@@ -162,7 +153,6 @@ scrapy.org_support.doctest
                 "name": "logo",
                 "xpath": "./a/img/@src",
                 "type_list": [
-                    "str",
                     "+"
                 ]
             }
@@ -181,9 +171,8 @@ scrapy.org_support.doctest
         "rule": [
             {
                 "name": "name",
-                "xpath": ".//span[@class='highlight']",
+                "xpath": ".//span[@class='highlight']/text()",
                 "type_list": [
-                    "str",
                     "+"
                 ]
             },
@@ -191,7 +180,6 @@ scrapy.org_support.doctest
                 "name": "company_url",
                 "xpath": "./a/@href",
                 "type_list": [
-                    "str",
                     "+1"
                 ]
             },
@@ -199,7 +187,6 @@ scrapy.org_support.doctest
                 "name": "blog_url",
                 "xpath": "./p/a/@href",
                 "type_list": [
-                    "str",
                     "*"
                 ]
             },
@@ -207,7 +194,6 @@ scrapy.org_support.doctest
                 "name": "logo",
                 "xpath": "./a/img/@src",
                 "type_list": [
-                    "str",
                     "+"
                 ]
             }
@@ -303,19 +289,20 @@ def do_unindent():
     _indent_stack.pop()
 
 
-def validate_xpath(s, loc, tock):
-    """
-    :type tock: list of str
-    """
-    try:
-        XPATH_EVALUATOR(tock[0])
-        i = 10
-        #TEST_DOM_SAMPLE.xpath(tock[0])
-    except etree.XPathEvalError, e:
-        raise ParseFatalException(s, loc, "validate_xpath->%s" % e)
+def _get_bnf(namespace=None):
+    def validate_xpath(s, loc, tock):
+        """
+        :type tock: list of str
+        """
+        xpath_ = tock[0]
+        try:
+            context = etree.fromstring("<root></root>")
+            context.xpath(xpath_, namespaces=namespace)
+            #XPATH_EVALUATOR(xpath_, namespaces=namespace)
+        except etree.XPathEvalError, e:
+            raise ParseFatalException(s, loc, "validate_xpath->%s" % e)
+        pass
 
-
-def _get_bnf():
     grave = Suppress("`")
     indent = lineEnd.suppress() + empty + empty.copy().setParseAction(_check_sub_indent)
     undent = FollowedBy(empty).setParseAction(_check_unindent).setParseAction(do_unindent)
@@ -323,7 +310,7 @@ def _get_bnf():
     identifier = Word(alphas, alphanums + "_")  # <url> ./url str +1 => label of rule
 
     # url <./url> str +1 => xpath query
-    xpath = grave + Word(printables + u" şăţ", excludeChars="`").addParseAction(validate_xpath) + grave
+    xpath = grave + Word(printables + " ", excludeChars="`").addParseAction(validate_xpath) + grave
 
     casting_functions = pyparsing.Or(
         Literal(i[:-1]) for i in dir(cast) if i.endswith("_") and not i.startswith("__")
@@ -346,7 +333,7 @@ def _get_bnf():
     return bnf
 
 
-def get_list(rules):
+def get_list(rules, namespace=None):
     """
     :param rules: file or basestring
     :return:
@@ -362,7 +349,8 @@ def get_list(rules):
         raise CiurException("no new line at the end of file", {"file_name": os.path.abspath(file_name)})
 
     try:
-        parse_tree = BNF.parseString(rules, parseAll=True)
+        bnf = _get_bnf(namespace=namespace)
+        parse_tree = bnf.parseString(rules, parseAll=True)
     except ParseBaseException, e:
         raise ParseExceptionInCiurFile(rules, file_name, e)
 
@@ -393,56 +381,19 @@ def to_json(rules):
     return pretty_json(data)
 
 
-def to_dict(rules):
-    list_ = get_list(rules)
+def to_dict(rules, namespace=None):
+    list_ = get_list(rules, namespace=namespace)
 
     data = _to_dict(list_)
 
     return data
 
 
-def matches(context, text, regex):
-    """
-    The function returns true if a matches the regular expression supplied as $pattern as influenced by the value
-    of $flags, if present; otherwise, it returns false.
-
-    see more http://www.w3.org/TR/xpath-functions/#func-matches
-
-    :param context: DOM context
-    :param text: input as string
-    :param regex:
-    :return:
-    """
-    assert isinstance(text, list) and len(text) == 1
-
-    import re
-    return bool(re.search(regex, text[0]))
-
-def matches(context, text, regex):
-    """
-    The function returns true if a matches the regular expression supplied as $pattern as influenced by the value
-    of $flags, if present; otherwise, it returns false.
-
-    see more http://www.w3.org/TR/xpath-functions/#func-matches
-
-    :param context: DOM context
-    :param text: input as string
-    :param regex:
-    :return:
-    """
-    assert isinstance(text, list) and len(text) == 1
-
-    import re
-    return bool(re.search(regex, text[0]))
-
-ns = etree.FunctionNamespace(None)
-ns['matches'] = matches
-
-
 # ------------
 # CONSTANTS
 # ------------
-BNF = _get_bnf()
 
-import lxml_xpath2
-XPATH_EVALUATOR = etree.XPathEvaluator(etree.fromstring("<root></root>"))
+# noinspection PyUnresolvedReferences
+import lxml_xpath2  # load etree
+
+#XPATH_EVALUATOR = etree.XPathEvaluator(etree.fromstring("<root></root>"))

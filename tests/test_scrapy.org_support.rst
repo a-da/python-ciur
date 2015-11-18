@@ -12,10 +12,10 @@ test internal dsl
 -----------------
 
 >>> rule = Rule("company_list", ".//div[@class='company-box']", "+",
-...             Rule("name", ".//span[@class='highlight']", ["str", "+"]),
-...             Rule("company_url", "./a/@href", ["str", "+1"]),
-...             Rule("blog_url", "./p/a/@href", ["str", "*"]),
-...             Rule("logo", "./a/img/@src", ["str", "+"])
+...             Rule("name", ".//span[@class='highlight']/text()", ["+"]),
+...             Rule("company_url", "./a/@href", ["+1"]),
+...             Rule("blog_url", "./p/a/@href", ["*"]),
+...             Rule("logo", "./a/img/@src", ["+"])
 ...            )
 
 >>> data = parse.html(response.content, rule)

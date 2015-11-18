@@ -12,12 +12,12 @@ test internal dsl
 -----------------
 
 >>> rule = Rule("root", "/jobs/job", "+",
-...            Rule("title", "./title", ["str", "+"]),
-...            Rule("url", "./url", ["str", "+1"]),
+...            Rule("title", "./title/text()", "+"),
+...            Rule("url", "./url/text()", "+1"),
 ...            Rule("location", ".", "*",
-...                 Rule("country", "./country", ["str", "+1"]),
-...                 Rule("city", "./city", ["str", "+1"]),
-...                 Rule("zip", "./postalcode", ["str", "*1"])
+...                 Rule("country", "./country/text()", "+1"),
+...                 Rule("city", "./city/text()", "+1"),
+...                 Rule("zip", "./postalcode/text()", "*1")
 ...            )
 ...        )
 

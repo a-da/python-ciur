@@ -1,3 +1,3 @@
 root `/html/body` +1
-    name `.//h1` str +1
-    paragraph `.//p` str +1
+    name `.//h1/text()` +1
+    paragraph `.//p/text()` +1

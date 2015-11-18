@@ -15,13 +15,13 @@ JSON = basestring
 class Rule(ciur.CommonEqualityMixin):
     """
     >>> rule1 = Rule("root", "/h3", "+",
-    ...  Rule("name", ".//h1[contains(text(), 'Justin')]", "str"),
-    ...  Rule("count_list", ".//h2[contains(text(), 'Andrei')]/p", ["int", "+"]),
-    ...  Rule("user", ".//h5[contains(text(), 'Andrei')]/p", "+",
-    ...         Rule("name", "./spam", "str"),
-    ...         Rule("sure_name", "./bold", "str"),
+    ...  Rule("name", ".//h1[contains(., 'Justin')]/text()", "+1"),
+    ...  Rule("count_list", ".//h2[contains(., 'Andrei')]/p", ["int", "+"]),
+    ...  Rule("user", ".//h5[contains(., 'Andrei')]/p", "+",
+    ...         Rule("name", "./spam/text()", "+1"),
+    ...         Rule("sure_name", "./bold/text()", "+1"),
     ...         Rule("age", "./it", "int"),
-    ...         Rule("hobby", "./li", ["str", "+"]),
+    ...         Rule("hobby", "./li/text()", "+"),
     ...         Rule("indexes", "./li/bold", ["int", "+"])
     ...       )
     ... )
@@ -34,12 +34,12 @@ class Rule(ciur.CommonEqualityMixin):
         "rule": [
             {
                 "name": "name",
-                "xpath": ".//h1[contains(text(), 'Justin')]",
-                "type_list": "str"
+                "xpath": ".//h1[contains(., 'Justin')]/text()",
+                "type_list": "+1"
             },
             {
                 "name": "count_list",
-                "xpath": ".//h2[contains(text(), 'Andrei')]/p",
+                "xpath": ".//h2[contains(., 'Andrei')]/p",
                 "type_list": [
                     "int",
                     "+"
@@ -47,18 +47,18 @@ class Rule(ciur.CommonEqualityMixin):
             },
             {
                 "name": "user",
-                "xpath": ".//h5[contains(text(), 'Andrei')]/p",
+                "xpath": ".//h5[contains(., 'Andrei')]/p",
                 "type_list": "+",
                 "rule": [
                     {
                         "name": "name",
-                        "xpath": "./spam",
-                        "type_list": "str"
+                        "xpath": "./spam/text()",
+                        "type_list": "+1"
                     },
                     {
                         "name": "sure_name",
-                        "xpath": "./bold",
-                        "type_list": "str"
+                        "xpath": "./bold/text()",
+                        "type_list": "+1"
                     },
                     {
                         "name": "age",
@@ -67,11 +67,8 @@ class Rule(ciur.CommonEqualityMixin):
                     },
                     {
                         "name": "hobby",
-                        "xpath": "./li",
-                        "type_list": [
-                            "str",
-                            "+"
-                        ]
+                        "xpath": "./li/text()",
+                        "type_list": "+"
                     },
                     {
                         "name": "indexes",
