@@ -5,14 +5,18 @@ basic function for casting or type conversion/transformation
 import HTMLParser
 import urlparse
 
-from lxml.etree import tostring, _Element
+# noinspection PyProtectedMember
+from lxml.etree import _Element as EtreeElement
+
+from lxml.etree import tostring
 from dateutil import parser
 
 from ciur import CiurException
+from ciur.python_dateutil_aditional_languages import MONTHS
 
 
 def element2text(value):
-    if isinstance(value, _Element):
+    if isinstance(value, EtreeElement):
         return value.text
     elif isinstance(value, list) and len(value) > 0:
         return [element2text(i) for i in value]
@@ -44,8 +48,13 @@ def float_(value, *args):
     :rtype: int
     """
     text = element2text(value)
-
-    return float(text)
+    try:
+        return float(text)
+    except ValueError, e:
+        if "invalid literal for float()" in e.message:
+            return float(text.replace(",", "."))
+        else:
+            raise e
 
 
 def raw_(value, *args):
@@ -53,6 +62,9 @@ def raw_(value, *args):
     get raw representation of DOM
     :param value: etree dom
     """
+    if isinstance(value, basestring):
+        return value
+
     return HTML_PARSER.unescape(tostring(value))
 
 
@@ -97,43 +109,8 @@ def datetime_(value):
     if not text:
         return value
 
-    # workaround http://stackoverflow.com/questions/8896038/how-to-use-python-dateutil-1-5-parse-function-to-work-with-unicode
-    languages = {
-        "russian": {
-            u"Янв": "January",
-            u"Февр": "February",
-            u"Март": "March",
-            u"Апр": "April",
-            u"Май": "May",
-            u"Июнь": "June",
-            u"Июль": "July",
-            u"Авг": "August",
-            u"Сент": "September",
-            u"Окт": "October",
-            u"Нояб": "November",
-            u"Дек": "December"
-        },
-        "romanian": {
-            "ianuarie": "January",
-            "februarie": "February",
-            "martie": "March",
-            "aprilie": "April",
-            "mai": "May",
-            "iunie": "June",
-            "iulie": "July",
-            "august": "August",
-            "septembrie": "September",
-            "octombrie": "October",
-            "noiembrie": "November",
-            "decembrie": "December"
-        }
-    }
-
-    for lang_i in languages.values():
-        for k, v in lang_i.iteritems():
-            text = text.replace(k.lower(), v)
-            text = text.replace(k.upper(), v)
-            text = text.replace(k.capitalize(), v)
+    for foreign, english in MONTHS.iteritems():
+        text = text.replace(foreign, english)
 
     try:
         return parser.parse(text)

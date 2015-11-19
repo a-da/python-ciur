@@ -82,7 +82,11 @@ def _recursive_parse(context_, rule, namespace=None, url=None):
     if not rule.name.endswith("_list") and len(res) == 1:
         res = res[0]
 
-    return None if not res  else {
+    if rule.rule and isinstance(res, NOT_NULL_TYPES):
+        import sys
+        sys.stderr.write("[WARN] there are children that were ignored on rule.name=`%s`\n" % rule.name)
+
+    return None if not res else {
         rule.name: res
     }
 

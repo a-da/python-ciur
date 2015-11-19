@@ -1,6 +1,8 @@
 """
 ciur external dsl
 
+FIXME: using russian characters in pyparsing
+
 >>> import pprint
 >>> bnf = _get_bnf()
 
@@ -394,6 +396,4 @@ def to_dict(rules, namespace=None):
 # ------------
 
 # noinspection PyUnresolvedReferences
-import lxml_xpath2  # load etree
-
-#XPATH_EVALUATOR = etree.XPathEvaluator(etree.fromstring("<root></root>"))
+import lxml_xpath2

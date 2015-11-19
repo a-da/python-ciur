@@ -67,23 +67,19 @@ def fn_matches(context, value, regex):
     :param context: DOM context
     :param text: input as string
     :param regex:
-    :return:
+    :return: FIXME return matched node
     """
+    if isinstance(value, list):
+        res = [fn_matches(context, i_value, regex) for i_value in value]
+        return res
+
     text = element2text(value)
 
     if not text:
         return text
 
-    if not (isinstance(text, list) and len(text) == 1):
-        raise CiurException({
-            "type": type(text),
-            "len": len(text),
-            "text": text,
-            "context": raw_(context.context_node)
-        }, "type checking violation in function `matches`")
-
     try:
-        m = re.search(regex, text[0])
+        m = re.search(regex, text)
     except sre_constants.error, e:
         raise CiurException("wrong regexp-> %s `%s`" % (str(e), regex))
 
