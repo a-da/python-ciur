@@ -59,6 +59,7 @@ def fn_replace(context, value, pattern, replacement):
 
 def fn_matches(context, value, regex):
     """
+    TODO: add text for this function
     The function returns true if a matches the regular expression supplied as $pattern as influenced by the value
     of $flags, if present; otherwise, it returns false.
 
@@ -83,7 +84,7 @@ def fn_matches(context, value, regex):
     except sre_constants.error, e:
         raise CiurException("wrong regexp-> %s `%s`" % (str(e), regex))
 
-    return bool(m)
+    return value if m else ""
 
 
 def fn_string_join(context, text, separator=""):
