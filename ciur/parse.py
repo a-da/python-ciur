@@ -28,10 +28,8 @@ def _recursive_parse(context_, rule, namespace=None, url=None):
     if isinstance(res, NOT_NULL_TYPES):
         res = [res]
 
-    type_list_ = rule.type_list
-
     # ignore size match check to use it later
-    for fun, args in type_list_[:-1]:
+    for fun, args in rule.type_list[:-1]:
         tmp = []
         for res_i in res:
             if fun.__name__ == "url_":
@@ -64,8 +62,6 @@ def _recursive_parse(context_, rule, namespace=None, url=None):
                 data = _recursive_parse(res_i, rule_i, url=url, namespace=namespace)
                 if data:
                     tmp_ordered_dict.update(data)
-                    #tmp_ordered_dict[rule_i.name+"a"] = data
-                    #tmp_ordered_dict = data
 
             if tmp_ordered_dict:
                 tmp_list.append(tmp_ordered_dict)
@@ -73,7 +69,7 @@ def _recursive_parse(context_, rule, namespace=None, url=None):
         res = tmp_list
 
     # do size match check
-    size, args = type_list_[-1]
+    size, args = rule.type_list[-1]
     try:
         size(len(res), *args)
     except Exception, e:
@@ -86,9 +82,10 @@ def _recursive_parse(context_, rule, namespace=None, url=None):
         import sys
         sys.stderr.write("[WARN] there are children that were ignored on rule.name=`%s`\n" % rule.name)
 
-    return None if not res else {
-        rule.name: res
-    }
+    if not res and not isinstance(res, NOT_NULL_TYPES):
+        return res
+    else:
+        return OrderedDict((rule_name, res) for rule_name in rule.name.split(":"))
 
 
 def html(doc, rule, warn=None, treebuilder="lxml", namespace=None, url=None):

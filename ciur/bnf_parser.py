@@ -309,7 +309,8 @@ def _get_bnf(namespace=None):
     indent = lineEnd.suppress() + empty + empty.copy().setParseAction(_check_sub_indent)
     undent = FollowedBy(empty).setParseAction(_check_unindent).setParseAction(do_unindent)
 
-    identifier = Word(alphas, alphanums + "_")  # <url> ./url str +1 => label of rule
+    # TODO: describe ":" variable comprehention
+    identifier = Word(alphas, alphanums + "_:")  # <url> ./url str +1 => label of rule
 
     # url <./url> str +1 => xpath query
     xpath = grave + Word(printables + " ", excludeChars="`").addParseAction(validate_xpath) + grave
