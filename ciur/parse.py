@@ -85,7 +85,14 @@ def _recursive_parse(context_, rule, namespace=None, url=None):
     if not res and not isinstance(res, NOT_NULL_TYPES):
         return res
     else:
-        return OrderedDict((rule_name, res) for rule_name in rule.name.split(":"))
+        if ":" not in rule.name:
+            return {rule.name: res}
+
+        rule_name_list = rule.name.split(":")
+        if rule_name_list[-1].endswith("_list"):
+            rule_name_list = [i if i.endswith("_list") else i + "_list" for i in rule_name_list]
+
+        return OrderedDict((i, res) for i in rule_name_list)
 
 
 def html(doc, rule, warn=None, treebuilder="lxml", namespace=None, url=None):

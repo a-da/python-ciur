@@ -216,8 +216,7 @@ from pyparsing import (
     alphas,
     alphanums,
     printables,
-    pythonStyleComment,
-    ParseBaseException, ZeroOrMore
+    pythonStyleComment
 )
 
 from pyparsing import (
@@ -231,7 +230,9 @@ from pyparsing import (
     OneOrMore,
     Group,
     Literal,
-    Suppress
+    Suppress,
+    ParseBaseException,
+    ZeroOrMore
 )
 from lxml import etree
 
@@ -291,6 +292,31 @@ def do_unindent():
     _indent_stack.pop()
 
 
+def validate_identifier(s, loc, tock):
+    identifier = tock[0]
+    if identifier.endswith(":"):
+        raise ParseFatalException(
+            s,
+            loc + len(identifier),
+            "validate_identifier-> not allowed `:` delimiter symbol at the end"
+        )
+
+    if identifier.startswith(":"):
+        raise ParseFatalException(
+            s,
+            loc + 1,
+            "validate_identifier-> not allowed `:` delimiter symbol at the begin"
+        )
+
+    index = identifier.find("::")
+    if index >= 0:
+        raise ParseFatalException(
+            s,
+            loc + index + 1,
+            "validate_identifier-> duplicate `:` delimiter"
+        )
+
+
 def _get_bnf(namespace=None):
     def validate_xpath(s, loc, tock):
         """
@@ -310,7 +336,7 @@ def _get_bnf(namespace=None):
     undent = FollowedBy(empty).setParseAction(_check_unindent).setParseAction(do_unindent)
 
     # TODO: describe ":" variable comprehention
-    identifier = Word(alphas, alphanums + "_:")  # <url> ./url str +1 => label of rule
+    identifier = Word(alphas, alphanums + "_:").addParseAction(validate_identifier)  # <url> ./url str +1 => label of rule
 
     # url <./url> str +1 => xpath query
     xpath = grave + Word(printables + " ", excludeChars="`").addParseAction(validate_xpath) + grave
@@ -397,4 +423,4 @@ def to_dict(rules, namespace=None):
 # ------------
 
 # noinspection PyUnresolvedReferences
-import lxml_xpath2
+import lxml_xpath2  # load namespace function in lxml.etree

@@ -9,7 +9,7 @@ import ciur
 import ciur.cast
 from ciur import pretty_json
 
-JSON = basestring
+_JSON = basestring
 
 
 class Rule(ciur.CommonEqualityMixin):
@@ -157,9 +157,9 @@ class Rule(ciur.CommonEqualityMixin):
     def from_dict(dict_):
         # TODO: check load root list
 
-        assert isinstance(dict_, (dict, JSON))
+        assert isinstance(dict_, (dict, _JSON))
 
-        if isinstance(dict_, JSON):
+        if isinstance(dict_, _JSON):
             dict_ = json.loads(dict_)
 
         # check for children [] means no children
