@@ -9,6 +9,9 @@ subentry
 # test pages
 scrapy
 
-# lxml
+# words from libs
 lxml
 treebuilder
+pytest
+
+

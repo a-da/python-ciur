@@ -11,7 +11,7 @@ from ciur import CiurException
 from ciur.cast import element2text
 
 
-def fn_replace(context, value, pattern, replacement):
+def fn_replace(context, value, pattern, replacement=''):
     """
     http://www.w3.org/TR/xpath-functions/#func-replace
 
@@ -71,8 +71,9 @@ def fn_matches(context, value, regex):
     :return: FIXME return matched node
     """
     if isinstance(value, list):
-        res = [fn_matches(context, i_value, regex) for i_value in value]
-        return res
+        return [i for i in [
+            fn_matches(context, i_value, regex) for i_value in value
+            ] if i is not None]
 
     text = element2text(value)
 
@@ -84,7 +85,7 @@ def fn_matches(context, value, regex):
     except sre_constants.error, e:
         raise CiurException("wrong regexp-> %s `%s`" % (str(e), regex))
 
-    return value if m else ""
+    return value if m else None
 
 
 def fn_string_join(context, text, separator=""):

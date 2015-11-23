@@ -85,6 +85,9 @@ def _recursive_parse(context_, rule, namespace=None, url=None):
     if not res and not isinstance(res, NOT_NULL_TYPES):
         return res
     else:
+        if res == "":
+            return None
+
         if ":" not in rule.name:
             return {rule.name: res}
 

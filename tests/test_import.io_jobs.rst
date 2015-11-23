@@ -30,7 +30,8 @@ test internal dsl
                 "url": "http://importio.applytojob.com/apply/.../...",
                 "location": {
                     "country": "United Kingdom",
-                    "city": "London"
+                    "city": "London",
+                    "zip": "EC2M 4YD"
                 }
             },
             ...
@@ -39,8 +40,7 @@ test internal dsl
                 "url": "http://importio.applytojob.com/apply/.../...",
                 "location": {
                     "country": "United Kingdom",
-                    "city": "London",
-                    "zip": "EC2M 4YD"
+                    "city": "London"
                 }
             },
             ...
@@ -55,17 +55,8 @@ test external dsl
 >>> rule = Rule.from_dict(res[0])  # doctest: +NORMALIZE_WHITESPACE
 >>> data = parse.xml(response.content, rule)
 >>> print pretty_json(data) # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
-    {
+{
         "root": [
-            {
-                "title": "...",
-                "url": "http://importio.applytojob.com/apply/.../...",
-                "location": {
-                    "country": "United Kingdom",
-                    "city": "London"
-                }
-            },
-            ...
             {
                 "title": "...",
                 "url": "http://importio.applytojob.com/apply/.../...",
@@ -76,5 +67,17 @@ test external dsl
                 }
             },
             ...
+            {
+                "title": "...",
+                "url": "http://importio.applytojob.com/apply/.../...",
+                "location": {
+                    "country": "United Kingdom",
+                    "city": "London"
+                }
+            },
+            ...
         ]
     }
+
+
+
