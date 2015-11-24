@@ -208,7 +208,6 @@ from collections import OrderedDict
 import os
 import re
 
-import pyparsing
 from pyparsing import (
     col,
     lineEnd,
@@ -216,9 +215,9 @@ from pyparsing import (
     alphas,
     alphanums,
     printables,
-    pythonStyleComment
+    pythonStyleComment,
+    delimitedList
 )
-
 from pyparsing import (
     ParseFatalException,
     ParseException,
@@ -232,10 +231,10 @@ from pyparsing import (
     Literal,
     Suppress,
     ParseBaseException,
-    ZeroOrMore
+    ZeroOrMore,
+    Or
 )
 from lxml import etree
-
 from ciur import pretty_json, CiurException
 from ciur import cast
 
@@ -317,6 +316,13 @@ def validate_identifier(s, loc, tock):
         )
 
 
+def type_list_validation(s, loc, expr, err):
+    """
+    add more explicit error handling in case if bnf fail
+    """
+    raise ParseFatalException(s, loc, "type_list_validation->%s" % err)
+
+
 def _get_bnf(namespace=None):
     def validate_xpath(s, loc, tock):
         """
@@ -324,9 +330,16 @@ def _get_bnf(namespace=None):
         """
         xpath_ = tock[0]
         try:
+            if re.search("number\(.*\)", s):
+                import sys
+                sys.stderr.write(
+                    "[WARNING] use `float` from type_list instead of `number` from xpath, "
+                    "because number lies see "
+                    "http://stackoverflow.com/questions/33789196/is-xpath-number-function-lies\n")
+
             context = etree.fromstring("<root></root>")
             context.xpath(xpath_, namespaces=namespace)
-            #XPATH_EVALUATOR(xpath_, namespaces=namespace)
+            # XPATH_EVALUATOR(xpath_, namespaces=namespace)
         except etree.XPathEvalError, e:
             raise ParseFatalException(s, loc, "validate_xpath->%s" % e)
         pass
@@ -336,20 +349,23 @@ def _get_bnf(namespace=None):
     undent = FollowedBy(empty).setParseAction(_check_unindent).setParseAction(do_unindent)
 
     # TODO: describe ":" variable comprehention
-    identifier = Word(alphas, alphanums + "_:").addParseAction(validate_identifier)  # <url> ./url str +1 => label of rule
+    # <url> ./url str +1 => label of rule
+    identifier = Word(alphas, alphanums + "_:").addParseAction(validate_identifier)
 
     # url <./url> str +1 => xpath query
     xpath = grave + Word(printables + " ", excludeChars="`").addParseAction(validate_xpath) + grave
 
-    casting_functions = pyparsing.Or(
-        Literal(i[:-1]) for i in dir(cast) if i.endswith("_") and not i.startswith("__")
+    casting_functions_args = Optional(Suppress("(") + delimitedList(identifier) + Suppress(")"))
 
+    casting_functions = Or(
+        Group(Literal(i[:-1]) + casting_functions_args) for i in dir(cast)
+        if i.endswith("_") and not i.startswith("__")
     )
 
     type_list = Group(
         ZeroOrMore(casting_functions) +  # url ./url <str> +1 => functions chains for transformation
-        Regex("[\+*]\d*")   # url ./url str <+1>  => size match: + mandatory, * optional, \d+ exact len
-    )
+        Regex("[\+*]\d*")  # url ./url str <+1>  => size match: + mandatory, * optional, \d+ exact len
+    ).setFailAction(type_list_validation)
 
     rule = (identifier + xpath + type_list)  # <url ./url str +1> => rule line
 

@@ -16,7 +16,7 @@ test internal dsl
 ...              Rule("paragraph", ".//p/text()", ["+1"])
 ... )
 
->>> data = parse.html(response.content, rule)
+>>> data = parse.html_type(response.content, rule)
 >>> print pretty_json(data)  # doctest: +NORMALIZE_WHITESPACE
 {
     "root": {
@@ -34,7 +34,7 @@ test external dsl
 >>> res = bnf_parser.to_dict(open("ciur.d/example.com.ciur"))
 
 >>> rule = Rule.from_dict(res[0])  # doctest: +NORMALIZE_WHITESPACE
->>> data = parse.html(response.content, rule)
+>>> data = parse.html_type(response.content, rule)
 >>> print pretty_json(data)  # doctest: +NORMALIZE_WHITESPACE
 {
     "root": {

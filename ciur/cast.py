@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 """
 basic function for casting or type conversion/transformation
+
+NOTE:
+    local convention for all public cast function is `[a-z]+[a-z0-9_]+_` is should end with underscore
 """
 import HTMLParser
 import urlparse
@@ -34,6 +37,15 @@ def url_(url, base_url):
     return urlparse.urljoin(base_url, url)
 
 
+def url_param_(url, param, *args):
+    """
+    get param from url
+    """
+    import urlparse
+    parsed = urlparse.urlparse(url)
+    return urlparse.parse_qs(parsed.query)[param]
+
+
 def int_(value, *args):
     """
     convert data into integer
@@ -48,6 +60,9 @@ def float_(value, *args):
     :rtype: int
     """
     text = element2text(value)
+    if text == "":
+        return text
+
     try:
         return float(text)
     except ValueError, e:
@@ -116,6 +131,10 @@ def datetime_(value):
         return parser.parse(text)
     except ValueError, e:
         raise CiurException(e, {"text": text})
+
+
+def tail_(value):
+    return value.tail
 
 
 HTML_PARSER = HTMLParser.HTMLParser()

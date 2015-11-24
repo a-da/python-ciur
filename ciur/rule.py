@@ -8,6 +8,7 @@ import json
 import ciur
 import ciur.cast
 from ciur import pretty_json
+import re
 
 _JSON = basestring
 
@@ -98,19 +99,20 @@ class Rule(ciur.CommonEqualityMixin):
         tmp = []
 
         for type_i in self._2complex(type_list_):
-            assert isinstance(type_i, basestring)
-            import re
-            m = re.search("^([\*\+])(\d+)?$", type_i)
-            if m:
-                func_name = "size"
-                args = (
-                    "mandatory" if m.group(1) == "+" else "optional",
-                    int(m.group(2) or 0),
-                )
+            #  assert isinstance(type_i, basestring)
+
+            if isinstance(type_i, list):
+                func_name = type_i[0]
+                args = type_i[1:]
+
             else:
-                if isinstance(type_i, list):
-                    func_name = type_i[:1]
-                    args = type_i[1:]
+                m = re.search("^([\*\+])(\d+)?$", type_i)
+                if m:
+                    func_name = "size"
+                    args = (
+                        "mandatory" if m.group(1) == "+" else "optional",
+                        int(m.group(2) or 0),
+                    )
                 else:
                     func_name = type_i
                     args = tuple()
@@ -118,8 +120,6 @@ class Rule(ciur.CommonEqualityMixin):
             tmp.append([getattr(ciur.cast, func_name + "_"), args])
 
         self.type_list = tmp
-
-        i = 100
 
     @classmethod
     def _2complex(cls, value):

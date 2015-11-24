@@ -8,3 +8,4 @@ pyparsing
 rfc3987
 python-dateutil
 sh # for test only
+pdfminer # convert pdf to tag (“Tagged PDF” xml like format)

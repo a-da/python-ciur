@@ -33,12 +33,12 @@ def pretty_parse(ciur_file_path, url, doctype=None, namespace=None):
     response = requests.get(url)
 
     if not doctype:
-        if "xml" in response.headers["content-type"]:
-            doctype = "xml"
-        elif "html" in response.headers["content-type"]:
-            doctype = "html"
+        for i_doc_type in dir(parse):
+            if i_doc_type.endswith("_type") and i_doc_type.replace("_type", "") in response.headers["content-type"]:
+                doctype = i_doc_type
+                break
         else:
-            raise CiurException("can not autodetect doctype `%s`" % response.headers["content-type"])
+            raise CiurException("can not autodetect doc_type `%s`" % response.headers["content-type"])
 
     parse_fun = getattr(parse, doctype)
 

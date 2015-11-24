@@ -1,5 +1,12 @@
 """
 xpath function from xpath2 specification that are not supported native yet in lxml
+
+NOTE:
+    local convention for all public xpath2 function is `fn_[a-z]+[a-z0-9_]+` is should begin with "fn_" and
+    underscores `_` are converted to dash
+    f.e.
+        fn_string_join -> string-join(//p)
+
 """
 import re
 import sre_constants
@@ -101,9 +108,3 @@ ns = FunctionNamespace(None)
 
 
 ns.update({k[3:].replace("_", "-"): v for (k, v) in locals().iteritems() if k.startswith("fn_")})
-
-
-
-
-
-

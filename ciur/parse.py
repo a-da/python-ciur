@@ -1,7 +1,10 @@
 """
 parse page based on ciur rules and page type (xml, html ...)
-"""
 
+NOTE:
+    local convention for all public paring function is `[a-z]+[a-z0-9_]+_type` is should end with "_type"
+"""
+import StringIO
 from collections import OrderedDict
 import warnings
 
@@ -10,6 +13,9 @@ from lxml.etree import _Element
 
 from lxml import etree
 import html5lib
+from pdfminer.pdfdevice import TagExtractor
+from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
+from pdfminer.pdfpage import PDFPage
 
 from ciur import CiurException
 
@@ -40,6 +46,7 @@ def _recursive_parse(context_, rule, namespace=None, url=None):
             # filter null results
             if res_i not in [None, ""]:
                 tmp.append(res_i)
+
         res = tmp
 
     if isinstance(res, _Element):
@@ -68,6 +75,11 @@ def _recursive_parse(context_, rule, namespace=None, url=None):
 
         res = tmp_list
 
+    # filter empty items
+    res = [i for i in res if i != ""]
+    if isinstance(res, NOT_NULL_TYPES):
+        res = [res]
+
     # do size match check
     size, args = rule.type_list[-1]
     try:
@@ -75,10 +87,15 @@ def _recursive_parse(context_, rule, namespace=None, url=None):
     except Exception, e:
         raise Exception("[ERROR] %s, on rule `%s` %s but got %s element" % (e.message, rule.name, args, len(res)))
 
-    if not rule.name.endswith("_list") and len(res) == 1:
+    if not rule.name.endswith("_list") and isinstance(res, list) and len(res) == 1:
         res = res[0]
+        if isinstance(res, list) and len(res) == 1:  # list in list use case
+            res = res[0]
 
-    if rule.rule and isinstance(res, NOT_NULL_TYPES):
+    if rule.rule and (
+                isinstance(res, NOT_NULL_TYPES) or
+                res and isinstance(res, list) and isinstance(res[0], NOT_NULL_TYPES)
+    ):
         import sys
         sys.stderr.write("[WARN] there are children that were ignored on rule.name=`%s`\n" % rule.name)
 
@@ -98,7 +115,7 @@ def _recursive_parse(context_, rule, namespace=None, url=None):
         return OrderedDict((i, res) for i in rule_name_list)
 
 
-def html(doc, rule, warn=None, treebuilder="lxml", namespace=None, url=None):
+def html_type(doc, rule, warn=None, treebuilder="lxml", namespace=None, url=None):
     """
     use this function if page is html
     """
@@ -112,7 +129,7 @@ def html(doc, rule, warn=None, treebuilder="lxml", namespace=None, url=None):
     return ret
 
 
-def xml(doc, rule, namespace=None, url=None):
+def xml_type(doc, rule, namespace=None, url=None):
     """
     use this function if page is xml
     """
@@ -120,3 +137,26 @@ def xml(doc, rule, namespace=None, url=None):
 
     ret = _recursive_parse(context, rule, url=url, namespace=namespace)
     return ret
+
+
+def pdf_type(doc, rule, namespace=None, url=None):
+    """
+    use this function if page is pdf
+    TODO: do not forget to document this
+    """
+
+    resource_manager = PDFResourceManager(caching=True)
+
+    out_fp = StringIO.StringIO()  # TODO: check if is close correctly
+    in_fp = StringIO.StringIO(doc)
+
+    device = TagExtractor(resource_manager, out_fp, codec='utf-8')
+
+    interpreter = PDFPageInterpreter(resource_manager, device)
+    for page in PDFPage.get_pages(in_fp):
+        page.rotate %= 360
+        interpreter.process_page(page)
+
+    out_fp.seek(0)  # reset the buffer position to the beginning
+
+    return xml_type(out_fp.read(), rule, namespace=namespace, url=url)

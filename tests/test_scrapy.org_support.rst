@@ -18,7 +18,7 @@ test internal dsl
 ...             Rule("logo", "./a/img/@src", ["+"])
 ...            )
 
->>> data = parse.html(response.content, rule)
+>>> data = parse.html_type(response.content, rule)
 >>> print pretty_json(data)  # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
     {
             "company_list": [
@@ -49,7 +49,7 @@ test external dsl
 >>> from ciur import bnf_parser
 >>> res = bnf_parser.to_dict(open("ciur.d/scrapy.org_support.ciur"))
 >>> rule = Rule.from_dict(res[0])  # doctest: +NORMALIZE_WHITESPACE
->>> data = parse.html(response.content, rule)
+>>> data = parse.html_type(response.content, rule)
 >>> print pretty_json(data)  # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
     {
         "company_list": [
