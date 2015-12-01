@@ -12,6 +12,8 @@ import re
 
 _JSON = basestring
 
+_SELECTOR_TYPE_SET = {"xpath", "css"}
+
 
 class Rule(ciur.CommonEqualityMixin):
     """
@@ -30,17 +32,20 @@ class Rule(ciur.CommonEqualityMixin):
     >>> print res1  # doctest: +NORMALIZE_WHITESPACE
     {
         "name": "root",
-        "xpath": "/h3",
+        "selector": "/h3",
+        "selector_type": "xpath",
         "type_list": "+",
         "rule": [
             {
                 "name": "name",
-                "xpath": ".//h1[contains(., 'Justin')]/text()",
+                "selector": ".//h1[contains(., 'Justin')]/text()",
+                "selector_type": "xpath",
                 "type_list": "+1"
             },
             {
                 "name": "count_list",
-                "xpath": ".//h2[contains(., 'Andrei')]/p",
+                "selector": ".//h2[contains(., 'Andrei')]/p",
+                "selector_type": "xpath",
                 "type_list": [
                     "int",
                     "+"
@@ -48,32 +53,38 @@ class Rule(ciur.CommonEqualityMixin):
             },
             {
                 "name": "user",
-                "xpath": ".//h5[contains(., 'Andrei')]/p",
+                "selector": ".//h5[contains(., 'Andrei')]/p",
+                "selector_type": "xpath",
                 "type_list": "+",
                 "rule": [
                     {
                         "name": "name",
-                        "xpath": "./spam/text()",
+                        "selector": "./spam/text()",
+                        "selector_type": "xpath",
                         "type_list": "+1"
                     },
                     {
                         "name": "sure_name",
-                        "xpath": "./bold/text()",
+                        "selector": "./bold/text()",
+                        "selector_type": "xpath",
                         "type_list": "+1"
                     },
                     {
                         "name": "age",
-                        "xpath": "./it",
+                        "selector": "./it",
+                        "selector_type": "xpath",
                         "type_list": "int"
                     },
                     {
                         "name": "hobby",
-                        "xpath": "./li/text()",
+                        "selector": "./li/text()",
+                        "selector_type": "xpath",
                         "type_list": "+"
                     },
                     {
                         "name": "indexes",
-                        "xpath": "./li/bold",
+                        "selector": "./li/bold",
+                        "selector_type": "xpath",
                         "type_list": [
                             "int",
                             "+"
@@ -91,10 +102,24 @@ class Rule(ciur.CommonEqualityMixin):
     True
     """
 
-    def __init__(self, name, xpath, type_list_, *rule):
+    def __init__(self, name, selector, type_list_, *selector_type_and_or_rule):
         self.name = name
-        self.xpath = xpath
-        self.rule = rule
+        self.selector = selector
+
+        if not selector_type_and_or_rule:
+            self.selector_type = "xpath"
+            self.rule = ()
+        else:
+            if selector_type_and_or_rule[0] in _SELECTOR_TYPE_SET:
+                self.selector_type = selector_type_and_or_rule[0]
+                self.rule = selector_type_and_or_rule[1]
+            else:
+                self.selector_type = "xpath"
+                self.rule = selector_type_and_or_rule
+
+        # mutable object is eval !
+        if isinstance(self.rule, list):
+            self.rule = tuple(self.rule)
 
         tmp = []
 
@@ -165,7 +190,10 @@ class Rule(ciur.CommonEqualityMixin):
         # check for children [] means no children
         rule = [Rule.from_dict(rule) for rule in dict_.get("rule", [])]
 
-        return Rule(dict_["name"], dict_["xpath"], dict_["type_list"], *rule)
+        return Rule(
+            dict_["name"], dict_["selector"], dict_["type_list"],
+            *(dict_.get("selector_type", "xpath"), rule)
+        )
 
     @staticmethod
     def from_list(list_):
@@ -175,7 +203,8 @@ class Rule(ciur.CommonEqualityMixin):
 
         ret = OrderedDict()
         ret["name"] = self.name
-        ret["xpath"] = self.xpath
+        ret["selector"] = self.selector
+        ret["selector_type"] = self.selector_type
         ret["type_list"] = self._2simple(self.type_list)
 
         rule = [i.to_dict() for i in self.rule]

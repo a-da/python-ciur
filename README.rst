@@ -42,7 +42,7 @@ Command Line Interface
     }
 
 Python ciur API
-----------------------
+---------------
 
    >>> import ciur
    >>> ciur.parse(url="http://example.org", rules="example.org.ciur")
@@ -61,3 +61,9 @@ Install
 =======
 
 >>> pip install git+https://bitbucket.org/ada/ciur.git#egg=ciur
+
+
+TODO
+====
+3. type.method evaluation
+3. method evaluation

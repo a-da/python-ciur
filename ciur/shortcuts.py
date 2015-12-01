@@ -3,14 +3,26 @@ This module collects helper functions and classes.
 """
 
 import requests
+import os
+import inspect
 
 from ciur import bnf_parser, parse, pretty_json, CiurException
 from ciur.rule import Rule
+import ciur
 
-requests = requests.Session()
+req_session = requests.Session()
+
+_HTTP_HEADERS = {
+    "User-Agent": "%s/%s %s/%s %s" % (
+        ciur.__title__, ciur.__version__,
+        requests.__title__, requests.__version__,
+
+        ciur.__git__
+    )
+}
 
 
-def pretty_parse(ciur_file_path, url, doctype=None, namespace=None):
+def pretty_parse(ciur_file_path, url, doctype=None, namespace=None, headers=_HTTP_HEADERS, encoding=None):
     """
     WARN:
         do not use this helper in production,
@@ -23,14 +35,16 @@ def pretty_parse(ciur_file_path, url, doctype=None, namespace=None):
     """
 
     # workaround for get relative files
-    import os
-    import inspect
     called_by_script = inspect.stack()[1][1]
     ciur_file_path = os.path.join(os.path.dirname(called_by_script), ciur_file_path)
 
     res = bnf_parser.to_dict(open(ciur_file_path), namespace=namespace)
     rule = Rule.from_list(res)
-    response = requests.get(url)
+    response = req_session.get(url, headers=headers)
+
+    if response.headers.get("Etag"):
+        import sys
+        sys.stderr.write("[WARN] request.response has Etag")
 
     if not doctype:
         for i_doc_type in dir(parse):
@@ -42,6 +56,8 @@ def pretty_parse(ciur_file_path, url, doctype=None, namespace=None):
 
     parse_fun = getattr(parse, doctype)
 
-    data = parse_fun(response.content, rule[0], url=response.url, namespace=namespace)
+    if not encoding:
+        encoding = response.apparent_encoding
+    data = parse_fun(response.content, rule[0], url=response.url, namespace=namespace, encoding=encoding)
 
     return pretty_json(data)

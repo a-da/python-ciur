@@ -3,6 +3,12 @@
 """
 import json
 
+__title__ = "ciur"
+__version__ = "1.0.0"
+__author__ = "Andrei Danciuc"
+__license__ = "MIT"
+__git__ = "https://bitbucket.org/ada/ciur"
+
 
 def pretty_json(dict_):
     """

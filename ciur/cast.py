@@ -88,7 +88,10 @@ def iraw_(value, *args):
     get raw representation of children DOM aka innerHTML
     :param value: etree dom
     """
-    return value.text + "".join(raw_(child) for child in value) + value.tail
+    text = value.text.strip() if value.text else ""
+    tail = value.tail.strip() if value.tail else ""
+
+    return text + "".join(raw_(child) for child in value) + tail
 
 
 def size_(got, mandatory_or_optional, expect):

@@ -16,9 +16,11 @@ example.com.doctest
 
 >>> pprint.pprint(get_list(rules))
 [['root',
+  'xpath',
   '/html/body',
   ['+1'],
-  [['name', './/h1/text()', ['+1']], ['paragrapth', './/p/text()', ['+1']]]]]
+  [['name', 'xpath', './/h1/text()', ['+1']],
+   ['paragrapth', 'xpath', './/p/text()', ['+1']]]]]
 
 import.io_jobs.doctest
 ======================
@@ -34,64 +36,73 @@ import.io_jobs.doctest
 ... '''
 >>> pprint.pprint(get_list(rules))
 [['root',
+  'xpath',
   '/jobs/job',
   ['+'],
-  [['title', './title/text()', ['+']],
-   ['url', './url/text()', ['+1']],
+  [['title', 'xpath', './title/text()', ['+']],
+   ['url', 'xpath', './url/text()', ['+1']],
    ['location',
+    'xpath',
     '.',
     ['*'],
-    [['country', './country/text()', ['+1']],
-     ['city', './city/text()', ['+1']],
-     ['zip', './postalcode/text()', ['*1']]]]]]]
+    [['country', 'xpath', './country/text()', ['+1']],
+     ['city', 'xpath', './city/text()', ['+1']],
+     ['zip', 'xpath', './postalcode/text()', ['*1']]]]]]]
 
 >>> print to_json(rules)  # doctest: +NORMALIZE_WHITESPACE
 [
     {
         "name": "root",
-        "xpath": "/jobs/job",
+        "selector_type": "xpath",
+        "selector": "/jobs/job",
         "type_list": [
             "+"
         ],
         "rule": [
             {
                 "name": "title",
-                "xpath": "./title/text()",
+                "selector_type": "xpath",
+                "selector": "./title/text()",
                 "type_list": [
                     "+"
                 ]
             },
             {
                 "name": "url",
-                "xpath": "./url/text()",
+                "selector_type": "xpath",
+                "selector": "./url/text()",
                 "type_list": [
                     "+1"
                 ]
             },
             {
                 "name": "location",
-                "xpath": ".",
+                "selector_type": "xpath",
+                "selector": ".",
                 "type_list": [
                     "*"
                 ],
                 "rule": [
                     {
                         "name": "country",
-                        "xpath": "./country/text()",
+                        "selector_type": "xpath",
+                        "selector": "./country/text()",
                         "type_list": [
                             "+1"
                         ]
                     },
                     {
                         "name": "city",
-                        "xpath": "./city/text()",
+                        "selector_type": "xpath",
+                        "selector": "./city/text()",
                         "type_list": [
                             "+1"
                         ]
                     },
                     {
                         "name": "zip",
-                        "xpath": "./postalcode/text()",
+                        "selector_type": "xpath",
+                        "selector": "./postalcode/text()",
                         "type_list": [
                             "*1"
                         ]
@@ -114,87 +125,52 @@ scrapy.org_support.doctest
 
 >>> pprint.pprint(get_list(rules))
 [['company_list',
+  'xpath',
   ".//div[@class='company-box']",
   ['+'],
-  [['name', ".//span[@class='highlight']/text()", ['+']],
-   ['company_url', './a/@href', ['+1']],
-   ['blog_url', './p/a/@href', ['*']],
-   ['logo', './a/img/@src', ['+']]]]]
+  [['name', 'xpath', ".//span[@class='highlight']/text()", ['+']],
+   ['company_url', 'xpath', './a/@href', ['+1']],
+   ['blog_url', 'xpath', './p/a/@href', ['*']],
+   ['logo', 'xpath', './a/img/@src', ['+']]]]]
 
 >>> print to_json(rules)  # doctest: +NORMALIZE_WHITESPACE
 [
     {
         "name": "company_list",
-        "xpath": ".//div[@class='company-box']",
+        "selector_type": "xpath",
+        "selector": ".//div[@class='company-box']",
         "type_list": [
             "+"
         ],
         "rule": [
             {
                 "name": "name",
-                "xpath": ".//span[@class='highlight']/text()",
+                "selector_type": "xpath",
+                "selector": ".//span[@class='highlight']/text()",
                 "type_list": [
                     "+"
                 ]
             },
             {
                 "name": "company_url",
-                "xpath": "./a/@href",
+                "selector_type": "xpath",
+                "selector": "./a/@href",
                 "type_list": [
                     "+1"
                 ]
             },
             {
                 "name": "blog_url",
-                "xpath": "./p/a/@href",
+                "selector_type": "xpath",
+                "selector": "./p/a/@href",
                 "type_list": [
                     "*"
                 ]
             },
             {
                 "name": "logo",
-                "xpath": "./a/img/@src",
-                "type_list": [
-                    "+"
-                ]
-            }
-        ]
-    }
-]
-
->>> print to_json(rules)  # doctest: +NORMALIZE_WHITESPACE
-[
-    {
-        "name": "company_list",
-        "xpath": ".//div[@class='company-box']",
-        "type_list": [
-            "+"
-        ],
-        "rule": [
-            {
-                "name": "name",
-                "xpath": ".//span[@class='highlight']/text()",
-                "type_list": [
-                    "+"
-                ]
-            },
-            {
-                "name": "company_url",
-                "xpath": "./a/@href",
-                "type_list": [
-                    "+1"
-                ]
-            },
-            {
-                "name": "blog_url",
-                "xpath": "./p/a/@href",
-                "type_list": [
-                    "*"
-                ]
-            },
-            {
-                "name": "logo",
-                "xpath": "./a/img/@src",
+                "selector_type": "xpath",
+                "selector": "./a/img/@src",
                 "type_list": [
                     "+"
                 ]
@@ -216,8 +192,8 @@ from pyparsing import (
     alphanums,
     printables,
     pythonStyleComment,
-    delimitedList
-)
+    delimitedList,
+    QuotedString, oneOf)
 from pyparsing import (
     ParseFatalException,
     ParseException,
@@ -353,7 +329,8 @@ def _get_bnf(namespace=None):
     identifier = Word(alphas, alphanums + "_:").addParseAction(validate_identifier)
 
     # url <./url> str +1 => xpath query
-    xpath = grave + Word(printables + " ", excludeChars="`").addParseAction(validate_xpath) + grave
+    #xpath = grave + Word(printables + " ", excludeChars="`").addParseAction(validate_xpath) + grave
+    xpath = Optional(oneOf("xpath css css/"), default="xpath") + QuotedString(quoteChar="`")
 
     casting_functions_args = Optional(Suppress("(") + delimitedList(identifier) + Suppress(")"))
 
@@ -408,10 +385,11 @@ def _to_dict(rule_list):
     for rule_i in rule_list:
         d = OrderedDict()
         d["name"] = rule_i[0]
-        d["xpath"] = rule_i[1]
-        d["type_list"] = rule_i[2]
-        if len(rule_i) == 4:
-            d["rule"] = _to_dict(rule_i[3])
+        d["selector_type"] = rule_i[1]
+        d["selector"] = rule_i[2]
+        d["type_list"] = rule_i[3]
+        if len(rule_i) == 5:
+            d["rule"] = _to_dict(rule_i[4])
 
         rule_list_out.append(d)
 
