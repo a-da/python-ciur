@@ -1,11 +1,6 @@
-pytimeparse
-pip
-pymongo
 html5lib
 lxml
-git+https://bitbucket.org/ada/advanced_types.git#egg=advanced-types
 pyparsing
-rfc3987
 python-dateutil
-sh # for test only
 pdfminer # convert pdf to tag (“Tagged PDF” xml like format)
+requests[security] # http://stackoverflow.com/questions/29099404/ssl-insecureplatform-error-when-using-requests-package

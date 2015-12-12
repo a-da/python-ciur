@@ -2,7 +2,6 @@
 -r requirements-pip.txt
 
 # test
-requests[security] # http://stackoverflow.com/questions/29099404/ssl-insecureplatform-error-when-using-requests-package
 pytest
 
 # interactive command line fro debugging

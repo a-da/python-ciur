@@ -40,14 +40,8 @@ setup(
     license="MIT",
     long_description=open("README.rst").read(),
     packages=[
-        "ciur",
-        "ciur.common",
-        "ciur.util"
+        "ciur"
     ],
-    package_data={
-        "": ["*.py", "requirements-pip.txt"]
-    },
-    include_package_data=True,
     install_requires=parse_requirements("requirements-pip.txt"),
     classifiers=[
         "Intended Audience :: Developers",
@@ -56,4 +50,9 @@ setup(
         "Programming Language :: Python :: 2.7",
         # "Programming Language :: Python :: 3",
     ],
+    entry_points={
+        "console_scripts": [
+            "ciur = ciur.cli:main",            
+        ]
+    }
 )
