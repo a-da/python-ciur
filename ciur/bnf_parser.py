@@ -11,7 +11,7 @@ example.com.doctest
 >>> rules = '''
 ... root `/html/body` +1
 ...    name `.//h1/text()` +1
-...    paragrapth `.//p/text()` +1
+...    paragraph `.//p/text()` +1
 ... '''
 
 >>> pprint.pprint(get_list(rules))
@@ -20,7 +20,7 @@ example.com.doctest
   '/html/body',
   ['+1'],
   [['name', 'xpath', './/h1/text()', ['+1']],
-   ['paragrapth', 'xpath', './/p/text()', ['+1']]]]]
+   ['paragraph', 'xpath', './/p/text()', ['+1']]]]]
 
 import.io_jobs.doctest
 ======================
@@ -180,20 +180,11 @@ scrapy.org_support.doctest
 ]
 """
 
-from collections import OrderedDict
 import os
 import re
+from collections import OrderedDict
 
-from pyparsing import (
-    col,
-    lineEnd,
-    empty,
-    alphas,
-    alphanums,
-    printables,
-    pythonStyleComment,
-    delimitedList,
-    QuotedString, oneOf)
+from lxml import etree
 from pyparsing import (
     ParseFatalException,
     ParseException,
@@ -208,105 +199,136 @@ from pyparsing import (
     Suppress,
     ParseBaseException,
     ZeroOrMore,
-    Or
+    Or,
+    QuotedString
 )
-from lxml import etree
-from ciur import pretty_json, CiurException
+from pyparsing import (
+    col,
+    lineEnd,
+    empty,
+    alphas,
+    alphanums,
+    pythonStyleComment,
+    delimitedList,
+    oneOf)
+
 from ciur import cast
+from ciur import pretty_json
+from ciur.exceptions import CiurBaseException, ParseExceptionInCiurFile
+
+# noinspection PyUnresolvedReferences
+# load namespace function in lxml.etree
+import ciur.lxml_xpath2  # pylint: disable=unused-import
+
+_INDENT_STACK = [1]
 
 
-class ParseExceptionInCiurFile(ParseBaseException):
-    def __init__(self, file_string, file_name, p):
-        ParseBaseException.__init__(self, p.pstr, p.loc, p.msg, p.parserElement)
-        self._file_string = file_string.splitlines()
-        self._file_name = None if not file_name else os.path.abspath(file_name)
+def _check_peer_indent(string, location, token):
+    """
+    :param string: the original string being parsed
+    :param location: the location of the matching substring
+    :param token: matched token, packaged as a C{L{ParseResults}} object
+    """
+    del token
 
-    def __str__(self):
-        s = "|from file `%s`" % self._file_name if self._file_name else "from string"
-
-        line = "%s" % self.lineno
-
-        return "%s,\n    %s \n    |%s: %s\n    %s^" % (
-            ParseBaseException.__str__(self),
-            s,
-            line,
-            self._file_string[self.lineno - 1],
-            " " * (self.col + 1 + len(line))
-        )
+    cur_col = col(location, string)
+    if cur_col != _INDENT_STACK[-1]:
+        if (not _INDENT_STACK) or cur_col > _INDENT_STACK[-1]:
+            raise ParseFatalException(string, location, "illegal nesting")
+        raise ParseException(string, location, "not a peer entry ????")
 
 
-_indent_stack = [1]
-
-
-def _check_peer_indent(s, l, tock):
-    cur_col = col(l, s)
-    if cur_col != _indent_stack[-1]:
-        if (not _indent_stack) or cur_col > _indent_stack[-1]:
-            raise ParseFatalException(s, l, "illegal nesting")
-        raise ParseException(s, l, "not a peer entry ????")
-
-
-def _check_sub_indent(s, loc, tock):
-    cur_col = col(loc, s)
-    if cur_col > _indent_stack[-1]:
-        _indent_stack.append(cur_col)
+def _check_sub_indent(string, location, token):
+    """
+    :param string: the original string being parsed
+    :param location: the location of the matching substring
+    :param token: matched token, packaged as a C{L{ParseResults}} object
+    """
+    del token
+    cur_col = col(location, string)
+    if cur_col > _INDENT_STACK[-1]:
+        _INDENT_STACK.append(cur_col)
     else:
-        raise ParseException(s, loc, "not a subentry")
+        raise ParseException(string, location, "not a subentry")
 
 
-def _check_unindent(s, loc):
-    if loc >= len(s):
+def _check_unindent(string, location):
+    """
+    :param string: the original string being parsed
+    :param location: the location of the matching substring
+    """
+    if location >= len(string):
         return
 
-    cur_col = col(loc, s)
-    if not(cur_col < _indent_stack[-1] and cur_col <= _indent_stack[-2]):
-        raise ParseException(s, loc, "not an unindent")
+    cur_col = col(location, string)
+    if not(cur_col < _INDENT_STACK[-1] and cur_col <= _INDENT_STACK[-2]):
+        raise ParseException(string, location, "not an unindent")
 
 
 def do_unindent():
-    _indent_stack.pop()
+    """detect end of indent and unindent stack back"""
+    _INDENT_STACK.pop()
 
 
-def validate_identifier(s, loc, tock):
-    identifier = tock[0]
+def validate_identifier(string, location, tokens):
+    """
+    :param string: the original string being parsed
+    :param location: the location of the matching substring
+    :param tokens: list of matched tokens, packaged as a C{L{ParseResults}} object
+    """
+
+    identifier = tokens[0]
     if identifier.endswith(":"):
         raise ParseFatalException(
-            s,
-            loc + len(identifier),
+            string,
+            location + len(identifier),
             "validate_identifier-> not allowed `:` delimiter symbol at the end"
         )
 
     if identifier.startswith(":"):
         raise ParseFatalException(
-            s,
-            loc + 1,
+            string,
+            location + 1,
             "validate_identifier-> not allowed `:` delimiter symbol at the begin"
         )
 
     index = identifier.find("::")
     if index >= 0:
         raise ParseFatalException(
-            s,
-            loc + index + 1,
+            string,
+            location + index + 1,
             "validate_identifier-> duplicate `:` delimiter"
         )
 
 
-def type_list_validation(s, loc, expr, err):
+def type_list_validation(string, location, expr, error):
     """
-    add more explicit error handling in case if bnf fail
+    add more explicit error handling in case if bnf fail caused by invalid type_list
+    :param error:
+    :param expr: the parse expression that failed
+    :param location: location where expression match was attempted and failed
+    :param string: string being parsed
     """
-    raise ParseFatalException(s, loc, "type_list_validation->%s" % err)
+    del expr
+
+    raise ParseFatalException(string, location + 1, "type_list_validation->%s" % error)
 
 
 def _get_bnf(namespace=None):
-    def validate_xpath(s, loc, tock):
+    """
+    :param namespace:
+    :rtype pyparsing.ParserElement
+    """
+
+    def validate_xpath(string, location, tokens):
         """
-        :type tock: list of str
+        :param string: the original string being parsed
+        :param location: the location of the matching substring
+        :param tokens: list of matched tokens, packaged as a C{L{ParseResults}} object
         """
-        xpath_ = tock[0]
+        xpath_ = tokens[0]
         try:
-            if re.search("number\(.*\)", s):
+            if re.search(r"number\(.*?\)", string):
                 import sys
                 sys.stderr.write(
                     "[WARNING] use `float` from type_list instead of `number` from xpath, "
@@ -316,32 +338,39 @@ def _get_bnf(namespace=None):
             context = etree.fromstring("<root></root>")
             context.xpath(xpath_, namespaces=namespace)
             # XPATH_EVALUATOR(xpath_, namespaces=namespace)
-        except etree.XPathEvalError, e:
-            raise ParseFatalException(s, loc, "validate_xpath->%s" % e)
-        pass
+        except (etree.XPathEvalError, ) as xpath_eval_error:
+            raise ParseFatalException(string, location, "validate_xpath->%s" % xpath_eval_error)
 
-    grave = Suppress("`")
     indent = lineEnd.suppress() + empty + empty.copy().setParseAction(_check_sub_indent)
     undent = FollowedBy(empty).setParseAction(_check_unindent).setParseAction(do_unindent)
 
-    # TODO: describe ":" variable comprehention
+    # TODO: describe ":" variable comprehension
     # <url> ./url str +1 => label of rule
     identifier = Word(alphas, alphanums + "_:").addParseAction(validate_identifier)
 
     # url <./url> str +1 => xpath query
-    #xpath = grave + Word(printables + " ", excludeChars="`").addParseAction(validate_xpath) + grave
-    xpath = Optional(oneOf("xpath css css/"), default="xpath") + QuotedString(quoteChar="`")
+    xpath = Optional(oneOf("xpath css"), default="xpath") + QuotedString(quoteChar="`")
 
-    casting_functions_args = Optional(Suppress("(") + delimitedList(identifier) + Suppress(")"))
+    casting_functions_args = Optional(
+        Suppress("(") +
+        delimitedList(identifier | QuotedString(quoteChar="\'", )) +
+        Suppress(")")
+    )
+
+    casting_functions_list = [
+        Group(Literal(i[:-1]) + casting_functions_args) for i in dir(cast) if i.endswith("_") and not i.startswith("__")
+    ]
+
+    casting_functions_list.append(Group(Group("str" + Suppress(".") + identifier) + casting_functions_args))
+    casting_functions_list.append(Group(Group("unicode" + Suppress(".") + identifier) + casting_functions_args))
 
     casting_functions = Or(
-        Group(Literal(i[:-1]) + casting_functions_args) for i in dir(cast)
-        if i.endswith("_") and not i.startswith("__")
+        casting_functions_list
     )
 
     type_list = Group(
         ZeroOrMore(casting_functions) +  # url ./url <str> +1 => functions chains for transformation
-        Regex("[\+*]\d*")  # url ./url str <+1>  => size match: + mandatory, * optional, \d+ exact len
+        Regex(r"[+*]\d*")  # url ./url str <+1>  => size match: + mandatory, * optional, \d+ exact len
     ).setFailAction(type_list_validation)
 
     rule = (identifier + xpath + type_list)  # <url ./url str +1> => rule line
@@ -350,7 +379,9 @@ def _get_bnf(namespace=None):
     bnf = OneOrMore(stmt)
 
     children = Group(indent + bnf + undent).ignore(pythonStyleComment)
-    stmt << Group(rule + Optional(children))  # check for children
+
+    # check for children
+    stmt << Group(rule + Optional(children))  # pylint: disable=expression-not-assigned
 
     return bnf
 
@@ -358,7 +389,7 @@ def _get_bnf(namespace=None):
 def get_list(rules, namespace=None):
     """
     :param rules: file or basestring
-    :return:
+    :rtype pyparsing.ParserElement
     """
     assert isinstance(rules, (file, basestring))
 
@@ -367,54 +398,75 @@ def get_list(rules, namespace=None):
         file_name = rules.name
         rules = rules.read()
 
-    if not re.search("\n\s*$", rules):
-        raise CiurException("no new line at the end of file", {"file_name": os.path.abspath(file_name)})
+    if not re.search(r"\n\s*$", rules):
+        raise CiurBaseException("no new line at the end of file", {"file_name": os.path.abspath(file_name)})
 
+    bnf = _get_bnf(namespace=namespace)
     try:
-        bnf = _get_bnf(namespace=namespace)
         parse_tree = bnf.parseString(rules, parseAll=True)
-    except ParseBaseException, e:
-        raise ParseExceptionInCiurFile(rules, file_name, e)
+    except (ParseBaseException,) as parse_error:
+        raise ParseExceptionInCiurFile(rules, file_name, parse_error)
 
     return parse_tree.asList()
 
 
 def _to_dict(rule_list):
+    """
+    convert list of grammar into `dict`
+    :param rule_list:
+    :rtype: list of OrderedDict
+    """
     rule_list_out = []
 
     for rule_i in rule_list:
-        d = OrderedDict()
-        d["name"] = rule_i[0]
-        d["selector_type"] = rule_i[1]
-        d["selector"] = rule_i[2]
-        d["type_list"] = rule_i[3]
+        dict_ = OrderedDict()
+        dict_["name"] = rule_i[0]
+        dict_["selector_type"] = rule_i[1]
+        dict_["selector"] = rule_i[2]
+        dict_["type_list"] = rule_i[3]
         if len(rule_i) == 5:
-            d["rule"] = _to_dict(rule_i[4])
+            dict_["rule"] = _to_dict(rule_i[4])
 
-        rule_list_out.append(d)
+        rule_list_out.append(dict_)
 
     return rule_list_out
 
 
-def to_json(rules):
-    list_ = get_list(rules)
+def str2unicode(data):
+    """
+    ensure that we use string but not unicode
+    :param data:
+    :rtype str
+    """
+    if isinstance(data, list):
+        return [str2unicode(i) for i in data]
+    if isinstance(data, str):
+        return data.decode("utf-8")
 
-    data = _to_dict(list_)
-
-    return pretty_json(data)
+    return data
 
 
 def to_dict(rules, namespace=None):
+    """
+    :param rules:
+    :param namespace:
+    :rtype: OrderedDict
+    """
     list_ = get_list(rules, namespace=namespace)
+    list_ = str2unicode(list_)
 
     data = _to_dict(list_)
 
     return data
 
 
-# ------------
-# CONSTANTS
-# ------------
+def to_json(rules):
+    """
+    :param rules:
+    :return: json
+    :rtype: str
+    """
 
-# noinspection PyUnresolvedReferences
-import lxml_xpath2  # load namespace function in lxml.etree
+    data = to_dict(rules)
+
+    return pretty_json(data)

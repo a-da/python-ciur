@@ -17,17 +17,29 @@ from pdfminer.pdfdevice import TagExtractor
 from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
 from pdfminer.pdfpage import PDFPage
 
-from ciur import CiurException
+from ciur.exceptions import CiurBaseException
 
 NOT_NULL_TYPES = (bool, float, basestring)
 _DATA_TYPE_DICT = "_dict"
 
 
 def _is_list(value):
+    """
+    check if is list
+    :param value:
+    :type value: str
+    :rtype bool
+    """
     return value.endswith("_list")
 
 
 def _is_dict(value):
+    """
+    check if is dict
+    :param value:
+    :type value: str
+    :rtype bool
+    """
     return value.endswith("_dict")
 
 
@@ -42,8 +54,8 @@ def _recursive_parse(context_, rule, namespace=None, url=None):
         xpath = sel.path
     try:
         res = context_.xpath(xpath, namespaces=namespace)
-    except etree.XPathEvalError, e:
-        raise CiurException(e, {"rule.name": rule.name, "rule.selector": rule.selector})
+    except (etree.XPathEvalError,) as xpath_eval_error:
+        raise CiurBaseException(xpath_eval_error, {"rule.name": rule.name, "rule.selector": rule.selector})
 
     if isinstance(res, NOT_NULL_TYPES):
         res = [res]
@@ -63,19 +75,7 @@ def _recursive_parse(context_, rule, namespace=None, url=None):
 
         res = tmp
 
-    if isinstance(res, EtreeElement):
-        ordered_dict = OrderedDict()
-        for rule_i in rule.rule:
-            data = _recursive_parse(res, rule_i, url=url, namespace=namespace)
-
-            if data or data is False:
-                ordered_dict[rule_i.name + "x"] = data
-
-        res = {
-            rule.name: ordered_dict
-        }
-
-    elif isinstance(res, list) and len(res) and isinstance(res[0], EtreeElement):
+    if isinstance(res, list) and len(res) and isinstance(res[0], EtreeElement):
         tmp_list = []
         for res_i in res:
             tmp_ordered_dict = OrderedDict()
@@ -94,27 +94,30 @@ def _recursive_parse(context_, rule, namespace=None, url=None):
     if isinstance(res, NOT_NULL_TYPES):
         res = [res]
 
+    if _is_dict(rule.name):
+        res = OrderedDict((i.pop(rule.rule[0].name), i) for i in res)  # pylint: disable=redefined-variable-type
+
     # do size match check
     size, args = rule.type_list[-1]
     try:
         size(len(res), *args)
-    except Exception, e:
-        raise CiurException({
+    except (AssertionError,) as assert_error:
+        raise CiurBaseException({
             "rule.name": rule.name,
             "rule.selector": rule.selector,
             "url": url
-        }, "size-match error -> %s, on rule `%s` %s but got %s element" % (e.message, rule.name, args, len(res)))
+        }, "size-match error -> %s, on rule `%s` %s but got %s element" % (
+            assert_error.message, rule.name, args, len(res)
+        ))
 
     if not _is_list(rule.name) and isinstance(res, list) and len(res) == 1:
         res = res[0]
         if isinstance(res, list) and len(res) == 1:  # list in list use case
             res = res[0]
-    elif _is_dict(rule.name) and isinstance(res, list):
-        res = OrderedDict((i.popitem(last=False)[1], i) for i in res)
 
     if rule.rule and (
-                isinstance(res, NOT_NULL_TYPES) or
-                res and isinstance(res, list) and isinstance(res[0], NOT_NULL_TYPES)
+            isinstance(res, NOT_NULL_TYPES) or
+            res and isinstance(res, list) and isinstance(res[0], NOT_NULL_TYPES)
     ):
         import sys
         sys.stderr.write("[WARN] there are children that were ignored on rule.name=`%s`\n" % rule.name)
@@ -153,6 +156,8 @@ def xml_type(doc, rule, namespace=None, url=None, encoding=None):
     """
     use this function if page is xml
     """
+    del encoding
+
     context = etree.fromstring(doc)
 
     ret = _recursive_parse(context, rule, url=url, namespace=namespace)
@@ -164,6 +169,7 @@ def pdf_type(doc, rule, namespace=None, url=None, encoding=None):
     use this function if page is pdf
     TODO: do not forget to document this
     """
+    del encoding
 
     resource_manager = PDFResourceManager(caching=True)
 

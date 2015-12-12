@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 from setuptools import setup
 import re
+import ciur
+
 
 def parse_requirements(filename, editable=False):
     _ = []
@@ -25,20 +27,17 @@ def parse_requirements(filename, editable=False):
 
     return _
 
-name = "ciur"
-version = __import__(name).VERSION
-
 setup(
-    name=name,
-    version=version,
-    url='http://asta-s.eu',
+    name=ciur.__title__,
+    version=ciur.__version__,
+    url=ciur.__git__,
     dependency_links=[
-       "git+https://bitbucket.org/ada/ciur.git#egg=ciur"
+       "git+%s.git#egg=ciur" % ciur.__git__
     ],
-    author_email="ada@asta-s.eu",
-    author="Andrei Danciuc",
-    description="Advanced python dict",
-    license="TODO",
+    author_email=ciur.__email__,
+    author=ciur.__author__,
+    description=ciur.__doc__,
+    license="MIT",
     long_description=open("README.rst").read(),
     packages=[
         "ciur",
@@ -55,6 +54,6 @@ setup(
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Programming Language :: Python",
         "Programming Language :: Python :: 2.7",
-        "Programming Language :: Python :: 3",
+        # "Programming Language :: Python :: 3",
     ],
 )

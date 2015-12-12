@@ -11,3 +11,10 @@ bpython
 # Documentation
 Sphinx
 
+# Code smell
+pylint
+pyenchant # spelling
+
+# Coverage
+pytest-cov
+coverage

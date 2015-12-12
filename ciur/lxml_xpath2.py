@@ -13,53 +13,40 @@ import sre_constants
 
 from lxml.etree import FunctionNamespace
 
-from cast import raw_
-from ciur import CiurException
+from ciur.cast import raw_
+from ciur.exceptions import CiurBaseException
 from ciur.cast import element2text
 
 
-def fn_replace(context, value, pattern, replacement=''):
+def fn_replace(context, value, pattern, replacement=""):
     """
     http://www.w3.org/TR/xpath-functions/#func-replace
-
-    Examples:
-
-        replace("abracadabra", "bra", "*") returns "a*cada*"
-
-        replace("abracadabra", "a.*a", "*") returns "*"
-
-        replace("abracadabra", "a.*?a", "*") returns "*c*bra"
-
-        replace("abracadabra", "a", "") returns "brcdbr"
-
-        replace("abracadabra", "a(.)", "a$1$1") returns "abbraccaddabbra"
-
-        replace("abracadabra", ".*?", "$1") raises an error, because the pattern matches the zero-length string
-
-        replace("AAAA", "A+", "b") returns "b"
-
-        replace("AAAA", "A+?", "b") returns "bbbb"
-
-        replace("darted", "^(.*?)d(.*)$", "$1c$2") returns "carted". The first d is replaced.
-
+    :param context: Etree context
+    :param replacement:
+    :param pattern: regex pattern
+    :param value: matches xpath results
+    :param context: Etree context
     """
-    text = element2text(value)
+    text = element2text(value)    
 
     if not text:
         return text
 
-    if not (isinstance(text, list) and len(text) == 1):
-        raise CiurException({
+    if not (isinstance(text, basestring) or isinstance(text, list) and len(text) == 1):
+        raise CiurBaseException({
             "type": type(text),
             "len": len(text),
             "text": text,
             "context": raw_(context.context_node)
-        }, "type checking violation in function `matches`")
+        }, "type checking violation in function `replace`")
+
+    if not isinstance(text, basestring):
+        text = text[0]
 
     try:
-        string = re.sub(pattern, replacement, text[0])
-    except sre_constants.error, e:
-        raise CiurException("wrong regexp-> %s `%s`" % (str(e), pattern))
+        string = re.sub(pattern, replacement, text)
+    except (sre_constants.error,) as regex_error:
+        raise CiurBaseException("wrong regexp-> %s `%s`" % (str(regex_error), pattern))
 
     return string
 
@@ -73,7 +60,7 @@ def fn_matches(context, value, regex):
     see more http://www.w3.org/TR/xpath-functions/#func-matches
 
     :param context: DOM context
-    :param text: input as string
+    :param value: ElementTree or text
     :param regex:
     :return: FIXME return matched node
     """
@@ -88,11 +75,11 @@ def fn_matches(context, value, regex):
         return text
 
     try:
-        m = re.search(regex, text)
-    except sre_constants.error, e:
-        raise CiurException("wrong regexp-> %s `%s`" % (str(e), regex))
+        match = re.search(regex, text)
+    except (sre_constants.error, ) as regexp_error:
+        raise CiurBaseException("wrong regexp-> %s `%s`" % (str(regexp_error), regex))
 
-    return value if m else None
+    return value if match else None
 
 
 def fn_string_join(context, text, separator=""):
@@ -101,10 +88,33 @@ def fn_string_join(context, text, separator=""):
     Returns a string created by concatenating the members of the
     text sequence using separator.
     """
+    del context
     return separator.join(text)
 
 
-ns = FunctionNamespace(None)
+def fn_upper_case(context, text):
+    """
+    http://www.w3.org/TR/xpath-functions/#func-upper-case
+    :param context:
+    :param text:
+    :return string
+    # TODO add in documentation
+    """
+    del context
+    return text.upper()
 
 
-ns.update({k[3:].replace("_", "-"): v for (k, v) in locals().iteritems() if k.startswith("fn_")})
+def fn_lower_case(context, text):
+    """
+    http://www.w3.org/TR/xpath-functions/#func-lower-case
+    :param context:
+    :param text:
+    :return string
+    # TODO add in documentation
+    """
+    del context
+    return text.lower()
+
+FUNCTION_NAMESPACES = FunctionNamespace(None)
+
+FUNCTION_NAMESPACES.update({k[3:].replace("_", "-"): v for (k, v) in locals().iteritems() if k.startswith("fn_")})

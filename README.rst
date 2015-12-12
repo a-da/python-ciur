@@ -7,6 +7,7 @@ Ciur
    :alt: Ciur
    
 *Ciur is a scrapper layer in developing process.*
+*Ciur is a lib because it has less black magic than a framework*
 
 Export all scrapper related code into separate layer.
 
@@ -33,25 +34,25 @@ End-User Documentation
 Command Line Interface
 ----------------------
 
-    >>> ciur --url "http://example.org" --rules="example.org.ciur"
+    bash> ciur --url "http://example.org" --rules="example.org.ciur"
     {
         "root": {
             "name": "Example Domain",
-            "paragrapth": "This domain is established to be used for illustrative examples in documents. You may use this\n    domain in examples without prior coordination or asking for permission."
+            "paragraph": "This domain is established to be used for illustrative examples in documents. You may use this\n    domain in examples without prior coordination or asking for permission."
         }
     }
 
 Python ciur API
 ---------------
 
-   >>> import ciur
-   >>> ciur.parse(url="http://example.org", rules="example.org.ciur")
-   {
-        "root": {
-            "name": "Example Domain",
-            "paragrapth": "This domain is established to be used for illustrative examples in documents. You may use this\n    domain in examples without prior coordination or asking for permission."
-        }
-    }
+    >>> import ciur.shortcuts
+    >>> ciur.shortcuts.pretty_parse("example.org.ciur", "http://example.org")
+    {
+         "root": {
+             "name": "Example Domain",
+             "paragraph": "This domain is established to be used for illustrative examples in documents. You may use this\n    domain in examples without prior coordination or asking for permission."
+         }
+     }
 
 Developer Guide
 ===============
@@ -65,5 +66,9 @@ Install
 
 TODO
 ====
-3. type.method evaluation
-3. method evaluation
+DONE: type.method evaluation
+TODO: http://lybniz2.sourceforge.net/safeeval.html
+
+
+====== Last Mile
+https://youtu.be/FVEEndIwOSA?t=2243

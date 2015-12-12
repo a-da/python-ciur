@@ -2,7 +2,7 @@
 # coding=utf-8
 """
 additional language support for python-dateutil lib
-see http,//stackoverflow.com/questions/8896038/how-to-use-python-dateutil-1-5-parse-function-to-work-with-unicode
+see http//stackoverflow.com/questions/8896038/how-to-use-python-dateutil-1-5-parse-function-to-work-with-unicode
 
 TODO, create separated package of this python-dateutil-language
 """

@@ -4,11 +4,12 @@ ciur internal dsl (python api)
 from collections import OrderedDict
 from types import FunctionType
 import json
+import re
 
 import ciur
 import ciur.cast
 from ciur import pretty_json
-import re
+
 
 _JSON = basestring
 
@@ -131,30 +132,52 @@ class Rule(ciur.CommonEqualityMixin):
                 args = type_i[1:]
 
             else:
-                m = re.search("^([\*\+])(\d+)?$", type_i)
-                if m:
+                match = re.search(r"^([*+])(\d*)$", type_i)
+                if match:
                     func_name = "size"
                     args = (
-                        "mandatory" if m.group(1) == "+" else "optional",
-                        int(m.group(2) or 0),
+                        "mandatory" if match.group(1) == "+" else "optional",
+                        int(match.group(2) or 0),
                     )
                 else:
                     func_name = type_i
                     args = tuple()
 
-            tmp.append([getattr(ciur.cast, func_name + "_"), args])
+            # TODO there are 2 entity function and methods of object, rename func_name into callable_name
+            if isinstance(func_name, list):
+                obj_str, method_str = func_name
+                import __builtin__
+                obj = getattr(__builtin__, obj_str)
+                method = getattr(obj, method_str)
+                tmp.append([method, args])
+            else:
+                tmp.append([getattr(ciur.cast, func_name + "_"), args])
 
         self.type_list = tmp
 
     @classmethod
     def _2complex(cls, value):
-        if not isinstance(value, list):
+        """
+        convert data from simple/compact format into complex/verbose format
+        :param value:
+            :type value: tuple or list or str
+        :rtype: tuple
+        """
+        if not isinstance(value, (tuple, list)):
+
+            # noinspection PyRedundantParentheses
             return (value, )
 
         return value
 
     @classmethod
     def _2simple(cls, value):
+        """
+        convert data from complex/verbose format into simple/compact
+        :param value:
+            :type value: list or tuple or str
+        :rtype: value or list or tuple
+        """
         if isinstance(value, (list, tuple)):
             tmp = []
             for value_i in value:
@@ -180,6 +203,11 @@ class Rule(ciur.CommonEqualityMixin):
 
     @staticmethod
     def from_dict(dict_):
+        """
+        factory method, build `Rule` object from `dict_`
+        :param dict_:
+        :rtype: Rule
+        """
         # TODO: check load root list
 
         assert isinstance(dict_, (dict, _JSON))
@@ -197,10 +225,18 @@ class Rule(ciur.CommonEqualityMixin):
 
     @staticmethod
     def from_list(list_):
+        """
+        factory method, build ListOf `Rule` objects from `list_`
+        :param list_:
+        :rtype: list of Rule
+        """
         return ListOfT(Rule.from_dict(i) for i in list_)
 
     def to_dict(self):
-
+        """
+        exporting/serializing `Rule` object into `OrderedDict`
+        :rtype OrderedDict
+        """
         ret = OrderedDict()
         ret["name"] = self.name
         ret["selector"] = self.selector
@@ -227,8 +263,13 @@ class ListOfT(list):
     The purpose is to have pretty print option for that complex type
     """
     @classmethod
-    def _callback(cls, x):
-        return x
+    def _callback(cls, value):
+        """
+        define logic of serialization
+        :param value:
+        :return: value
+        """
+        return value
 
     def __str__(self):
         name = "%s.%s:" % (self.__class__.__module__, self.__class__.__name__)
