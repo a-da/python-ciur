@@ -68,6 +68,7 @@ def pretty_parse(ciur_file_or_path,
         response = req_callback()
     else:
         response = REQ_SESSION.get(url, headers=headers)
+        # TODO: set http timeout 10
 
     if not CONF["IGNORE_WARNING"] and response.headers.get("Etag"):
         sys.stderr.write("[WARN] request.response has Etag. TODO: link to documentation\n")

@@ -1,5 +1,7 @@
 Testing http://example.com
 ==========================
+>>> import os
+>>> os.chdir("tests")
 
 >>> from ciur import parse, pretty_json
 >>> from ciur.rule import Rule

@@ -1,2 +1,6 @@
 [run]
 omit = docs/*
+data_file = tests/.coverage.ciur
+
+[html]
+directory= tests/html-cov-ciur

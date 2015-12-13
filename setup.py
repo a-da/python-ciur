@@ -40,9 +40,11 @@ setup(
     license="MIT",
     long_description=open("README.rst").read(),
     packages=[
-        "ciur"
+        ciur.__title__
     ],
     install_requires=parse_requirements("requirements-pip.txt"),
+    setup_requires=['pytest-runner'],
+    tests_require=['pytest'],
     classifiers=[
         "Intended Audience :: Developers",
         "Topic :: Software Development :: Libraries :: Python Modules",
