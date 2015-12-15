@@ -2665,3 +2665,11 @@ spam
 doctype
 http
 args
+usr
+env
+tmp
+argv
+stdin
+os
+readline
+ok

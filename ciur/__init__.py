@@ -25,7 +25,7 @@ def pretty_json(data):
     :return: json
     """
 
-    def default(value):        
+    def default(value):
         """
         is a function that should return a serializable version of obj or repr(value).
 
@@ -35,7 +35,7 @@ def pretty_json(data):
         """
         # noinspection PyProtectedMember
         from lxml.etree import _Comment as EtreeComment
-        
+
         if isinstance(value, EtreeComment):
             return "<!--%s %s -->" % (value.text, value.tail)
 

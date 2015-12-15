@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from setuptools import setup
+import setuptools
 import re
 import ciur
 
@@ -27,7 +27,7 @@ def parse_requirements(filename, editable=False):
 
     return _
 
-setup(
+setup_params = dict(
     name=ciur.__title__,
     version=ciur.__version__,
     url=ciur.__git__,
@@ -54,7 +54,10 @@ setup(
     ],
     entry_points={
         "console_scripts": [
-            "ciur = ciur.cli:main",            
+            "ciur = ciur.cli:parse_cli",            
         ]
     }
-)
+)    
+
+if __name__ == '__main__':
+    setuptools.setup(**setup_params)
