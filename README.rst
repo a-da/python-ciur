@@ -5,9 +5,11 @@ Ciur
 .. image:: http://thumbs.dreamstime.com/m/wooden-sieve-old-ancient-isolated-white-background-45140021.jpg
    :target: https://bitbucket.org/ada/ciur
    :alt: Ciur
-   
-    *Ciur is a scrapper layer in developing process.*
-    *Ciur is a lib because it has less black magic than a framework*
+
+
+*Ciur is a scrapper layer in developing process.*
+*Ciur is a lib because it has less black magic than a framework*
+
 
 Export all scrapper related code into separate layer.
 
