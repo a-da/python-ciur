@@ -3,7 +3,7 @@ collection of decorators user in `ciur`
 """
 from functools import wraps
 
-from ciur import element2text
+from ciur.helpers import element2text
 
 
 def check_new_node(func):

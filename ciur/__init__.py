@@ -6,13 +6,15 @@ import logging
 import os
 import sys
 import warnings
-from cookielib import LWPCookieJar
-
-from lxml.etree import FunctionNamespace
-from requests import Session
 
 # noinspection PyProtectedMember
-from lxml.etree import _Element as EtreeElement
+
+__title__ = "ciur"
+__version__ = "0.1.2"
+__author__ = "Andrei Danciuc"
+__license__ = "MIT"
+__git__ = "https://bitbucket.org/ada/ciur"
+__email__ = "python.ciur@gmail.com"
 
 # TODO make configurable
 CONF = {
@@ -59,68 +61,6 @@ class CommonEqualityMixin(object):  # pylint: disable=too-few-public-methods
 
     def __ne__(self, other):
         return not self.__eq__(other)
-
-
-def get_session(callback_log_in, cookie_file_path):
-    """
-    get session with cookies file support save / load
-
-    :param cookie_file_path:
-        :type cookie_file_path: str
-    :param callback_log_in:
-        :type callback_log_in: function
-
-    :rtype: Session
-    """
-
-    session = Session()
-
-    session.cookies = LWPCookieJar(cookie_file_path)
-
-    if not os.path.exists(cookie_file_path):
-        print "[INFO] setting cookies"
-        session.cookies.save()
-        callback_log_in(session)
-    else:
-        print "[INFO] loading cookies"
-        session.cookies.load(ignore_discard=True)
-
-    return session
-
-
-def load_xpath_functions(locals_):
-    """
-    load xpath functions into lxml scopes
-    see http://lxml.de/extensions.html#the-functionnamespace
-
-    :param locals_:  dictionary containing the current scope's local variables.
-        :type locals_: dict
-    """
-    locals()
-    function_namespaces = FunctionNamespace(None)
-
-    function_namespaces.update({
-        k[3:].replace("_", "-"): v for (k, v) in locals_.iteritems()
-        if k.startswith("fn_")
-    })
-
-
-def element2text(value):
-    """
-    convert value to text if is EtreeElement or strip value is is text already
-    :param value:
-        :type value: EtreeElement or list or str
-    :rtype str or iterable[str]
-    """
-    if isinstance(value, EtreeElement):
-        return value.text
-    elif isinstance(value, list) and len(value) > 0:
-        return [element2text(i) for i in value]
-
-    if not value:
-        return value
-
-    return value.strip()
 
 
 def path(relative, root=__file__):

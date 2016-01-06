@@ -1,4 +1,3 @@
-# TODO rename example.com.ciur into example.org.ciur
 root `/html/body` +1
     name `.//h1/text()` +1
     paragraph `.//p/text()` +1

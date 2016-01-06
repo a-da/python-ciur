@@ -10,7 +10,7 @@ Success test
 
 >>> parse_cli(
 ... "--url", "http://example.org",
-... "--rule", ciur.path("../tests/ciur.d/example.com.ciur"),
+... "--rule", ciur.path("../tests/ciur.d/example.org.ciur"),
 ... "--ignore_warn", "true",
 ... ) # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
 {
@@ -41,8 +41,8 @@ Test on shell level
     optional arguments:
       -h, --help            show this help message and exit
       -u URL, --url URL     url of required document html, xml, pdf. (f.e.
-                            http://example.com)
-      -r RULE, --rule RULE  file with rule (f.e. /tmp/example.com.ciur)
+                            http://example.org)
+      -r RULE, --rule RULE  file with rule (f.e. /tmp/example.org.ciur)
       -w IGNORE_WARN, --ignore_warn IGNORE_WARN
                             suppress warning
 
@@ -121,7 +121,7 @@ PARSER.add_argument(
     "--url",
     required=True,
     help="url of required document html, xml, pdf."
-         " (f.e. http://example.com)",
+         " (f.e. http://example.org)",
     type=check_url
 )
 
@@ -129,7 +129,7 @@ PARSER.add_argument(
     "-r",
     "--rule",
     required=True,
-    help='file with rule (f.e. /tmp/example.com.ciur)',
+    help='file with rule (f.e. /tmp/example.org.ciur)',
     type=check_file
 )
 

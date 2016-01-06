@@ -7,8 +7,8 @@ import sys
 
 import requests
 
-import ciur.__package__
-from ciur import bnf_parser, get_logger
+from ciur import bnf_parser
+from ciur import get_logger
 from ciur import parse
 from ciur import pretty_json
 from ciur.exceptions import CiurBaseException
@@ -21,10 +21,10 @@ REQ_SESSION = requests.Session()
 
 HTTP_HEADERS = {
     "User-Agent": "%s/%s %s/%s %s" % (
-        ciur.__package__.__title__, ciur.__package__.__version__,
+        ciur.__title__, ciur.__version__,
         requests.__title__, requests.__version__,
 
-        ciur.__package__.__git__
+        ciur.__git__
     )
 }
 

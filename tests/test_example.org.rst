@@ -1,4 +1,4 @@
-Testing http://example.com
+Testing http://example.org
 ==========================
 >>> import os
 
@@ -7,7 +7,7 @@ Testing http://example.com
 >>> import requests
 
 >>> requests = requests.Session()
->>> response = requests.get("http://example.com")
+>>> response = requests.get("http://example.org")
 
 test internal dsl
 -----------------
@@ -32,7 +32,7 @@ test external dsl
 >>> from ciur import bnf_parser, open_file
 
 >>> res = bnf_parser.external2dict(open_file(
-...     "../tests/ciur.d/example.com.ciur"
+...     "../tests/ciur.d/example.org.ciur"
 ... ))
 >>> rule = Rule.from_dict(res[0])  # doctest: +NORMALIZE_WHITESPACE
 >>> data = parse.html_type(parse.Document(response.content), rule)
@@ -45,7 +45,7 @@ test external dsl
 }
 
 >>> res = bnf_parser.external2dict(open_file(
-...     "../tests/ciur.d/example.com.ciur"
+...     "../tests/ciur.d/example.org.ciur"
 ... ))
 >>> rule = Rule.from_dict(res[0])  # doctest: +NORMALIZE_WHITESPACE
 >>> data = parse.html_type(parse.Document(response.content), rule)
@@ -58,7 +58,7 @@ test external dsl
 }
 
 >>> res = bnf_parser.external2dict(open_file(
-...     "../tests/ciur.d/example.com.ciur"
+...     "../tests/ciur.d/example.org.ciur"
 ... ))
 >>> rule = Rule.from_dict(res[0])  # doctest: +NORMALIZE_WHITESPACE
 >>> data = parse.html_type(parse.Document(response.content), rule)

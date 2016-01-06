@@ -16,8 +16,10 @@ import urlparse
 from lxml.etree import tostring
 from dateutil import parser
 
-from ciur import load_xpath_functions, element2text
-from ciur.decorators import check_new_node, convert_element2text
+from ciur.helpers import load_xpath_functions
+from ciur.helpers import element2text
+from ciur.decorators import check_new_node
+from ciur.decorators import convert_element2text
 from ciur.exceptions import CiurBaseException
 from ciur.dateutil_aditional_languages import MONTHS
 

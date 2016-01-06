@@ -18,7 +18,8 @@ NOTE:
 import re
 import sre_constants
 
-from ciur import load_xpath_functions, element2text
+from ciur.helpers import load_xpath_functions
+from ciur.helpers import element2text
 
 from ciur.exceptions import CiurBaseException
 from ciur.xpath_functions_ciur import fn_raw
