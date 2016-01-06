@@ -126,16 +126,13 @@ Install ciur in virtualenv
     ...
 
 
-TODO
+TODO:
 ====
-
-DONE: type.method evaluation
-
-TODO: http://lybniz2.sourceforge.net/safeeval.html
-
-demo on cloud9
-
-http://lxml.de/lxmlhtml.html#parsing-html
+ 
+ * TODO: http://lybniz2.sourceforge.net/safeeval.html
+ * demo on cloud9
+ * build documentation on readthedocs 
+ * http://lxml.de/lxmlhtml.html#parsing-html
 
    .cssselect(expr):
 
