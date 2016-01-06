@@ -3,7 +3,7 @@ Ciur
 ====
 
 .. image:: http://thumbs.dreamstime.com/m/wooden-sieve-old-ancient-isolated-white-background-45140021.jpg
-   :target: https://bitbucket.org/ada/ciur
+   :target: https://bitbucket.org/ada/python-ciur
    :alt: Ciur
 
 ..
