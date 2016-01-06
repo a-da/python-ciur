@@ -43,7 +43,7 @@ Ciur use own dsl, for example
 
      $ cat python-ciur/tests/ciur.d/example.org.ciur
 
-.. code-block:: ciur
+.. code-block:: yaml
 
     root `/html/body` +1
         name `.//h1/text()` +1
