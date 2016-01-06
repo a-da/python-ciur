@@ -123,13 +123,20 @@ Install ciur in virtualenv
 
 TODO
 ====
+
 DONE: type.method evaluation
+
 TODO: http://lybniz2.sourceforge.net/safeeval.html
+
 demo on cloud9
+
 http://lxml.de/lxmlhtml.html#parsing-html
+
    .cssselect(expr):
+
    .base_url:
 
 
 ====== Last Mile
+
 https://youtu.be/FVEEndIwOSA?t=2243
