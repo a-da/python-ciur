@@ -40,12 +40,16 @@ class ParseExceptionInCiurFile(ParseBaseException):
         :param file_name:
         :param parse_error:
         """
-        ParseBaseException.__init__(self, parse_error.pstr, parse_error.loc, parse_error.msg, parse_error.parserElement)
+        ParseBaseException.__init__(
+            self, parse_error.pstr, parse_error.loc,
+            parse_error.msg, parse_error.parserElement
+        )
         self._file_string = file_string.splitlines()
         self._file_name = None if not file_name else os.path.abspath(file_name)
 
     def __str__(self):
-        buf = "|from file `%s`" % self._file_name if self._file_name else "from string"
+        buf = "|from file `%s`" % self._file_name \
+            if self._file_name else "from string"
 
         line = "%s" % self.lineno
 

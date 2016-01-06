@@ -1,7 +1,6 @@
 Testing http://example.com
 ==========================
 >>> import os
->>> os.chdir("tests")
 
 >>> from ciur import parse, pretty_json
 >>> from ciur.rule import Rule
@@ -18,7 +17,7 @@ test internal dsl
 ...              Rule("paragraph", ".//p/text()", ["+1"])
 ... )
 
->>> data = parse.html_type(response.content, rule)
+>>> data = parse.html_type(parse.Document(response.content), rule)
 >>> print pretty_json(data)  # doctest: +NORMALIZE_WHITESPACE
 {
     "root": {
@@ -30,12 +29,39 @@ test internal dsl
 test external dsl
 -----------------
 
->>> from ciur import bnf_parser
->>> import os
+>>> from ciur import bnf_parser, open_file
 
->>> res = bnf_parser.to_dict(open("ciur.d/example.com.ciur"))
+>>> res = bnf_parser.external2dict(open_file(
+...     "../tests/ciur.d/example.com.ciur"
+... ))
 >>> rule = Rule.from_dict(res[0])  # doctest: +NORMALIZE_WHITESPACE
->>> data = parse.html_type(response.content, rule)
+>>> data = parse.html_type(parse.Document(response.content), rule)
+>>> print pretty_json(data)  # doctest: +NORMALIZE_WHITESPACE
+{
+    "root": {
+        "name": "Example Domain",
+        "paragraph": "This domain is established to be used for illustrative examples in documents. You may use this\n    domain in examples without prior coordination or asking for permission."
+    }
+}
+
+>>> res = bnf_parser.external2dict(open_file(
+...     "../tests/ciur.d/example.com.ciur"
+... ))
+>>> rule = Rule.from_dict(res[0])  # doctest: +NORMALIZE_WHITESPACE
+>>> data = parse.html_type(parse.Document(response.content), rule)
+>>> print pretty_json(data)  # doctest: +NORMALIZE_WHITESPACE
+{
+    "root": {
+        "name": "Example Domain",
+        "paragraph": "This domain is established to be used for illustrative examples in documents. You may use this\n    domain in examples without prior coordination or asking for permission."
+    }
+}
+
+>>> res = bnf_parser.external2dict(open_file(
+...     "../tests/ciur.d/example.com.ciur"
+... ))
+>>> rule = Rule.from_dict(res[0])  # doctest: +NORMALIZE_WHITESPACE
+>>> data = parse.html_type(parse.Document(response.content), rule)
 >>> print pretty_json(data)  # doctest: +NORMALIZE_WHITESPACE
 {
     "root": {

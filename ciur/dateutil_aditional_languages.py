@@ -2,7 +2,8 @@
 # coding=utf-8
 """
 additional language support for python-dateutil lib
-see http//stackoverflow.com/questions/8896038/how-to-use-python-dateutil-1-5-parse-function-to-work-with-unicode
+see http//stackoverflow.com/questions/8896038/
+    how-to-use-python-dateutil-1-5-parse-function-to-work-with-unicode
 
 TODO, create separated package of this python-dateutil-language
 """
@@ -81,7 +82,9 @@ MONTHS = OrderedDict((
     ("septembrie", "September"),
     ("octombrie", "October"),
     ("noiembrie", "November"),
-    ("decembrie", "December")
+    ("decembrie", "December"),
+
+    ("ian.", "January")
 ))
 
 for foreign, eng in MONTHS.iteritems():

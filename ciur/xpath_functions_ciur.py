@@ -1,38 +1,25 @@
 # -*- coding: utf-8 -*-
 """
-basic function for casting or type conversion/transformation
+Custom xpath functions available from `ciur` namespaces.
+This namespace is identified by the namespace prefix ciur:, which is a
+predefined prefix in this context of this lib.
+This document describes implementation of function namespace
+https://bitbucket.org/ada/ciur/src/docs/2016/xpath-functions
 
 NOTE:
-    local convention for all public cast function is `[a-z]+[a-z0-9_]+_` it should end with underscore
+    local convention for all public cast function is `[a-z]+[a-z0-9_]+_`
+    it should end with underscore
 """
 import HTMLParser
 import urlparse
 
-# noinspection PyProtectedMember
-from lxml.etree import _Element as EtreeElement
-
 from lxml.etree import tostring
 from dateutil import parser
+
+from ciur import load_xpath_functions, element2text
+from ciur.decorators import check_new_node, convert_element2text
 from ciur.exceptions import CiurBaseException
 from ciur.dateutil_aditional_languages import MONTHS
-
-
-def element2text(value):
-    """
-    convert value to text if is EtreeElement or strip value is is text already
-    :param value:
-        :type value: EtreeElement or list or str
-    :rtype str
-    """
-    if isinstance(value, EtreeElement):
-        return value.text
-    elif isinstance(value, list) and len(value) > 0:
-        return [element2text(i) for i in value]
-
-    if not value:
-        return value
-
-    return value.strip()
 
 
 def url_(url, base_url):
@@ -50,58 +37,57 @@ def url_param_(url, param, *_):
     return urlparse.parse_qs(parsed.query)[param]
 
 
-def int_(value, *_):
+@convert_element2text
+def fn_int(context, value, *_):
     """
     convert data into integer
+    :param context: Parent DOM context
+        :type context: EtreeElement
+    :param value:
+        :type value: basestring
+    :param _: unused
+
     :rtype: int
     """
+    del context
+
     return int(value)
 
 
-def float_(value, *_):
-    """
-    convert data into integer
-    :rtype: int
-    """
-    text = element2text(value)
-    if text == "":
-        return text
-
-    try:
-        return float(text)
-    except (ValueError,) as value_error:
-        if "invalid literal for float()" in value_error.message:
-            return float(text.replace(",", "."))
-        else:
-            raise value_error
-
-
-def raw_(value, *_):
+def fn_raw(context, value, *_):
     """
     get raw representation of DOM
+    :param context: Parent DOM context
+        :type context: EtreeElement
     :param value:
         :type value: EtreeElement or basestring
     :param _: unused args
     """
+    del context
+
     if isinstance(value, basestring):
         return value
 
     return HTML_PARSER.unescape(tostring(value))
 
 
-def iraw_(value, *_):
+def fn_iraw(context, value, *_):
     """
     get raw representation of children DOM aka innerHTML
+
+    :param context: Parent DOM context
+        :type context: EtreeElement
     :param value:
         :type value: EtreeElement or basestring
     :param _: unused args
     """
+
     text = value.text.strip() if value.text else ""
     tail = value.tail.strip() if value.tail else ""
     if tail:
         tail = " " + tail
 
-    return text + "".join(raw_(child) for child in value) + tail
+    return text + "".join(fn_raw(context, child) for child in value) + tail
 
 
 def size_(got, mandatory_or_optional, expect):
@@ -124,14 +110,20 @@ def size_(got, mandatory_or_optional, expect):
             assert got == expect, "expect size `%s`, got `%s`" % (expect, got)
 
 
-def datetime_(value):
+@convert_element2text
+def fn_datetime(context, value):
     """
-    because of exception (bellow) string do datetime CAN NOT be embedded into lxml namespace functions
-        File "extensions.pxi", line 612, in lxml.etree._wrapXPathObject (src/lxml/lxml.etree.c:145847)
+    because of exception (bellow) string do datetime CAN NOT be embedded
+    into lxml namespace functions:
+
+        File "extensions.pxi", line 612, in lxml.etree._wrapXPathObject
+        (src/lxml/lxml.etree.c:145847)
         lxml.etree.XPathResultError: Unknown return type: datetime.datetime
 
     So this is the reason why it is implemented in type_list casting chain
     """
+    del context
+
     text = element2text(value)
 
     if not text:
@@ -146,16 +138,51 @@ def datetime_(value):
         raise CiurBaseException(value_error, {"text": text})
 
 
-def tail_(value):
+@convert_element2text
+@check_new_node
+def fn_float(context, text):
+    """
+    workaround for fn:number
+    http://stackoverflow.com/questions/33789196/is-xpath-number-function-lies
+
+    :param context: Parent DOM context
+        :type context: EtreeElement
+    :param text:
+        :type text: basestring
+    :return: float or None
+    """
+    # TODO: move from cast_
+    del context
+
+    if text in ["", None]:
+        return None
+
+    try:
+        return float(text)
+    except (ValueError,) as value_error:
+        if "invalid literal for float()" in value_error.message:
+            return float(text.replace(",", "."))
+        else:
+            raise value_error
+
+
+@check_new_node
+def fn_tail(context, value):
     """
     >> xpath(<div><p>paragraph</p>tail_text</div>).tail
     tail_text
+    :param context: Parent DOM context
+        :type context: EtreeElement
 
     :param value:
         :type value: EtreeElement or basestring
     :rtype str
     """
+    del context
+
     return value.tail
 
 
 HTML_PARSER = HTMLParser.HTMLParser()
+
+load_xpath_functions(locals())

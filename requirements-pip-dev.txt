@@ -1,22 +1,48 @@
-# Runtime requirements
+# =====================================
+# python2 developments pip requirements
+# =====================================
+
+# Production runtime requirements
+# ===============================
+
 -r requirements-pip.txt
 
 # test
-pytest
-pytest-runner # Integrating with setuptools / python setup.py test / pytest-runner
+# ====
+
+pytest==2.8.5
+
+# Integrating with setuptools / python setup.py test / pytest-runner
+pytest-runner==2.6.2
+pytest-sugar==0.5.1 #  progressbar, show tests that fail instantly
+sh==1.11 # linux bash wrapper
 
 
 # interactive command line fro debugging
-bpython
+# ======================================
+
+bpython==0.14.2
 
 # Documentation
-Sphinx
+# =============
+
+Sphinx==1.3.3
 
 # Code smell
-pylint
-setuptools-lint # This package expose pylint as a lint command into setup.py
-pyenchant # spelling
+# ==========
+
+pylint==1.5.2
+
+# This package expose pylint as a lint command into setup.py
+setuptools-lint==0.4.1
+
+pyenchant==1.6.6 # spelling for pylint
 
 # Coverage
-pytest-cov
-coverage
+# ========
+
+pytest-cov==2.2.0
+coverage==4.0.3
+
+
+

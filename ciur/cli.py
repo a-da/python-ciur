@@ -1,33 +1,66 @@
 #!/usr/bin/env python
 """
->>> import os
+Command line interface for ``ciur`` module.
+
+Test on python level
+====================
 
 Success test
 ~~~~~~~~~~~~
 
 >>> parse_cli(
 ... "--url", "http://example.org",
-... "--rule", os.path.join(ciur.__path__[0], "..", "tests/ciur.d/example.com.ciur"),
+... "--rule", ciur.path("../tests/ciur.d/example.com.ciur"),
 ... "--ignore_warn", "true",
 ... ) # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
 {
     "root": {
         "name": "Example Domain",
-        "paragraph": "This domain is established to be used for illustrative examples in documents. You may use this\\n    domain in examples without prior coordination or asking for permission."
+        "paragraph": "This domain is established to be used for illustrative
+        examples in documents. You may use this\\n domain in examples without
+        prior coordination or asking for permission."
     }
 }
 
-Fail bad url argument
-~~~~~~~~~~~~~~~~~~~~~
+Test on shell level
+===================
 
->>> parse_cli(
-... "--url", "example.org",
-... )
-Traceback (most recent call last):
-...
-SystemExit: 2
+    Command: Help
+    -------------
 
+    More about of reason to use ``sh``
+    http://stackoverflow.com/questions/34266190/
+    cover-cli-py-file-python-argparse-with-doctest
+    >>> import sh
 
+    >>> python = sh.Command(sys.executable)
+    >>> python(__file__, "--help")
+    ... # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
+    usage: cli.py... [-h] -u URL -r RULE [-w IGNORE_WARN]
+    *Ciur is a scrapper layer*
+    optional arguments:
+      -h, --help            show this help message and exit
+      -u URL, --url URL     url of required document html, xml, pdf. (f.e.
+                            http://example.com)
+      -r RULE, --rule RULE  file with rule (f.e. /tmp/example.com.ciur)
+      -w IGNORE_WARN, --ignore_warn IGNORE_WARN
+                            suppress warning
+
+    Url validation
+    --------------
+
+    >>> python(__file__, "--url", "example.org")
+    ... # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
+    Traceback (most recent call last):
+      ...
+    ErrorReturnCode_2:
+      RAN: '.../bin/python...
+          .../python-ciur/ciur/cli.py... --url example.org'
+      STDOUT:
+      STDERR:
+    usage: cli.py... [-h] -u URL -r RULE [-w IGNORE_WARN]
+    cli.py...: error: argument -u/--url: Invalid URL 'example.org':
+        No schema supplied. Perhaps you meant http://example.org?
 
 """
 import argparse
@@ -37,11 +70,27 @@ import sys
 from requests.models import PreparedRequest
 import requests.exceptions
 
-import ciur
-from ciur.shortcuts import pretty_parse
+try:
+    import ciur
+    from ciur.shortcuts import pretty_parse_from_url
+except (ImportError,) as import_error:
+    # work around for `No module named ciur`
+    # TODO make it logging
+    # print e
+    import os
+    sys.path.append(os.path.abspath(
+        os.path.join(os.path.dirname(__file__), "..")
+    ))
+
+    import ciur
+    from ciur.shortcuts import pretty_parse_from_url
 
 
 def check_url(url):
+    """
+    :param url:
+        :type url: str
+    """
     prepared_request = PreparedRequest()
     try:
         prepared_request.prepare_url(url, None)
@@ -51,8 +100,13 @@ def check_url(url):
 
 
 def check_file(path):
+    """
+    :param path:
+        :type path: str
+    """
     if not path.endswith(".ciur"):
-        sys.stderr.write("[WARN] is recommended that rule files have extension `.ciur`\n\n")
+        sys.stderr.write("[WARN] is recommended that rule files have"
+                         "extension `.ciur`\n\n")
 
     try:
         return open(path)
@@ -66,7 +120,8 @@ PARSER.add_argument(
     "-u",
     "--url",
     required=True,
-    help="url of required document html, xml, pdf. \n (f.e. http://example.com)",
+    help="url of required document html, xml, pdf."
+         " (f.e. http://example.com)",
     type=check_url
 )
 
@@ -86,14 +141,18 @@ PARSER.add_argument(
 
 
 def parse_cli(*argv):
+    """
+    :param argv: command line arguments
+      :type argv: list[str]
+    """
     args = PARSER.parse_args(argv)
 
     if args.ignore_warn:
         ciur.CONF["IGNORE_WARNING"] = args.ignore_warn
 
-    print pretty_parse(args.rule, args.url)
-    
-    
+    print pretty_parse_from_url(args.rule, args.url)
+
+
 if __name__ == "__main__":
     parse_cli(*sys.argv)
 

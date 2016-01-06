@@ -7,9 +7,8 @@ import json
 import re
 
 import ciur
-import ciur.cast
-from ciur import pretty_json
-
+import ciur.xpath_functions_ciur
+from ciur import pretty_json, bnf_parser
 
 _JSON = basestring
 
@@ -143,7 +142,8 @@ class Rule(ciur.CommonEqualityMixin):
                     func_name = type_i
                     args = tuple()
 
-            # TODO there are 2 entity function and methods of object, rename func_name into callable_name
+            # TODO there are 2 entity function and methods of object,
+            # TODO  rename func_name into callable_name
             if isinstance(func_name, list):
                 obj_str, method_str = func_name
                 import __builtin__
@@ -151,7 +151,24 @@ class Rule(ciur.CommonEqualityMixin):
                 method = getattr(obj, method_str)
                 tmp.append([method, args])
             else:
-                tmp.append([getattr(ciur.cast, func_name + "_"), args])
+                try:
+                    tmp.append([
+                        getattr(ciur.xpath_functions_ciur, func_name + "_"),
+                        args
+                    ])
+                except AttributeError:
+                    try:
+                        tmp.append([
+                            getattr(
+                                ciur.xpath_functions_ciur, "fn_" + func_name
+                            ),
+                            args
+                        ])
+                    except AttributeError:
+                        tmp.append([
+                            getattr(ciur.xpath_functions, "fn_" + func_name),
+                            args
+                        ])
 
         self.type_list = tmp
 
@@ -191,7 +208,13 @@ class Rule(ciur.CommonEqualityMixin):
                         )
                     else:
                         if not value_i[1]:
-                            tmp_i = ("%s" % function[:-1]).encode("utf-8")
+                            if function.startswith("fn_"):
+                                tmp_i = ("%s" % function[3:]).encode("utf-8")
+                            elif function.endswith("_"):
+                                tmp_i = ("%s" % function[:-1]).encode("utf-8")
+                            else:
+                                # TODO remove this in future
+                                raise Exception("new use case")
 
                 tmp.append(tmp_i)
             value = tmp
@@ -206,6 +229,7 @@ class Rule(ciur.CommonEqualityMixin):
         """
         factory method, build `Rule` object from `dict_`
         :param dict_:
+            :type dict_: dict or basestring
         :rtype: Rule
         """
         # TODO: check load root list
@@ -228,9 +252,22 @@ class Rule(ciur.CommonEqualityMixin):
         """
         factory method, build ListOf `Rule` objects from `list_`
         :param list_:
+            :type list_: list
         :rtype: list of Rule
         """
         return ListOfT(Rule.from_dict(i) for i in list_)
+
+    @staticmethod
+    def from_dsl(dsl):
+        """
+        factory method, build rule from dsl
+        :param dsl:
+            :type dsl: FileIO or str
+        :rtype: list of Rule
+        """
+        res = bnf_parser.external2dict(dsl)
+
+        return Rule.from_list(res)
 
     def to_dict(self):
         """
@@ -250,11 +287,19 @@ class Rule(ciur.CommonEqualityMixin):
         return ret
 
     def __repr__(self):
-        return "%s.%s(%s)" % (self.__class__.__module__, self.__class__.__name__, self.to_dict())
+        return "%s.%s(%s)" % (
+            self.__class__.__module__,
+            self.__class__.__name__,
+            self.to_dict()
+        )
 
     def __str__(self):
         pretty = pretty_json(self.to_dict())
-        return "%s.%s(%s)" % (self.__class__.__module__, self.__class__.__name__, pretty)
+        return "%s.%s(%s)" % (
+            self.__class__.__module__,
+            self.__class__.__name__,
+            pretty
+        )
 
 
 class ListOfT(list):
@@ -267,14 +312,16 @@ class ListOfT(list):
         """
         define logic of serialization
         :param value:
-        :return: value
+            :type value: object
+        :rtype: value
         """
         return value
 
     def __str__(self):
         name = "%s.%s:" % (self.__class__.__module__, self.__class__.__name__)
         res = name + "".join(
-            "\n-----------%d-\n%s" % (index, self._callback(t)) for index, t in enumerate(self, 1)
+            "\n-----------%d-\n%s" % (index, self._callback(t))
+            for index, t in enumerate(self, 1)
         ).replace("\n", "\n    ")
 
         return res

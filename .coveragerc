@@ -1,6 +1,6 @@
 [run]
 omit = docs/*
-data_file = tests/.coverage.ciur
+data_file = ../python-ciur/tests/.coverage.ciur
 
 [html]
-directory= tests/html-cov-ciur
+directory= ../python-ciur/tests/html-cov-ciur

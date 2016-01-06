@@ -18,6 +18,8 @@ Export all scrapper related code into separate layer.
 If you are annoyed from sql spaghetti inside php and inline css inside html
 THEN you also are annoyed from xpath/css code inside crawler.
 
+Samples of `bad code <./docs/bad_code/>`_.
+
 Ciur give you additional possibility to fix previous headache with adding additional layer.
 
 What does “Ciur” mean?
@@ -72,7 +74,12 @@ TODO
 ====
 DONE: type.method evaluation
 TODO: http://lybniz2.sourceforge.net/safeeval.html
+demo on cloud9
+http://lxml.de/lxmlhtml.html#parsing-html
+   .cssselect(expr):
+   .base_url:
 
 
 ====== Last Mile
 https://youtu.be/FVEEndIwOSA?t=2243
+
