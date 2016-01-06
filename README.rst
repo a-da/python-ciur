@@ -53,7 +53,7 @@ Command Line Interface
 >>> ciur --url "http://example.org" --rules="example.org.ciur"
 
 
-.. code-block:: json
+.. code-block::
         {
             "root": {
                 "name": "Example Domain",
