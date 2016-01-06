@@ -37,6 +37,16 @@ Please see `LICENSE <./LICENSE>`_.
 End-User Documentation
 ======================
 
+Ciur use own dsl, for example ``cat python-ciur/tests/ciur.d/example.org.ciur``
+
+.. code-block:: ciur
+
+    root `/html/body` +1
+        name `.//h1/text()` +1
+        paragraph `.//p/text()` +1
+
+
+
 Command Line Interface
 ----------------------
 
