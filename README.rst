@@ -53,20 +53,19 @@ Command Line Interface
 ```
 #!bash
 
+.. sourcecode :: bash
 
-ciur --url "http://example.org" --rules="example.org.ciur"
-```
+    ciur --url "http://example.org" --rules="example.org.ciur"
         
 
 .. sourcecode :: json
 
-        {
-            "root": {
-                "name": "Example Domain",
-                "paragraph": "This domain is established to be used for illustrative examples in documents. You may use this\n    domain in examples without prior coordination or asking for permission."
-            }
+    {
+        "root": {
+            "name": "Example Domain",
+            "paragraph": "This domain is established to be used for illustrative examples in documents. You may use this\n    domain in examples without prior coordination or asking for permission."
         }
-
+    }
 
 
 Python ciur API
