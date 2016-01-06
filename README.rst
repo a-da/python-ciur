@@ -75,8 +75,13 @@ Command Line Interface
 Python ciur API
 ---------------
 
-    >>> import ciur.shortcuts
-    >>> ciur.shortcuts.pretty_parse("example.org.ciur", "http://example.org")
+    >>> import ciur
+    >>> from ciur.shortcuts import pretty_parse_from_url
+    >>> with ciur.open_file("example.org.ciur", __file__) as f:
+    ...    print pretty_parse_from_url(
+    ...            f,
+    ...            "http://example.org"
+    ...    )    
     {
          "root": {
              "name": "Example Domain",
