@@ -50,14 +50,26 @@ Ciur use own dsl, for example ``cat python-ciur/tests/ciur.d/example.org.ciur``
 Command Line Interface
 ----------------------
 
-bash> ciur --url "http://example.org" --rules="example.org.ciur"
+```
+#!bash
 
-        {
+
+ciur --url "http://example.org" --rules="example.org.ciur"
+```
+
+
+        
+```
+#!json
+
+{
             "root": {
                 "name": "Example Domain",
                 "paragraph": "This domain is established to be used for illustrative examples in documents. You may use this\n    domain in examples without prior coordination or asking for permission."
             }
         }
+
+```
 
 Python ciur API
 ---------------
