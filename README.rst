@@ -50,7 +50,7 @@ Ciur use own dsl, for example ``cat python-ciur/tests/ciur.d/example.org.ciur``
 Command Line Interface
 ----------------------
 
->>> ciur --url "http://example.org" --rules="example.org.ciur"
+bash> ciur --url "http://example.org" --rules="example.org.ciur"
 
 
 .. code-block::
