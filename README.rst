@@ -51,6 +51,7 @@ Command Line Interface
 ----------------------
 
 ``bash> ciur --url "http://example.org" --rules="example.org.ciur"``
+
 .. code-block:: json
         {
             "root": {
