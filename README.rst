@@ -89,6 +89,11 @@ Python ciur API
          }
      }
 
+
+Samples of usage:
+   * https://bitbucket.org/ada/ciur.example.exchange --> parsing site exchange money rates world wide (40 sources, 4 country).
+   * https://bitbucket.org/ada/ciur.example.social --> parsing social site (facebook, linkedin, xing ...) (not yet ready for open realease)
+
 Developer Guide
 ===============
 
