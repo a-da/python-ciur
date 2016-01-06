@@ -96,9 +96,10 @@ Developer Guide
 Install
 =======
 
-install virtualenv
+Install virtualenv
 
 .. code-block :: bash
+
     $ sudo virtualenv -p python2 /opt/python-env/ciur_env/
     [sudo] password for ada: 
     Running virtualenv with interpreter /usr/bin/python2
@@ -106,7 +107,7 @@ install virtualenv
     Also creating executable in /opt/python-env/ciur_env/bin/python
     Installing setuptools, pip, wheel...done.
 
-install ciur in virtualenv
+Install ciur in virtualenv
 
 .. code-block :: bash
 
