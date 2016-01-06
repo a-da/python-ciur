@@ -3,23 +3,16 @@
 """
 import json
 import logging
+import os
+import sys
 import warnings
 from cookielib import LWPCookieJar
-import os
 
-import sys
-from requests import Session
 from lxml.etree import FunctionNamespace
+from requests import Session
 
 # noinspection PyProtectedMember
 from lxml.etree import _Element as EtreeElement
-
-__title__ = "ciur"
-__version__ = "0.1.2"
-__author__ = "Andrei Danciuc"
-__license__ = "MIT"
-__git__ = "https://bitbucket.org/ada/ciur"
-__email__ = "python.ciur@gmail.com"
 
 # TODO make configurable
 CONF = {

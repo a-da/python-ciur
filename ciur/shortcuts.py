@@ -7,6 +7,7 @@ import sys
 
 import requests
 
+import ciur.__package__
 from ciur import bnf_parser, get_logger
 from ciur import parse
 from ciur import pretty_json
@@ -20,10 +21,10 @@ REQ_SESSION = requests.Session()
 
 HTTP_HEADERS = {
     "User-Agent": "%s/%s %s/%s %s" % (
-        ciur.__title__, ciur.__version__,
+        ciur.__package__.__title__, ciur.__package__.__version__,
         requests.__title__, requests.__version__,
 
-        ciur.__git__
+        ciur.__package__.__git__
     )
 }
 

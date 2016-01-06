@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import setuptools
 import re
-import ciur
+from ciur import __package__ as ciur 
 
 
 def parse_requirements(filename, editable=False):
@@ -40,7 +40,7 @@ setup_params = dict(
     license="MIT",
     long_description=open("README.rst").read(),
     packages=[
-        ciur.__title__
+        ciur.__package__.__title__
     ],
     install_requires=parse_requirements("requirements-pip.txt"),
     setup_requires=['pytest-runner'],
@@ -54,7 +54,7 @@ setup_params = dict(
     ],
     entry_points={
         "console_scripts": [
-            "ciur = ciur.cli:parse_cli",            
+            "ciur = ciur.cli:parse_cli",
         ]
     }
 )    
