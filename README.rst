@@ -39,7 +39,7 @@ End-User Documentation
 
 Ciur use own dsl, for example
 
-.. sourcecode :: bash
+.. code-block :: bash
 
      $ cat python-ciur/tests/ciur.d/example.org.ciur
 
@@ -54,13 +54,13 @@ Ciur use own dsl, for example
 Command Line Interface
 ----------------------
 
-.. sourcecode :: bash
+.. code-block :: bash
 
     $ ciur --url "http://example.org" --rules="example.org.ciur"
         
 got:
 
-.. sourcecode :: json
+.. code-block :: json
 
     {
         "root": {
