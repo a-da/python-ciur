@@ -128,11 +128,13 @@ Install ciur in virtualenv
 Features 
 ========
 
+The ``ciur`` can do a lot.
+
 .. image:: http://s1.developerslife.ru/public/images/gifs/afc71b8f-f197-4f4e-b98c-bb5178843fef.gif
    :target: https://bitbucket.org/ada/python-ciur
    :alt: Ciur
 
-Please see `features <./features.rst>`_.
+Please see `list of all features <./features.rst>`_.
 
 TODO:
 ====
