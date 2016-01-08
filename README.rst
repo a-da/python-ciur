@@ -125,6 +125,14 @@ Install ciur in virtualenv
     requests-2.9.1 six-1.10.0
     ...
 
+Features 
+========
+
+.. image:: http://s1.developerslife.ru/public/images/gifs/afc71b8f-f197-4f4e-b98c-bb5178843fef.gif
+   :target: https://bitbucket.org/ada/python-ciur
+   :alt: Ciur
+
+Please see `features <./features.rst>`_.
 
 TODO:
 ====
