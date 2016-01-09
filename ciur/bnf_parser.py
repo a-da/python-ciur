@@ -525,7 +525,7 @@ def ensure_unicode_provision(data):
 def external2dict(rules, namespace=None):
     """
     convert external_dls (*.ciur) to dict_dsl
-    TODO: define in documentation type of dsl's:
+    TODO: define in documentation type of DSL:
         external, dict, json, grammar_list, internal_dsl (Rule)
     :param rules:
         :type rules: FileIO or str

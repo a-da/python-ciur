@@ -65,7 +65,7 @@ Test on shell level
 """
 import argparse
 import sys
-
+import os
 
 from requests.models import PreparedRequest
 import requests.exceptions
@@ -77,7 +77,6 @@ except (ImportError,) as import_error:
     # work around for `No module named ciur`
     # TODO make it logging
     # print e
-    import os
     sys.path.append(os.path.abspath(
         os.path.join(os.path.dirname(__file__), "..")
     ))

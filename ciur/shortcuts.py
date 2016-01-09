@@ -33,12 +33,12 @@ LOGGER = get_logger(__name__)
 
 
 def pretty_parse_(ciur_file_or_path,
-                 url,
-                 doctype=None,
-                 namespace=None,
-                 headers=None,
-                 encoding=None,
-                 req_callback=None):
+                  url,
+                  doctype=None,
+                  namespace=None,
+                  headers=None,
+                  encoding=None,
+                  req_callback=None):
     """
     WARN:
         do not use this helper in production,
@@ -122,7 +122,7 @@ def pretty_parse_from_document(ciur_file_or_path, document, doctype="html"):
     :param url: url to be fetch with GET requests lib
     :return : extracted data as pretty json
     """
-    
+
     ciur_file_path, ciur_file = ciur_file_or_path.name, ciur_file_or_path
 
     res = bnf_parser.external2dict(ciur_file, namespace=document.namespace)
@@ -158,13 +158,12 @@ def pretty_parse_from_url(ciur_file_or_path, url, namespace=None):
 
     if "/xml" in doctype:
         doctype = "xml"
+    elif "/pdf" in doctype:
+        doctype = "pdf"
     elif "/html" in doctype:
         doctype = "html"
 
-    document = Document(
-            response.content,
-            namespace=namespace
-    )
+    document = Document(response, namespace=namespace)
 
     LOGGER.debug("doctype: `%s`", doctype)
 

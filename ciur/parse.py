@@ -10,19 +10,19 @@ from collections import OrderedDict
 
 # noinspection PyProtectedMember
 from lxml.etree import _Element as EtreeElement
-
 from lxml.cssselect import CSSSelector
 from lxml import etree
-
+import html5lib
 from pdfminer.pdfdevice import TagExtractor
-from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
+from pdfminer.pdfinterp import PDFResourceManager
+from pdfminer.pdfinterp import PDFPageInterpreter
 from pdfminer.pdfpage import PDFPage
 
 from ciur.exceptions import CiurBaseException
 from ciur.models import Document
 
+
 NOT_NULL_TYPES = (bool, float, basestring)
-_DATA_TYPE_DICT = "_dict"
 
 
 def _is_list(value):
@@ -69,13 +69,30 @@ def _type_list_casting(type_list, res, url):
     return res
 
 
-def _get_xpath(selector, selector_type):
-    xpath = selector.decode("utf-8") if isinstance(selector, str) else selector
-    if selector_type == "css":
-        sel = CSSSelector(xpath)
-        xpath = sel.path
+def _evaluate_xpath(rule, context_, doctype, rule_file_path):
+    selector = rule.selector.decode("utf-8") \
+        if isinstance(rule.selector, str) else rule.selector
 
-    return xpath
+    if rule.selector_type == "xpath":
+        xpath = selector
+    elif rule.selector_type == "css":
+        css = CSSSelector(
+            selector,
+            translator=doctype,
+            namespaces=context_.nsmap
+        )
+        xpath = css.path
+    else:
+        assert False, "unknown rule.selector_type `%s`" % rule.selector_type
+
+    try:
+        return context_.xpath(xpath)
+    except (etree.XPathEvalError,) as xpath_eval_error:
+        raise CiurBaseException(xpath_eval_error, {
+            "rule.name": rule.name,
+            "rule.selector": rule.selector,
+            "rule_file_path": rule_file_path
+        })
 
 
 def _shrink(res, it_list):
@@ -116,21 +133,17 @@ def _size_match_assert(res, rule, url, size, args):
         ))
 
 
-def _recursive_parse(context_, rule, namespace=None, url=None):
+def _recursive_parse(context_, rule, doctype, rule_file_path=None):
     """
     recursive parse embedded rules
+    :param: context_:
+        :type: context_: lxml.etree._ElementTree
     """
 
-    xpath = _get_xpath(rule.selector, rule.selector_type)
-    try:
-        res = context_.xpath(xpath, namespaces=namespace)
-    except (etree.XPathEvalError,) as xpath_eval_error:
-        raise CiurBaseException(xpath_eval_error, {
-            "rule.name": rule.name, "rule.selector": rule.selector
-        })
+    res = _evaluate_xpath(rule, context_, doctype, rule_file_path)
 
     res = _stretch(res)
-    res = _type_list_casting(rule.type_list, res, url)
+    res = _type_list_casting(rule.type_list, res, context_.base)
 
     if isinstance(res, list) and len(res) and isinstance(res[0], EtreeElement):
         tmp_list = []
@@ -138,7 +151,10 @@ def _recursive_parse(context_, rule, namespace=None, url=None):
             tmp_ordered_dict = OrderedDict()
             for rule_i in rule.rule:
                 data = _recursive_parse(
-                    res_i, rule_i, url=url, namespace=namespace
+                    res_i,
+                    rule_i,
+                    doctype,
+                    rule_file_path=rule_file_path
                 )
                 if data:
                     tmp_ordered_dict.update(data)
@@ -158,7 +174,7 @@ def _recursive_parse(context_, rule, namespace=None, url=None):
         # pylint: disable=redefined-variable-type
         res = OrderedDict((i.pop(rule.rule[0].name), i) for i in res)
 
-    _size_match_assert(res, rule, url, *rule.type_list[-1])
+    _size_match_assert(res, rule, context_.base, *rule.type_list[-1])
 
     res = _shrink(res, _is_list(rule.name))
 
@@ -183,12 +199,24 @@ def _recursive_parse(context_, rule, namespace=None, url=None):
         return _name_colon(res, rule.name)
 
 
-def html_type(document, rule):
+def _prepare_context(context_, url=None):
+    if isinstance(context_, EtreeElement):
+        pass
+    else:
+        context_ = context_.getroot()
+
+    if url:
+        context_.base = url
+
+    return context_
+
+
+def html_type(document, rule, rule_file_path=None):
     """
     use this function if page is html
-    :param tree_builder: collection of modules names for building different
-        kinds of tree from HTML documents.
-        :type tree_builder: str
+
+    :param rule_file_path:
+        :type rule_file_path: str
 
     :param rule:
         :type rule: Rule
@@ -197,27 +225,21 @@ def html_type(document, rule):
         :type document: Document
 
     :rtype: OrderedDict
-    """    
-    
-    import html5lib
-    # context = html5parser.document_fromstring(document.content)
+    """
+
     context = html5lib.parse(
-         document.content,
-         treebuilder="lxml",
-         namespaceHTMLElements=document.namespace,
-         encoding=document.encoding
+        document.content,
+        treebuilder="lxml",
+        namespaceHTMLElements=document.namespace,
+        encoding=document.encoding
     )
 
-    ret = _recursive_parse(
-        context,
-        rule,
-        url=document.url,
-        namespace={'html': 'http://www.w3.org/1999/xhtml'} # document.namespace
-    )
-    return ret
+    context = _prepare_context(context, document.url)
+
+    return _recursive_parse(context, rule, "html", rule_file_path)
 
 
-def xml_type(document, rule):
+def xml_type(document, rule, rule_file_path=None):
     """
     use this function if page is xml
     :param rule:
@@ -226,24 +248,27 @@ def xml_type(document, rule):
     :param document: Document to be parsed
         :type document: Document
 
+    :param rule_file_path:
+        :type rule_file_path: str
+
     :rtype: OrderedDict
     """
 
-    context = etree.fromstring(document.content)    
+    context = etree.fromstring(document.content)
 
-    ret = _recursive_parse(
-        context,
-        rule,
-        url=document.url,
-        namespace=document.namespace
-    )
-    return ret
+    context = _prepare_context(context, document.url)
+
+    return _recursive_parse(context, rule, "xml", rule_file_path)
 
 
-def pdf_type(document, rule):
+def pdf_type(document, rule, rule_file_path=None):
     """
     use this function if page is pdf
     TODO: do not forget to document this
+
+    :param rule_file_path:
+        :type rule_file_path: str
+
     :param rule:
         :type rule: Rule
 
@@ -266,10 +291,10 @@ def pdf_type(document, rule):
         interpreter.process_page(page)
 
     out_fp.seek(0)  # reset the buffer position to the beginning
-    
+
     xml = Document(
         out_fp.read(),
         namespace=document.namespace,
         url=document.url
     )
-    return xml_type(xml, rule)
+    return xml_type(xml, rule, rule_file_path)

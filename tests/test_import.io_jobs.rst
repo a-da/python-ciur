@@ -21,9 +21,10 @@ test internal dsl
 ...            )
 ...        )
 
->>> data = parse.xml_type(response.content, rule)
+>>> from ciur.models import Document
+>>> data = parse.xml_type(Document(response), rule)
 >>> print pretty_json(data)  # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
-{
+    {
         "root": [
             {
                 "title": "...",
@@ -53,7 +54,7 @@ test external dsl
 >>> from ciur import bnf_parser
 >>> res = bnf_parser.external2dict(open("ciur.d/import.io_jobs.ciur"))
 >>> rule = Rule.from_dict(res[0])  # doctest: +NORMALIZE_WHITESPACE
->>> data = parse.xml_type(response.content, rule)
+>>> data = parse.xml_type(Document(response), rule)
 >>> print pretty_json(data) # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
 {
         "root": [
@@ -80,11 +81,9 @@ test external dsl
     }
 
 
-
-
 >>> res = bnf_parser.to_dict(open("ciur.d/import.io_jobs.ciur"))
 >>> rule = Rule.from_dict(res[0])  # doctest: +NORMALIZE_WHITESPACE
->>> data = parse.xml_type(response.content, rule)
+>>> data = parse.xml_type(Document(response), rule)
 >>> print pretty_json(data) # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
 {
         "root": [

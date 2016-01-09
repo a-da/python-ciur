@@ -1,3 +1,7 @@
+"""
+Common function that can not be hold in ciur.__init__ because it is doing
+third party library calls
+"""
 import os
 from cookielib import LWPCookieJar
 

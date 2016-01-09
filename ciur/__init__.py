@@ -92,13 +92,18 @@ def open_file(relative, root=__file__, mode='r'):
 
 def get_logger(name, formatter=None, handler=None, level=logging.INFO):
     """
-    
-    :param name: 
-    :param formatter: 
-    :param handler: 
-    :param level: 
+    :param name: usually __name__
+        :type name: str
+    :param formatter: Formatter instances are used to convert a
+        LogRecord to text.
+        :type formatter: logging.Formatter
+    :param handler: Handler instances dispatch logging events to
+        specific destinations.
+        :type handler: logging.Handler
+    :param level: log level
+        :type level: long or int
     :return: logger
-        :rtype: logger
+        :rtype: logging.Logger
     """
     logger = logging.getLogger(name)
     logger.setLevel(level)
@@ -110,6 +115,18 @@ def get_logger(name, formatter=None, handler=None, level=logging.INFO):
     logger.addHandler(handler)
 
     def custom_warn(message, category, filename, lineno, *_):
+        """
+        redirect logs from warning module to log module
+        :param message:
+            :type message: str
+        :param category: a class that the warning must be a subclass of
+            :type category: warnings.WarningMessage
+        :param filename:
+            :type filename: str
+        :param lineno:
+            :type lineno: int
+        :param _: unused
+        """
         logger.warn(
             warnings.formatwarning(message, category, filename, lineno).strip()
         )
