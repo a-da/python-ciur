@@ -31,7 +31,7 @@ IDE pycharm tuning::
 
     Theme: Darcula
 
- * Editor:
+ * Editor
  
     Editor > Code Style
 
