@@ -34,6 +34,10 @@ Appearance & Behavior > Appearance
 Editor > Code Style
 
     Right margin (columns): 80
+    
+Editor > Colors & fonts
+
+    Scheme: Darcula
 
 Editor > Spelling > [TAB] Dictionaries
 
