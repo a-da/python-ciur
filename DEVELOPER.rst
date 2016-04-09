@@ -27,32 +27,32 @@ Code Check list::
 IDE pycharm tuning::
 ====================
 
-Appearance & Behavior > Appearance
+ * Appearance & Behavior > Appearance
 
     Theme: Darcula
 
-Editor > Code Style
+ * Editor
+ 
+    Editor > Code Style
 
-    Right margin (columns): 80
+        Right margin (columns): 80
     
-Editor > Colors & fonts
+    Editor > Colors & fonts
 
-    Scheme: Darcula
+        Scheme: Darcula
 
-Editor > Spelling > [TAB] Dictionaries
+    Editor > Spelling > [TAB] Dictionaries
 
-    Custom Dictionaries Folder: ${CIUR_HOME}
+        Custom Dictionaries Folder: ${CIUR_HOME}
 
+    Editor > General > Appearance
 
-Editor > General > Appearance
+        Show line numbers (on)
 
-    Show line numbers (on)
-
-    Show whitespaces:
-       - Leading (off)
-       - Inner (off)
-       - Trailing (on)
-
+        Show whitespaces:
+           - Leading (off)
+           - Inner (off)
+           - Trailing (on)
 
 Project: ciur > Project Interpreter
 
