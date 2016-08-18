@@ -231,7 +231,6 @@ def html_type(document, rule, rule_file_path=None):
         document.content,
         treebuilder="lxml",
         namespaceHTMLElements=document.namespace,
-        encoding=document.encoding
     )
 
     context = _prepare_context(context, document.url)

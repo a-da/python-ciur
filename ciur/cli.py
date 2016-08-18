@@ -38,6 +38,7 @@ Test on shell level
     ... # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
     usage: cli.py... [-h] -u URL -r RULE [-w IGNORE_WARN]
     *Ciur is a scrapper layer*
+    ...
     optional arguments:
       -h, --help            show this help message and exit
       -u URL, --url URL     url of required document html, xml, pdf. (f.e.
@@ -64,6 +65,7 @@ Test on shell level
 
 """
 import argparse
+from argparse import RawTextHelpFormatter
 import sys
 import os
 
@@ -113,7 +115,11 @@ def check_file(path):
         raise argparse.ArgumentTypeError(io_error)
 
 
-PARSER = argparse.ArgumentParser(description=ciur.__doc__)
+PARSER = argparse.ArgumentParser(
+    description=ciur.__doc__,
+    formatter_class=RawTextHelpFormatter
+)
+
 
 PARSER.add_argument(
     "-u",
@@ -152,8 +158,12 @@ def parse_cli(*argv):
     print pretty_parse_from_url(args.rule, args.url)
 
 
-if __name__ == "__main__":
-    parse_cli(*sys.argv)
+def main():
+    parse_cli(*sys.argv[1:])
+
+
+if __name__ == "__main__":    
+    parse_cli(*sys.argv[1:])
 
     # TODO: use also stream
     # bash$ curl "http://example.org" | ciur --rule=/tmp/example.org.ciur

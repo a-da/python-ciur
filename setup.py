@@ -54,7 +54,7 @@ setup_params = dict(
     ],
     entry_points={
         "console_scripts": [
-            "ciur = ciur.cli:parse_cli",
+            "ciur = ciur.cli:main",
         ]
     }
 )

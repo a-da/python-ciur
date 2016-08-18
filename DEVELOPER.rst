@@ -73,4 +73,3 @@ TODO: Other IDE tuning::
 
     Add here tuning eclipse, sublime ...
     Read contribution protocol link <link> before !
-

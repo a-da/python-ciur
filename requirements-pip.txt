@@ -1,8 +1,9 @@
 
 # because it raise undesirable exception install latest directly from repo
 # https://github.com/lxml/lxml/pull/172#issuecomment-169285414
-#html5lib # TODO enable back when issue_fix is released
-git+https://github.com/html5lib/html5lib-python.git@46dae3d9f471468da5890803e80115db246ea6b6#egg=html5lib
+#html5lib # TODO check if it is fixed
+html5lib==0.999999999
+# git+https://github.com/html5lib/html5lib-python.git@46dae3d9f471468da5890803e80115db246ea6b6#egg=html5lib
 
 
 lxml==3.5.0 # xml like document parsing
@@ -18,5 +19,3 @@ pdfminer==20140328 # convert pdf to tag (“Tagged PDF” xml like format)
 # http://stackoverflow.com/questions/29099404/
 # ssl-insecureplatform-error-when-using-requests-package
 requests[security]==2.9.1
-
-

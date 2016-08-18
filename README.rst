@@ -2,31 +2,36 @@
 Ciur
 ====
 
-.. image:: http://thumbs.dreamstime.com/m/wooden-sieve-old-ancient-isolated-white-background-45140021.jpg
+.. image:: ./docs/images/wooden-sieve-old-ancient-isolated-white-background.jpg
    :target: https://bitbucket.org/ada/python-ciur
    :alt: Ciur
 
 ..
 
-    *Ciur is a scrapper layer in developing process.*
+    *Ciur is a scrapper layer in development*
 
     *Ciur is a lib because it has less black magic than a framework*
 
 
-Export all scrapper related code into separate layer.
+It exports all scrapper related code into separate layer.
 
-If you are annoyed from sql spaghetti inside php and inline css inside html
-THEN you also are annoyed from xpath/css code inside crawler.
+If you are annoyed by
+`Spaghetti code <https://en.wikipedia.org/wiki/Spaghetti_code>`_,
+sql inside php and inline css inside html
+THEN you also are annoyed by xpath/css code inside crawler.
 
 Samples of `bad code <./docs/bad_code/>`_.
 
-Ciur give you additional possibility to fix previous headache with adding additional layer.
+Ciur gives the taste of `Lasagna code <http://c2.com/cgi/wiki?LasagnaCode>`_
+generally by enforcing encapsulation for scrapping layer.
 
 What does “Ciur” mean?
 ======================
-Ciur is an romanian word that means in english `Sieve <https://en.wikipedia.org/wiki/Sieve>`_.
 
-It has the same purpose "device for separating wanted elements from unwanted material".
+Ciur is Romanian for `Sieve <https://en.wikipedia.org/wiki/Sieve>`_.
+
+It fulfils the same purpose in the sense of being a
+"device for separating wanted elements from unwanted material".
 
 Ciur use MIT License
 ====================
@@ -37,7 +42,7 @@ Please see `LICENSE <./LICENSE>`_.
 End-User Documentation
 ======================
 
-Ciur use own dsl, for example
+Ciur uses own dsl, for example
 
 .. code-block :: bash
 
@@ -91,8 +96,8 @@ Python ciur API
 
 
 Samples of usage:
-   * https://bitbucket.org/ada/ciur.example.exchange --> parsing site exchange money rates world wide (40 sources, 4 country).
-   * https://bitbucket.org/ada/ciur.example.social --> parsing social site (facebook, linkedin, xing ...) (not yet ready for open realease)
+   * https://bitbucket.org/ada/ciur.example.exchange --> parsing world wide (40 sources, 4 country) currency exchange rates.
+   * https://bitbucket.org/ada/ciur.example.social --> parsing networking sites (such as Facebook, Linkedin, Xing ...) (not yet ready for open realease)
 
 Developer Guide
 ===============
@@ -125,19 +130,16 @@ Install ciur in virtualenv
     requests-2.9.1 six-1.10.0
     ...
 
-Features 
-========
+.. Features
+   ========
 
-The ``ciur`` can do a lot.
+   The ``ciur`` can do a lot.
 
-.. image:: http://s1.developerslife.ru/public/images/gifs/afc71b8f-f197-4f4e-b98c-bb5178843fef.gif
-   :target: https://bitbucket.org/ada/python-ciur
-   :alt: Ciur
+   Please see `list of all features <./features.rst>`_.
 
-Please see `list of all features <./features.rst>`_.
 
 TODO:
-====
+=====
  
  * TODO: http://lybniz2.sourceforge.net/safeeval.html
  * demo on cloud9
@@ -148,7 +150,5 @@ TODO:
 
    .base_url:
 
-
-====== Last Mile
-
-https://youtu.be/FVEEndIwOSA?t=2243
+.. ====== Last Mile
+   https://youtu.be/FVEEndIwOSA?t=2243

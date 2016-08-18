@@ -1,5 +1,12 @@
 """
 *Ciur is a scrapper layer*
+
+*Ciur is a lib because it has less black magic than a framework*
+
+If you are annoyed by `Spaghetti code` than we can taste `Lasagna code` 
+with help of Ciur
+
+https://bitbucket.org/ada/python-ciur
 """
 import json
 import logging
@@ -134,4 +141,3 @@ def get_logger(name, formatter=None, handler=None, level=logging.INFO):
     warnings.showwarning = custom_warn
 
     return logger
-
