@@ -151,24 +151,27 @@ class Rule(ciur.CommonEqualityMixin):
                 method = getattr(obj, method_str)
                 tmp.append([method, args])
             else:
-                try:
-                    tmp.append([
-                        getattr(ciur.xpath_functions_ciur, func_name + "_"),
-                        args
-                    ])
-                except AttributeError:
+                for casting_module in bnf_parser.casting_modules:
                     try:
                         tmp.append([
-                            getattr(
-                                ciur.xpath_functions_ciur, "fn_" + func_name
-                            ),
+                            getattr(casting_module, func_name + "_"),
                             args
                         ])
-                    except AttributeError:
+                        break
+                    except (AttributeError,) as attribute_error:
+                        pass
+
+                    try:
                         tmp.append([
-                            getattr(ciur.xpath_functions, "fn_" + func_name),
+                            getattr(casting_module, "fn_" + func_name),
                             args
                         ])
+                        break
+                    except (AttributeError,) as attribute_error:
+                        pass
+                else:
+                    raise attribute_error
+
 
         self.type_list = tmp
 

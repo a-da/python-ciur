@@ -19,7 +19,6 @@ def load_xpath_functions(locals_):
     :param locals_:  dictionary containing the current scope's local variables.
         :type locals_: dict
     """
-    locals()
     function_namespaces = FunctionNamespace(None)
 
     function_namespaces.update({

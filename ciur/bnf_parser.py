@@ -345,6 +345,11 @@ def type_list_validation(string, location, expr, error):
         "type_list_validation->%s, %s" % (error, expr)
     )
 
+casting_modules = {
+    ciur.xpath_functions_ciur,
+    ciur.xpath_functions,
+}
+
 
 def _type_list():
     casting_functions_args = Optional(
@@ -359,7 +364,7 @@ def _type_list():
         if i.endswith("_") and not i.startswith("__")
     ]
 
-    for i_module in [ciur.xpath_functions_ciur, ciur.xpath_functions]:
+    for i_module in casting_modules:
         casting_functions_list += [
             Group(Literal(k[3:]) + casting_functions_args)
             for k in i_module.__dict__.keys()
