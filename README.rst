@@ -1,10 +1,10 @@
-====
-Ciur
-====
-
 .. image:: https://magnum-ci.com/status/8fa4d3425c370586324393b7ad167d41.png
    :target: https://magnum-ci.com/projects/4535
    :alt: Build Status fom magnum-ci.com
+   
+====
+Ciur
+====
    
 .. image:: ./docs/images/wooden-sieve-old-ancient-isolated-white-background.jpg
    :target: https://bitbucket.org/ada/python-ciur
