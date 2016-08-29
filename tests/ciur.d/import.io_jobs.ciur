@@ -1,7 +1,0 @@
-root `/jobs/job` +
-    title `./title/text()` +
-    url `./url/text()` +1
-    location `.` *
-        country `./country/text()` +1
-        city `./city/text()` +1
-        zip `./postalcode/text()` *1

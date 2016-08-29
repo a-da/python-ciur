@@ -48,23 +48,27 @@ def _is_dict(value):
 def _type_list_casting(type_list, res, url):
     for fun, args in type_list[:-1]:
         tmp = []
-        for res_i in res:
-            if fun.__name__.startswith("fn_"):
-                res_i = fun(None, res_i, *args)
-            elif fun.__name__ == "url_":
-                res_i = fun(res_i, url)
-            else:
-                try:
-                    res_i = fun(res_i, *args)
-                except TypeError, type_error:
-                    print type_error
-                    # TODO fix this
 
-            # filter null results
-            if res_i not in [None, ""]:
-                tmp.append(res_i)
+        if getattr(fun, "process_list", None):
+            res = [fun(None, res, *args)]            
+        else:
+            for res_i in res:
+                if fun.__name__.startswith("fn_"):
+                    res_i = fun(None, res_i, *args)
+                elif fun.__name__ == "url_":
+                    res_i = fun(res_i, url)
+                else:
+                    try:
+                        res_i = fun(res_i, *args)
+                    except TypeError, type_error:
+                        print type_error
+                        # TODO fix this
+    
+                # filter null results
+                if res_i not in [None, ""]:
+                    tmp.append(res_i)
 
-        res = tmp
+            res = tmp
 
     return res
 

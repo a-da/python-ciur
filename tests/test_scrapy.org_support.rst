@@ -3,10 +3,30 @@ Testing http://scrapy.org/companies/
 
 >>> from ciur import parse, pretty_json
 >>> from ciur.rule import Rule
->>> import requests
 
->>> requests = requests.Session()
->>> response = requests.get("http://scrapy.org/companies/")
+>>> html_page = parse.Document("""<html><body>
+... <div class="companies-container">
+...     <div class="company-box">
+...       <a href="http://scrapinghub.com/?_ga=1.262811468.1789615425.1471746235">
+...       <img src="../img/shub-logo.png">
+...       </a>
+...       <span class="highlight">Scrapinghub:</span>
+...     </div>
+...
+...     <div class="company-box">
+...       <a href="http://parsely.com/"><img src="../img/01-parsely-logo.png"></a>
+...       <span class="highlight">Parsely:</span>
+...     </div>
+...
+...     <div class="company-box">
+...       <a href="http://directemployersfoundation.org/">
+...       <img src="../img/02-direct-employers-logo.png">
+...       </a>
+...       <span class="highlight">DirectEmployers Foundation:</span>
+...     </div>
+... </div>
+... </body></html>
+... """)
 
 test internal dsl
 -----------------
@@ -18,77 +38,24 @@ test internal dsl
 ...             Rule("logo", "./a/img/@src", ["+"])
 ...            )
 
->>> data = parse.html_type(parse.Document(response.content), rule)
->>> print pretty_json(data)  # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
-    {
-            "company_list": [
-                {
-                    "name": "Scrapinghub:",
-                    "company_url": "http://scrapinghub.com/",
-                    "blog_url": "http://scrapinghub.com/about",
-                    "logo": "../img/shub-logo.png"
-                },
-                ...
-                {
-                    "name": "El Útero de Marita:",
-                    "company_url": "http://utero.pe/",
-                    "logo": "../img/40-utero-logo.png"
-                },
-                ...
-                {
-                    "name": "SayOne:",
-                    "company_url": "http://sayonetech.com/",
-                    "logo": "../img/sayone-logo.png"
-                }
-            ]
-    }
-
-test external dsl
------------------
-
->>> from ciur import bnf_parser, open_file
->>> res = bnf_parser.external2dict(open_file(
-...     "../tests/ciur.d/scrapy.org_support.ciur"
-... ))
->>> rule = Rule.from_dict(res[0])  # doctest: +NORMALIZE_WHITESPACE
->>> data = parse.html_type(parse.Document(response.content), rule)
->>> print pretty_json(data)  # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
+>>> data = parse.html_type(html_page, rule)
+>>> print pretty_json(data)  # doctest: +NORMALIZE_WHITESPACE
     {
         "company_list": [
-        {
-            "name": "Scrapinghub:",
-            "company_url": "http://scrapinghub.com/",
-            "blog_url": "http://scrapinghub.com/about",
-            "logo": "../img/shub-logo.png"
-        },
-        ...
-        {
-            "name": "SayOne:",
-            "company_url": "http://sayonetech.com/",
-            "logo": "../img/sayone-logo.png"
-        }
-        ]
-    }
-
->>> res = bnf_parser.external2dict(open_file(
-...    "../tests/ciur.d/scrapy.org_support.ciur"
-... ))
->>> rule = Rule.from_dict(res[0])  # doctest: +NORMALIZE_WHITESPACE
->>> data = parse.html_type(parse.Document(response.content), rule)
->>> print pretty_json(data)  # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
-    {
-        "company_list": [
-        {
-            "name": "Scrapinghub:",
-            "company_url": "http://scrapinghub.com/",
-            "blog_url": "http://scrapinghub.com/about",
-            "logo": "../img/shub-logo.png"
-        },
-        ...
-        {
-            "name": "SayOne:",
-            "company_url": "http://sayonetech.com/",
-            "logo": "../img/sayone-logo.png"
-        }
+            {
+                "name": "Scrapinghub:",
+                "company_url": "http://scrapinghub.com/?_ga=1.262811468.1789615425.1471746235",
+                "logo": "../img/shub-logo.png"
+            },
+            {
+                "name": "Parsely:",
+                "company_url": "http://parsely.com/",
+                "logo": "../img/01-parsely-logo.png"
+            },
+            {
+                "name": "DirectEmployers Foundation:",
+                "company_url": "http://directemployersfoundation.org/",
+                "logo": "../img/02-direct-employers-logo.png"
+            }
         ]
     }

@@ -44,19 +44,26 @@ class ParseExceptionInCiurFile(ParseBaseException):
             self, parse_error.pstr, parse_error.loc,
             parse_error.msg, parse_error.parserElement
         )
-        self._file_string = file_string.splitlines()
+        self._file_string = file_string.splitlines()        
+            
         self._file_name = None if not file_name else os.path.abspath(file_name)
 
     def __str__(self):
         buf = "|from file `%s`" % self._file_name \
             if self._file_name else "from string"
 
-        line = "%s" % self.lineno
-
+        lineno = self.lineno - 1
+        line = "%s" % lineno
+        cursor_position = self.col + 1 + len(line)
+        
+        if lineno == len(self._file_string):
+            lineno -= 1            
+            cursor_position += len(self._file_string[-1]) + 1 
+            
         return "%s,\n    %s \n    |%s: %s\n    %s^" % (
             ParseBaseException.__str__(self),
             buf,
             line,
-            self._file_string[self.lineno - 1],
-            " " * (self.col + 1 + len(line))
+            self._file_string[lineno],
+            " " * cursor_position
         )

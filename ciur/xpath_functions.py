@@ -124,6 +124,9 @@ def fn_string_join(context, text, separator=""):
     return separator.join(text)
 
 
+fn_string_join.process_list = True
+
+
 def fn_upper_case(context, text):
     """
     http://www.w3.org/TR/xpath-functions/#func-upper-case

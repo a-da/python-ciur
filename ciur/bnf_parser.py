@@ -470,11 +470,18 @@ def external2list(rules, namespace=None):
     if isinstance(rules, file):
         file_name = rules.name
         rules = rules.read()
-
-    if not re.search(r"\n\s*$", rules):
+        
+    if not rules.strip():
+        raise CiurBaseException(
+            "DSL is empty", {
+                "file_name": os.path.abspath(file_name) if file_name else None
+            }
+        )
+    
+    if not re.search(r"\n\s*$", rules):        
         raise CiurBaseException(
             "no new line at the end of file", {
-                "file_name": os.path.abspath(file_name)
+                "file_name": os.path.abspath(file_name) if file_name else None
             }
         )
 
