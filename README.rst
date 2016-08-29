@@ -1,3 +1,5 @@
+[![PyPI](https://img.shields.io/pypi/v/bigchaindb.svg)](https://pypi.python.org/pypi/BigchainDB)
+
 ====
 Ciur
 ====
