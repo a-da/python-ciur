@@ -3,7 +3,7 @@ Common function that can not be hold in ciur.__init__ because it is doing
 third party library calls
 """
 import os
-from cookielib import LWPCookieJar
+from http.cookiejar import LWPCookieJar
 
 from lxml.etree import FunctionNamespace
 from lxml.etree import _Element as EtreeElement
@@ -22,7 +22,7 @@ def load_xpath_functions(locals_):
     function_namespaces = FunctionNamespace(None)
 
     function_namespaces.update({
-        k[3:].replace("_", "-"): v for (k, v) in locals_.iteritems()
+        k[3:].replace("_", "-"): v for (k, v) in locals_.items()
         if k.startswith("fn_")
     })
 
@@ -44,11 +44,11 @@ def get_session(callback_log_in, cookie_file_path):
     session.cookies = LWPCookieJar(cookie_file_path)
 
     if not os.path.exists(cookie_file_path):
-        print "[INFO] setting cookies"
+        print("[INFO] setting cookies")
         session.cookies.save()
         callback_log_in(session)
     else:
-        print "[INFO] loading cookies"
+        print("[INFO] loading cookies")
         session.cookies.load(ignore_discard=True)
 
     return session

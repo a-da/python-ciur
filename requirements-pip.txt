@@ -1,3 +1,8 @@
+# `Python Package Index <https://en.wikipedia.org/wiki/Python_Package_Index>`_
+# requirements for python3
+#
+# to install, use
+# pip install -r {this_file_path}
 
 # because it raise undesirable exception install latest directly from repo
 # https://github.com/lxml/lxml/pull/172#issuecomment-169285414
@@ -13,7 +18,7 @@ pyparsing==2.0.7 # ciur grammar rule parser builder
 
 python-dateutil==2.4.2 # parse datetime from different string formats
 
-pdfminer==20140328 # convert pdf to tag (“Tagged PDF” xml like format)
+
 
 # http client lib to fetch documents by url
 # http://stackoverflow.com/questions/29099404/

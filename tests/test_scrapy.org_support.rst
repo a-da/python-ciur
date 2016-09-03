@@ -39,7 +39,7 @@ test internal dsl
 ...            )
 
 >>> data = parse.html_type(html_page, rule)
->>> print pretty_json(data)  # doctest: +NORMALIZE_WHITESPACE
+>>> print(pretty_json(data))  # doctest: +NORMALIZE_WHITESPACE
     {
         "company_list": [
             {

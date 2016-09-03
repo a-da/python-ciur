@@ -46,7 +46,7 @@ Please see `LICENSE <./LICENSE>`_.
 End-User Documentation
 ======================
 
-Ciur uses own dsl, for example
+Ciur uses own DSL, for example
 
 .. code-block :: bash
 
@@ -106,20 +106,8 @@ Samples of usage:
 Developer Guide
 ===============
 
-
-Install
-=======
-
-Install virtualenv
-
-.. code-block :: bash
-
-    $ sudo virtualenv -p python2 /opt/python-env/ciur_env/
-    [sudo] password for ada: 
-    Running virtualenv with interpreter /usr/bin/python2
-    New python executable in /opt/python-env/ciur_env/bin/python2
-    Also creating executable in /opt/python-env/ciur_env/bin/python
-    Installing setuptools, pip, wheel...done.
+In case of fresh deployment for developer machine follow
+`Set up Python virtual environment <docs/python_virtual_environment.rst>`_
 
 Install ciur in virtualenv
 

@@ -87,7 +87,8 @@ MONTHS = OrderedDict((
     ("ian.", "January")
 ))
 
-for foreign, eng in MONTHS.iteritems():
+
+for foreign, eng in dict(MONTHS).items():
     MONTHS[foreign.lower()] = eng
     MONTHS[foreign.lower()] = eng
     MONTHS[foreign.capitalize()] = eng

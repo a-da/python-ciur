@@ -18,7 +18,7 @@ test internal dsl
 ... )
 
 >>> data = parse.html_type(parse.Document(response.content), rule)
->>> print pretty_json(data)  # doctest: +NORMALIZE_WHITESPACE
+>>> print(pretty_json(data))  # doctest: +NORMALIZE_WHITESPACE
 {
     "root": {
         "name": "Example Domain",
@@ -36,7 +36,7 @@ test external dsl
 ... ))
 >>> rule = Rule.from_dict(res[0])  # doctest: +NORMALIZE_WHITESPACE
 >>> data = parse.html_type(parse.Document(response.content), rule)
->>> print pretty_json(data)  # doctest: +NORMALIZE_WHITESPACE
+>>> print(pretty_json(data))  # doctest: +NORMALIZE_WHITESPACE
 {
     "root": {
         "name": "Example Domain",
@@ -49,7 +49,7 @@ test external dsl
 ... ))
 >>> rule = Rule.from_dict(res[0])  # doctest: +NORMALIZE_WHITESPACE
 >>> data = parse.html_type(parse.Document(response.content), rule)
->>> print pretty_json(data)  # doctest: +NORMALIZE_WHITESPACE
+>>> print(pretty_json(data))  # doctest: +NORMALIZE_WHITESPACE
 {
     "root": {
         "name": "Example Domain",
@@ -62,7 +62,7 @@ test external dsl
 ... ))
 >>> rule = Rule.from_dict(res[0])  # doctest: +NORMALIZE_WHITESPACE
 >>> data = parse.html_type(parse.Document(response.content), rule)
->>> print pretty_json(data)  # doctest: +NORMALIZE_WHITESPACE
+>>> print(pretty_json(data))  # doctest: +NORMALIZE_WHITESPACE
 {
     "root": {
         "name": "Example Domain",

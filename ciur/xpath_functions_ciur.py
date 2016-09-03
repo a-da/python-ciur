@@ -10,11 +10,9 @@ NOTE:
     local convention for all public cast function is `[a-z]+[a-z0-9_]+_`
     it should end with underscore
 """
-import HTMLParser
-import urlparse
+from html.parser import HTMLParser
+from urllib.parse import urlparse
 
-from lxml.etree import tostring
-from dateutil import parser
 
 from ciur.helpers import load_xpath_functions
 from ciur.helpers import element2text
@@ -185,6 +183,6 @@ def fn_tail(context, value):
     return value.tail
 
 
-HTML_PARSER = HTMLParser.HTMLParser()
+HTML_PARSER = HTMLParser()
 
 load_xpath_functions(locals())

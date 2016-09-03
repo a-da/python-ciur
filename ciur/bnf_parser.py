@@ -49,7 +49,7 @@ import.io_jobs.doctest
      ['city', 'xpath', './city/text()', ['+1']],
      ['zip', 'xpath', './postalcode/text()', ['*1']]]]]]]
 
->>> print external2json(rules)  # doctest: +NORMALIZE_WHITESPACE
+>>> print(external2json(rules))  # doctest: +NORMALIZE_WHITESPACE
 [
     {
         "name": "root",
@@ -133,7 +133,7 @@ scrapy.org_support.doctest
    ['blog_url', 'xpath', './p/a/@href', ['*']],
    ['logo', 'xpath', './a/img/@src', ['+']]]]]
 
->>> print external2json(rules)  # doctest: +NORMALIZE_WHITESPACE
+>>> print(external2json(rules))  # doctest: +NORMALIZE_WHITESPACE
 [
     {
         "name": "company_list",
@@ -183,6 +183,7 @@ scrapy.org_support.doctest
 import os
 import re
 from collections import OrderedDict
+from io import TextIOWrapper
 
 from lxml import etree
 from pyparsing import (
@@ -464,10 +465,10 @@ def external2list(rules, namespace=None):
 
     :rtype: list[str]
     """
-    assert isinstance(rules, (file, basestring))
-
+    assert isinstance(rules, (TextIOWrapper, str))
+    
     file_name = None
-    if isinstance(rules, file):
+    if isinstance(rules, TextIOWrapper):
         file_name = rules.name
         rules = rules.read()
         
@@ -527,9 +528,7 @@ def ensure_unicode_provision(data):
     :rtype list[unicode] or unicode or object
     """
     if isinstance(data, list):
-        return [ensure_unicode_provision(i) for i in data]
-    if isinstance(data, str):
-        return data.decode("utf-8")
+        return [ensure_unicode_provision(i) for i in data]    
 
     return data
 

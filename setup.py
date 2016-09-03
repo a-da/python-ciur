@@ -3,6 +3,14 @@ import setuptools
 import re
 import ciur
 
+# requires
+# http://setuptools.readthedocs.io/en/latest/setuptools.html
+# optional features of your project
+
+extras_require = {
+    'pdf': ["pdfminer==20140328"],
+}
+
 
 def parse_requirements(filename, editable=False):
     _ = []
@@ -43,14 +51,15 @@ setup_params = dict(
         ciur.__title__
     ],
     install_requires=parse_requirements("requirements-pip.txt"),
+    extras_require=extras_require,
     setup_requires=['pytest-runner'],
     tests_require=['pytest'],
     classifiers=[
         "Intended Audience :: Developers",
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Programming Language :: Python",
-        "Programming Language :: Python :: 2.7",
-        # "Programming Language :: Python :: 3",
+        # "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 3",
     ],
     entry_points={
         "console_scripts": [
@@ -58,6 +67,7 @@ setup_params = dict(
         ]
     }
 )
+
 
 if __name__ == '__main__':
     setuptools.setup(**setup_params)

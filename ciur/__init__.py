@@ -55,7 +55,7 @@ def pretty_json(data):
         return repr(value)
 
     res = json.dumps(data, indent=4, ensure_ascii=False, default=default)
-    return res.encode("utf-8") if isinstance(res, unicode) else res
+    return res
 
 
 class CommonEqualityMixin(object):  # pylint: disable=too-few-public-methods

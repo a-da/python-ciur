@@ -20,7 +20,7 @@ Testing string_join xpath function
 ... """)[0]
 
 >>> data = parse.html_type(html_document, string_join_sample_rule1)
->>> print pretty_json(data)  # doctest: +NORMALIZE_WHITESPACE
+>>> print(pretty_json(data))  # doctest: +NORMALIZE_WHITESPACE
 {
     "text": [
         "\n    ",
@@ -36,7 +36,7 @@ Testing string_join xpath function
 ... """)[0]
 
 >>> data = parse.html_type(html_document, string_join_sample_rule2)
->>> print pretty_json(data)  # doctest: +NORMALIZE_WHITESPACE
+>>> print(pretty_json(data))  # doctest: +NORMALIZE_WHITESPACE
 {
     "text": "\n    Do you want to face a new challenge?\n    Building a platform with top-notch\n"
 }
@@ -46,7 +46,7 @@ Testing string_join xpath function
 ... """)[0]
 
 >>> data = parse.html_type(html_document, string_join_sample_rule3)
->>> print pretty_json(data)  # doctest: +NORMALIZE_WHITESPACE
+>>> print(pretty_json(data))  # doctest: +NORMALIZE_WHITESPACE
 {
     "text": "\n    |Do you want to face a new challenge?|\n    |Building a platform with top-notch|\n"
 }

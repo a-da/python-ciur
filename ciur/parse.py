@@ -5,7 +5,8 @@ NOTE:
     local convention for all public paring function is `[a-z]+[a-z0-9_]+_type`
     is should end with "_type"
 """
-import StringIO
+import sys
+from io import StringIO
 from collections import OrderedDict
 
 # noinspection PyProtectedMember
@@ -13,16 +14,12 @@ from lxml.etree import _Element as EtreeElement
 from lxml.cssselect import CSSSelector
 from lxml import etree
 import html5lib
-from pdfminer.pdfdevice import TagExtractor
-from pdfminer.pdfinterp import PDFResourceManager
-from pdfminer.pdfinterp import PDFPageInterpreter
-from pdfminer.pdfpage import PDFPage
 
 from ciur.exceptions import CiurBaseException
 from ciur.models import Document
 
 
-NOT_NULL_TYPES = (bool, float, basestring)
+NOT_NULL_TYPES = (bool, float, str)
 
 
 def _is_list(value):
@@ -60,8 +57,8 @@ def _type_list_casting(type_list, res, url):
                 else:
                     try:
                         res_i = fun(res_i, *args)
-                    except TypeError, type_error:
-                        print type_error
+                    except (TypeError,) as type_error:                        
+                        print(type_error, file=sys.stderr)
                         # TODO fix this
     
                 # filter null results
@@ -74,8 +71,7 @@ def _type_list_casting(type_list, res, url):
 
 
 def _evaluate_xpath(rule, context_, doctype, rule_file_path):
-    selector = rule.selector.decode("utf-8") \
-        if isinstance(rule.selector, str) else rule.selector
+    selector = rule.selector
 
     if rule.selector_type == "xpath":
         xpath = selector
@@ -263,41 +259,48 @@ def xml_type(document, rule, rule_file_path=None):
 
     return _recursive_parse(context, rule, "xml", rule_file_path)
 
-
-def pdf_type(document, rule, rule_file_path=None):
-    """
-    use this function if page is pdf
-    TODO: do not forget to document this
-
-    :param rule_file_path:
-        :type rule_file_path: str
-
-    :param rule:
-        :type rule: Rule
-
-    :param document: Document to be parsed
-        :type document: Document
-
-    :rtype: OrderedDict
-    """
-
-    resource_manager = PDFResourceManager(caching=True)
-
-    out_fp = StringIO.StringIO()
-    in_fp = StringIO.StringIO(document.content)
-
-    device = TagExtractor(resource_manager, out_fp, codec='utf-8')
-
-    interpreter = PDFPageInterpreter(resource_manager, device)
-    for page in PDFPage.get_pages(in_fp):
-        page.rotate %= 360
-        interpreter.process_page(page)
-
-    out_fp.seek(0)  # reset the buffer position to the beginning
-
-    xml = Document(
-        out_fp.read(),
-        namespace=document.namespace,
-        url=document.url
-    )
-    return xml_type(xml, rule, rule_file_path)
+try:
+    from pdfminer.pdfdevice import TagExtractor
+    from pdfminer.pdfinterp import PDFResourceManager
+    from pdfminer.pdfinterp import PDFPageInterpreter
+    from pdfminer.pdfpage import PDFPage
+except (ImportError, ) as no_pdfminer_installed:
+    pass
+else:
+    def pdf_type(document, rule, rule_file_path=None):
+        """
+        use this function if page is pdf
+        TODO: do not forget to document this
+    
+        :param rule_file_path:
+            :type rule_file_path: str
+    
+        :param rule:
+            :type rule: Rule
+    
+        :param document: Document to be parsed
+            :type document: Document
+    
+        :rtype: OrderedDict
+        """
+    
+        resource_manager = PDFResourceManager(caching=True)
+    
+        out_fp = StringIO()
+        in_fp = StringIO(document.content)
+    
+        device = TagExtractor(resource_manager, out_fp, codec='utf-8')
+    
+        interpreter = PDFPageInterpreter(resource_manager, device)
+        for page in PDFPage.get_pages(in_fp):
+            page.rotate %= 360
+            interpreter.process_page(page)
+    
+        out_fp.seek(0)  # reset the buffer position to the beginning
+    
+        xml = Document(
+            out_fp.read(),
+            namespace=document.namespace,
+            url=document.url
+        )
+        return xml_type(xml, rule, rule_file_path)

@@ -5,7 +5,7 @@ Testing http://import.io/~ourjobs
 >>> from ciur.rule import Rule
 >>> from ciur.models import Document
 
->>> xml_document = Document("""<?xml version="1.0" encoding="UTF-8"?>
+>>> xml_document = Document(b"""<?xml version="1.0" encoding="UTF-8"?>
 ... <jobs>
 ...     <job>
 ...         <title>Back End Developer</title>

@@ -1,3 +1,9 @@
+# `Advanced Packaging Tool <https://en.wikipedia.org/wiki/Advanced_Packaging_Tool>`_
+# requirements
+#
+# to install, use
+# sudo apt-get install -y --force-yes $(cat {this_file_path} | grep -oP "^[^#\s]+")
+
 python-pip
 libxml2-dev
 libxslt1-dev

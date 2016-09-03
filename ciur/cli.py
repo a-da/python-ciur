@@ -54,13 +54,12 @@ Test on shell level
     ... # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
     Traceback (most recent call last):
       ...
-    ErrorReturnCode_2:
-      RAN: '.../bin/python...
-          .../python-ciur/ciur/cli.py... --url example.org'
-      STDOUT:
-      STDERR:
+    sh.ErrorReturnCode_2: 
+        RAN: '.../bin/python .../ciur/cli.py --url example.org'
+        STDOUT:
+        STDERR:
     usage: cli.py... [-h] -u URL -r RULE [-w IGNORE_WARN]
-    cli.py...: error: argument -u/--url: Invalid URL 'example.org':
+    cli.py...: error: argument -u/--url: Invalid URL 'example.org': 
         No schema supplied. Perhaps you meant http://example.org?
 
 """
@@ -155,7 +154,7 @@ def parse_cli(*argv):
     if args.ignore_warn:
         ciur.CONF["IGNORE_WARNING"] = args.ignore_warn
 
-    print pretty_parse_from_url(args.rule, args.url)
+    print(pretty_parse_from_url(args.rule, args.url))
 
 
 def main():

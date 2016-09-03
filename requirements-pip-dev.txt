@@ -1,6 +1,8 @@
-# =====================================
-# python2 developments pip requirements
-# =====================================
+# `Python Package Index <https://en.wikipedia.org/wiki/Python_Package_Index>`_
+# requirements for python3
+#
+# to install, use
+# pip install -r {this_file_path}
 
 # Production runtime requirements
 # ===============================
@@ -10,7 +12,7 @@
 # test
 # ====
 
-pytest==2.8.5
+pytest==3.0.2
 
 # Integrating with setuptools / python setup.py test / pytest-runner
 pytest-runner==2.6.2

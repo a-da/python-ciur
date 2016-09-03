@@ -10,7 +10,7 @@ import ciur
 import ciur.xpath_functions_ciur
 from ciur import pretty_json, bnf_parser
 
-_JSON = basestring
+_JSON = str
 
 _SELECTOR_TYPE_SET = {"xpath", "css"}
 
@@ -28,8 +28,9 @@ class Rule(ciur.CommonEqualityMixin):
     ...         Rule("indexes", "./li/bold", ["int", "+"])
     ...       )
     ... )
+    
     >>> res1 = pretty_json(rule1.to_dict())
-    >>> print res1  # doctest: +NORMALIZE_WHITESPACE
+    >>> print(res1)  # doctest: +NORMALIZE_WHITESPACE
     {
         "name": "root",
         "selector": "/h3",
@@ -94,7 +95,7 @@ class Rule(ciur.CommonEqualityMixin):
             }
         ]
     }
-
+    
     >>> rule2 = Rule.from_dict(res1)
     >>> rule1.to_dict() == rule2.to_dict()
     True
@@ -110,12 +111,14 @@ class Rule(ciur.CommonEqualityMixin):
             self.selector_type = "xpath"
             self.rule = ()
         else:
-            if selector_type_and_or_rule[0] in _SELECTOR_TYPE_SET:
+            if isinstance(selector_type_and_or_rule[0], self.__class__):
+                self.selector_type = "xpath"
+                self.rule = selector_type_and_or_rule
+            elif selector_type_and_or_rule[0] in _SELECTOR_TYPE_SET:
                 self.selector_type = selector_type_and_or_rule[0]
                 self.rule = selector_type_and_or_rule[1]
             else:
-                self.selector_type = "xpath"
-                self.rule = selector_type_and_or_rule
+                raise NotImplementedError("new Use case not Rule, css or xpath")
 
         # mutable object is eval !
         if isinstance(self.rule, list):
@@ -212,9 +215,9 @@ class Rule(ciur.CommonEqualityMixin):
                     else:
                         if not value_i[1]:
                             if function.startswith("fn_"):
-                                tmp_i = ("%s" % function[3:]).encode("utf-8")
+                                tmp_i = ("%s" % function[3:])
                             elif function.endswith("_"):
-                                tmp_i = ("%s" % function[:-1]).encode("utf-8")
+                                tmp_i = ("%s" % function[:-1])
                             else:
                                 # TODO remove this in future
                                 raise Exception("new use case")
