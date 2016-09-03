@@ -55,7 +55,7 @@ Test on shell level
     Traceback (most recent call last):
       ...
     sh.ErrorReturnCode_2: 
-        RAN: '.../bin/python .../ciur/cli.py --url example.org'
+        RAN: '.../bin/python... .../ciur/cli.py --url example.org'
         STDOUT:
         STDERR:
     usage: cli.py... [-h] -u URL -r RULE [-w IGNORE_WARN]
