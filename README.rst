@@ -16,6 +16,7 @@ Ciur
 
     *Ciur is a lib because it has less black magic than a framework*
 
+This is python2-ciur branch
 
 It exports all scrapper related code into separate layer.
 
