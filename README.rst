@@ -1,5 +1,5 @@
-.. image:: https://magnum-ci.com/status/8fa4d3425c370586324393b7ad167d41.png
-   :target: https://magnum-ci.com/projects/4535
+.. image:: https://magnum-ci.com/status/a277d3e9a6f876250c11ce920c28d9f4.png
+   :target: https://magnum-ci.com/public/0ca976ef4d8368c5ead3/builds
    :alt: Build Status fom magnum-ci.com
    
 ====
