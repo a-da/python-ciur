@@ -29,7 +29,7 @@ Samples of `bad code <./docs/bad_code/>`_.
 Ciur gives the taste of `Lasagna code <http://c2.com/cgi/wiki?LasagnaCode>`_
 generally by enforcing encapsulation for scrapping layer.
 
-What does “Ciur” mean?
+What does *Ciur* mean?
 ======================
 
 Ciur is Romanian for `Sieve <https://en.wikipedia.org/wiki/Sieve>`_.
