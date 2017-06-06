@@ -53,3 +53,17 @@ Install requirements
     sudo ${PYTHON3_CIUR}/pip install --upgrade pip setuptools
     sudo apt-get install -y --force-yes $(cat requirements-apt-get.txt | grep -oP "^[^#\s]+")
     sudo ${PYTHON3_CIUR}/pip install -r requirements-pip.txt
+
+
+Install ciur in virtualenv
+
+.. code-block :: bash
+
+    $ sudo /opt/python-env/ciur_env2/bin/pip install  git+https://bitbucket.org/ada/python-ciur.git#egg=ciur
+    ...
+    Successfully installed cffi-1.4.2 ciur-0.1.2 cryptography-1.1.2
+    cssselect-0.9.1 enum34-1.1.2 html5lib-0.9999999 idna-2.0 ipaddress-1.0.16
+    lxml-3.5.0 ndg-httpsclient-0.4.0 pdfminer-20140328 pyOpenSSL-0.15.1
+    pyasn1-0.1.9 pycparser-2.14 pyparsing-2.0.7 python-dateutil-2.4.2
+    requests-2.9.1 six-1.10.0
+    ...

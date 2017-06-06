@@ -1,11 +1,11 @@
 .. image:: https://magnum-ci.com/status/a277d3e9a6f876250c11ce920c28d9f4.png
    :target: https://magnum-ci.com/public/0ca976ef4d8368c5ead3/builds
    :alt: Build Status fom magnum-ci.com
-   
+
 ====
 Ciur
 ====
-   
+
 .. image:: ./docs/images/wooden-sieve-old-ancient-isolated-white-background.jpg
    :target: https://bitbucket.org/ada/python-ciur
    :alt: Ciur
@@ -66,7 +66,7 @@ Command Line Interface
 .. code-block :: bash
 
     $ ciur --url "http://example.org" --rules="example.org.ciur"
-        
+
 
 .. code-block :: json
 
@@ -90,7 +90,7 @@ Python ciur API
     ...    print pretty_parse_from_url(
     ...            f,
     ...            "http://example.org"
-    ...    )    
+    ...    )
     {
          "root": {
              "name": "Example Domain",
@@ -103,24 +103,12 @@ Samples of usage:
    * https://bitbucket.org/ada/ciur.example.exchange --> parsing world wide (40 sources, 4 country) currency exchange rates.
    * https://bitbucket.org/ada/ciur.example.social --> parsing networking sites (such as Facebook, Linkedin, Xing ...) (not yet ready for open realease)
 
-Developer Guide
-===============
 
-In case of fresh deployment for developer machine follow
-`Set up Python virtual environment <docs/python_virtual_environment.rst>`_
+Devloyments:
+============
 
-Install ciur in virtualenv
-
-.. code-block :: bash
-
-    $ sudo /opt/python-env/ciur_env2/bin/pip install  git+https://bitbucket.org/ada/python-ciur.git#egg=ciur  
-    ...
-    Successfully installed cffi-1.4.2 ciur-0.1.2 cryptography-1.1.2 
-    cssselect-0.9.1 enum34-1.1.2 html5lib-0.9999999 idna-2.0 ipaddress-1.0.16 
-    lxml-3.5.0 ndg-httpsclient-0.4.0 pdfminer-20140328 pyOpenSSL-0.15.1 
-    pyasn1-0.1.9 pycparser-2.14 pyparsing-2.0.7 python-dateutil-2.4.2 
-    requests-2.9.1 six-1.10.0
-    ...
+* Local `Python Virtual environment <docs/python_virtual_environment.rst>`_ for cuir
+* Container `Deploy on Docker from lambda amazon <docs/docker/README.rst>`_ for cuir
 
 .. Features
    ========
@@ -132,10 +120,10 @@ Install ciur in virtualenv
 
 TODO:
 =====
- 
+
  * TODO: http://lybniz2.sourceforge.net/safeeval.html
  * demo on cloud9
- * build documentation on readthedocs 
+ * build documentation on readthedocs
  * http://lxml.de/lxmlhtml.html#parsing-html
 
    .cssselect(expr):
