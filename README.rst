@@ -104,11 +104,12 @@ Samples of usage:
    * https://bitbucket.org/ada/ciur.example.social --> parsing networking sites (such as Facebook, Linkedin, Xing ...) (not yet ready for open realease)
 
 
-Devloyments:
-============
+Usage:
+======
 
 * Local `Python Virtual environment <docs/python_virtual_environment.rst>`_ for cuir
-* Container `Deploy on Docker from lambda amazon <docs/docker/README.rst>`_ for cuir
+* Container `Docker + lambda amazon + Ciur combination <docs/docker/README.rst>`_ for cuir
+* `Exchange money rates world wide parsers <https://bitbucket.org/ada/ciur.example.exchange>`_ based on Ciur
 
 .. Features
    ========
