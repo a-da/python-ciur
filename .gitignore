@@ -44,3 +44,6 @@ build
 # ~~~~~~~~~~~~~
 
 tests/html-cov-ciur
+
+/README.html
+/docs/*.html

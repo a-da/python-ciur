@@ -65,7 +65,7 @@ Command Line Interface
 
 .. code-block :: bash
 
-    $ ciur --url "http://example.org" --rules="example.org.ciur"
+    $ ciur --url "http://example.org" --rule "example.org.ciur"
 
 
 .. code-block :: json
@@ -85,9 +85,9 @@ Python ciur API
 ---------------
 
     >>> import ciur
-    >>> from ciur.shortcuts import pretty_parse_from_url
+    >>> from ciur.shortcuts import pretty_parse_from_resources
     >>> with ciur.open_file("example.org.ciur", __file__) as f:
-    ...    print pretty_parse_from_url(
+    ...    print pretty_parse_from_resources(
     ...            f,
     ...            "http://example.org"
     ...    )
@@ -100,16 +100,19 @@ Python ciur API
 
 
 Samples of usage:
-   * https://bitbucket.org/ada/ciur.example.exchange --> parsing world wide (40 sources, 4 country) currency exchange rates.
-   * https://bitbucket.org/ada/ciur.example.social --> parsing networking sites (such as Facebook, Linkedin, Xing ...) (not yet ready for open realease)
 
-
-Usage:
-======
-
-* Local `Python Virtual environment <docs/python_virtual_environment.rst>`_ for cuir
+* Say `Hello World <./docs/hello_world.rst>`_ in ciur language with `<http://www.example.org>`_
 * Container `Docker + lambda amazon + Ciur combination <docs/docker/README.rst>`_ for cuir
 * `Exchange money rates world wide parsers <https://bitbucket.org/ada/ciur.example.exchange>`_ based on Ciur
+  --> parsing world wide (40 sources, 4 country) currency exchange rates.
+* https://bitbucket.org/ada/ciur.example.social --> parsing networking sites (such as Facebook, Linkedin, Xing ...) (not yet ready for open realease)
+
+
+For Developers:
+===============
+
+* Local `Python Virtual environment <docs/python_virtual_environment.rst>`_ for cuir
+
 
 .. Features
    ========

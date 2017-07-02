@@ -16,16 +16,32 @@ class Document(object):  # pylint: disable=too-few-public-methods
             content,
             namespace=None,
             encoding=None,
-            url=None
+            url=None,
+            doctype="/html"
     ):
+        """
+        :param doctype: MIME types to specify the nature of the file currently
+            being handled.
+            see http://www.freeformatter.com/mime-types-list.html
+        """
         if isinstance(content, Response):
             self.content = content.content
             self.encoding = content.apparent_encoding
             self.url = content.url
+            doctype = content.headers["content-type"]
         else:
             self.content = content
             self.encoding = encoding
             self.url = url
+
+        if "/xml" in doctype:
+            doctype = "xml"
+        elif "/pdf" in doctype:
+            doctype = "pdf"
+        elif "/html" in doctype:
+            doctype = "html"
+
+        self.doctype = doctype
 
         self.namespace = namespace
 

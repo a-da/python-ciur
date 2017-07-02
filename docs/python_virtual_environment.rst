@@ -12,33 +12,37 @@ In case you don not have it, follow bellow instructions to compile it from sourc
 .. code-block:: bash
 
     #!/bin/bash
-    # script: compile_python_3_5
+    # script: compile_python
+
+    PYTHON_VERSION=3.6.1
 
     cd /opt
-    wget --version || apt-get install -y wget # install wget in case is not present
-    wget -c https://www.python.org/ftp/python/3.5.2/Python-3.5.2.tar.xz
+    wget --version > /dev/null || apt-get install -y wget # install wget in case is not present
+    wget -c "https://www.python.org/ftp/python/${PYTHON_VERSION}/Python-${PYTHON_VERSION}.tar.xz"
 
     xz --version || apt-get install -y xz-utils  # install xz in case is not present
-    tar xf Python-3.5.2.tar.xz
-    cd Python-3.5.2/
-    gcc --version || apt-get install -y build-essential  # install xz in case is not present
+    tar xf Python-${PYTHON_VERSION}.tar.xz
+    cd Python-${PYTHON_VERSION}/
+
+    gcc --version > /dev/null || apt-get install -y build-essential  # install xz in case is not present
     apt-get install -y libssl-dev # ssl is required by PIP module
+
     ./configure
     make
-    ./python --version # should show Python 3.5.2
+    ./python --version # should show Python ${PYTHON_VERSION}
 
 
-Create virtual python3.5 virtual environment
---------------------------------------------
+Create python virtual environment
+---------------------------------
 
 .. code-block:: bash
 
     #!/bin/bash
 
-    sudo ${PYTHON_INTERPRETER_PATH}/python -m venv /opt/python3-ciur
+    sudo ${PYTHON_INTERPRETER_PATH}/python -m venv /opt/python3.6-ciur
 
 
-Then use ``/opt/python3-ciur/bin/python`` as a default python interpreter in your IDE (f.e. PyCharm)
+Then use ``/opt/python3.6-ciur/bin/python`` as a default python interpreter in your IDE (f.e. PyCharm)
 
 
 Install requirements
@@ -49,21 +53,8 @@ Install requirements
     #!/bin/bash
     # script: install_requirements
 
-    PYTHON3_CIUR=/opt/python3-ciur/bin
-    sudo ${PYTHON3_CIUR}/pip install --upgrade pip setuptools
-    sudo apt-get install -y --force-yes $(cat requirements-apt-get.txt | grep -oP "^[^#\s]+")
-    sudo ${PYTHON3_CIUR}/pip install -r requirements-pip.txt
+    PYTHON_CIUR=/opt/python3.6-ciur/bin
+    ${PYTHON_CIUR}/pip install --upgrade pip setuptools
+    apt-get install -y --force-yes $(curl "https://bitbucket.org/ada/python-ciur/raw/python3.6-ciur/requirements-apt-get.txt" | grep -oP "^[^#\s]+")
 
-
-Install ciur in virtualenv
-
-.. code-block :: bash
-
-    $ sudo /opt/python-env/ciur_env2/bin/pip install  git+https://bitbucket.org/ada/python-ciur.git#egg=ciur
-    ...
-    Successfully installed cffi-1.4.2 ciur-0.1.2 cryptography-1.1.2
-    cssselect-0.9.1 enum34-1.1.2 html5lib-0.9999999 idna-2.0 ipaddress-1.0.16
-    lxml-3.5.0 ndg-httpsclient-0.4.0 pdfminer-20140328 pyOpenSSL-0.15.1
-    pyasn1-0.1.9 pycparser-2.14 pyparsing-2.0.7 python-dateutil-2.4.2
-    requests-2.9.1 six-1.10.0
-    ...
+    ${PYTHON_CIUR}/pip install -r "https://bitbucket.org/ada/python-ciur/raw/python3.6-ciur/requirements-pip.txt"

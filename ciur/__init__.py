@@ -3,7 +3,7 @@
 
 *Ciur is a lib because it has less black magic than a framework*
 
-If you are annoyed by `Spaghetti code` than we can taste `Lasagna code` 
+If you are annoyed by `Spaghetti code` than we can taste `Lasagna code`
 with help of Ciur
 
 https://bitbucket.org/ada/python-ciur

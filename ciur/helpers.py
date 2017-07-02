@@ -70,3 +70,10 @@ def element2text(value):
         return value
 
     return value.strip()
+
+
+def is_url(path):
+    return (
+        hasattr(path, "startswith") and
+        (path.startswith("https://") or path.startswith("http://"))
+    )
