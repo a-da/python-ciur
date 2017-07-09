@@ -1,7 +1,3 @@
-.. image:: https://magnum-ci.com/status/a277d3e9a6f876250c11ce920c28d9f4.png
-   :target: https://magnum-ci.com/public/0ca976ef4d8368c5ead3/builds
-   :alt: Build Status fom magnum-ci.com
-
 ====
 Ciur
 ====
@@ -24,33 +20,17 @@ If you are annoyed by
 sql inside php and inline css inside html
 THEN you also are annoyed by xpath/css code inside crawler.
 
-Samples of `bad code <./docs/bad_code/>`_.
-
 Ciur gives the taste of `Lasagna code <http://c2.com/cgi/wiki?LasagnaCode>`_
 generally by enforcing encapsulation for scrapping layer.
 
-What does *Ciur* mean?
-======================
+For more information visit the
+`documentation <https://readthedocs.org/projects/python-ciur/>`_.
 
-Ciur is Romanian for `Sieve <https://en.wikipedia.org/wiki/Sieve>`_.
 
-It fulfils the same purpose in the sense of being a
-"device for separating wanted elements from unwanted material".
+Nutshell
+========
 
-Ciur use MIT License
-====================
-This means that code may be included in proprietary code without any additional restrictions.
-
-Please see `LICENSE <./LICENSE>`_.
-
-End-User Documentation
-======================
-
-Ciur uses own DSL, for example
-
-.. code-block :: bash
-
-     $ cat python-ciur/tests/ciur.d/example.org.ciur
+Ciur uses own DSL, here is a small example of a ``example.org.ciur`` query:
 
 .. code-block:: yaml
 
@@ -58,15 +38,13 @@ Ciur uses own DSL, for example
         name `.//h1/text()` +1
         paragraph `.//p/text()` +1
 
-
-
-Command Line Interface
-----------------------
+This command
 
 .. code-block :: bash
 
     $ ciur --url "http://example.org" --rule "example.org.ciur"
 
+Will produce a json
 
 .. code-block :: json
 
@@ -80,59 +58,14 @@ Command Line Interface
         }
     }
 
+Installation
+============
 
-Python ciur API
----------------
+The recommendable way to install is via
+`Python Virtual environment <docs/python_virtual_environment.rst>`_.
 
-    >>> import ciur
-    >>> from ciur.shortcuts import pretty_parse_from_resources
-    >>> with ciur.open_file("example.org.ciur", __file__) as f:
-    ...    print pretty_parse_from_resources(
-    ...            f,
-    ...            "http://example.org"
-    ...    )
-    {
-         "root": {
-             "name": "Example Domain",
-             "paragraph": "This domain is established to be used for illustrative examples in documents. You may use this\n    domain in examples without prior coordination or asking for permission."
-         }
-     }
+Ciur use MIT License
+====================
+This means that code may be included in proprietary code without any additional restrictions.
 
-
-Samples of usage:
-
-* Say `Hello World <./docs/hello_world.rst>`_ in ciur language with `<http://www.example.org>`_
-* Container `Docker + lambda amazon + Ciur combination <docs/docker/README.rst>`_ for cuir
-* `Exchange money rates world wide parsers <https://bitbucket.org/ada/ciur.example.exchange>`_ based on Ciur
-  --> parsing world wide (40 sources, 4 country) currency exchange rates.
-* https://bitbucket.org/ada/ciur.example.social --> parsing networking sites (such as Facebook, Linkedin, Xing ...) (not yet ready for open realease)
-
-
-For Developers:
-===============
-
-* Local `Python Virtual environment <docs/python_virtual_environment.rst>`_ for cuir
-
-
-.. Features
-   ========
-
-   The ``ciur`` can do a lot.
-
-   Please see `list of all features <./features.rst>`_.
-
-
-TODO:
-=====
-
- * TODO: http://lybniz2.sourceforge.net/safeeval.html
- * demo on cloud9
- * build documentation on readthedocs
- * http://lxml.de/lxmlhtml.html#parsing-html
-
-   .cssselect(expr):
-
-   .base_url:
-
-.. ====== Last Mile
-   https://youtu.be/FVEEndIwOSA?t=2243
+Please see `LICENSE <./LICENSE>`_.
