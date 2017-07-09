@@ -2,7 +2,7 @@
 Python virtual environment
 ==========================
 
-We will use only python version 3.5
+We will work with python 3.5, but is is recommended 3.6
 
 Compile python it from source code
 ----------------------------------

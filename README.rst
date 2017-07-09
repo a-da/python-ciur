@@ -24,7 +24,7 @@ Ciur gives the taste of `Lasagna code <http://c2.com/cgi/wiki?LasagnaCode>`_
 generally by enforcing encapsulation for scrapping layer.
 
 For more information visit the
-`documentation <https://readthedocs.org/projects/python-ciur/>`_.
+`documentation <http://python-ciur.readthedocs.io/>`_.
 
 
 Nutshell
