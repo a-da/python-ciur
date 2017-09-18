@@ -18,9 +18,9 @@ pyparsing==2.0.7 # ciur grammar rule parser builder
 
 python-dateutil==2.4.2 # parse datetime from different string formats
 
-
-
 # http client lib to fetch documents by url
 # http://stackoverflow.com/questions/29099404/
 # ssl-insecureplatform-error-when-using-requests-package
 requests[security]==2.9.1
+
+pdfminer3k==1.3.1

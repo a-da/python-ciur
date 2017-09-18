@@ -12,7 +12,8 @@ NOTE:
 """
 from html.parser import HTMLParser
 from urllib.parse import urlparse
-
+from dateutil import parser
+from lxml.etree import tostring
 
 from ciur.helpers import load_xpath_functions
 from ciur.helpers import element2text
@@ -65,10 +66,11 @@ def fn_raw(context, value, *_):
     """
     del context
 
-    if isinstance(value, basestring):
+    if isinstance(value, str):
         return value
 
-    return HTML_PARSER.unescape(tostring(value))
+    raw_html = tostring(value).decode()
+    return html.unescape(raw_html)
 
 
 def fn_iraw(context, value, *_):
@@ -129,7 +131,7 @@ def fn_datetime(context, value):
     if not text:
         return value
 
-    for foreign, english in MONTHS.iteritems():
+    for foreign, english in MONTHS.items():
         text = text.replace(foreign, english)
 
     try:
@@ -181,6 +183,14 @@ def fn_tail(context, value):
     del context
 
     return value.tail
+
+@convert_element2text
+def fn_text(context, value):
+    """
+    del context
+    """
+
+    return value
 
 
 HTML_PARSER = HTMLParser()

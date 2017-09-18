@@ -28,7 +28,7 @@ class Rule(ciur.CommonEqualityMixin):
     ...         Rule("indexes", "./li/bold", ["int", "+"])
     ...       )
     ... )
-    
+
     >>> res1 = pretty_json(rule1.to_dict())
     >>> print(res1)  # doctest: +NORMALIZE_WHITESPACE
     {
@@ -95,7 +95,7 @@ class Rule(ciur.CommonEqualityMixin):
             }
         ]
     }
-    
+
     >>> rule2 = Rule.from_dict(res1)
     >>> rule1.to_dict() == rule2.to_dict()
     True

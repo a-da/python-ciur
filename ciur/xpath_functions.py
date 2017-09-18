@@ -46,7 +46,7 @@ def fn_replace(context, value, pattern, replacement=""):
         return text
 
     if not (
-            isinstance(text, basestring) or
+            isinstance(text, str) or
             isinstance(text, list) and len(text) == 1
     ):
         raise CiurBaseException({
@@ -56,7 +56,7 @@ def fn_replace(context, value, pattern, replacement=""):
             "context": fn_raw(None, context.context_node)
         }, "type checking violation in function `replace`")
 
-    if not isinstance(text, basestring):
+    if not isinstance(text, str):
         text = text[0]
 
     try:

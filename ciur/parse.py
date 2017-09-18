@@ -6,8 +6,9 @@ NOTE:
     is should end with "_type"
 """
 import sys
-from io import StringIO
+from io import BytesIO, StringIO
 from collections import OrderedDict
+import logging
 
 # noinspection PyProtectedMember
 from lxml.etree import _Element as EtreeElement
@@ -15,8 +16,13 @@ from lxml.cssselect import CSSSelector
 from lxml import etree
 import html5lib
 
+from pdfminer.pdfdevice import TagExtractor
+from pdfminer.pdfinterp import PDFResourceManager, process_pdf
+
 from ciur.exceptions import CiurBaseException
 from ciur.models import Document
+
+LOG = logging.getLogger(__name__)
 
 
 NOT_NULL_TYPES = (bool, float, str)
@@ -47,7 +53,7 @@ def _type_list_casting(type_list, res, url):
         tmp = []
 
         if getattr(fun, "process_list", None):
-            res = [fun(None, res, *args)]            
+            res = [fun(None, res, *args)]
         else:
             for res_i in res:
                 if fun.__name__.startswith("fn_"):
@@ -57,10 +63,10 @@ def _type_list_casting(type_list, res, url):
                 else:
                     try:
                         res_i = fun(res_i, *args)
-                    except (TypeError,) as type_error:                        
+                    except (TypeError,) as type_error:
                         print(type_error, file=sys.stderr)
                         # TODO fix this
-    
+
                 # filter null results
                 if res_i not in [None, ""]:
                     tmp.append(res_i)
@@ -129,7 +135,7 @@ def _size_match_assert(res, rule, url, size, args):
             "rule.selector": rule.selector,
             "url": url
         }, "size-match error -> %s, on rule `%s` %s but got %s element" % (
-            assert_error.message, rule.name, args, len(res)
+            assert_error, rule.name, args, len(res)
         ))
 
 
@@ -147,22 +153,23 @@ def _recursive_parse(context_, rule, doctype, rule_file_path=None):
 
     if isinstance(res, list) and len(res) and isinstance(res[0], EtreeElement):
         tmp_list = []
-        for res_i in res:
-            tmp_ordered_dict = OrderedDict()
-            for rule_i in rule.rule:
-                data = _recursive_parse(
-                    res_i,
-                    rule_i,
-                    doctype,
-                    rule_file_path=rule_file_path
-                )
-                if data:
-                    tmp_ordered_dict.update(data)
+        if rule.rule:
+            for res_i in res:
+                tmp_ordered_dict = OrderedDict()
+                for rule_i in rule.rule:
+                    data = _recursive_parse(
+                        res_i,
+                        rule_i,
+                        doctype,
+                        rule_file_path=rule_file_path
+                    )
+                    if len(data):
+                        tmp_ordered_dict.update(data)
 
-            if tmp_ordered_dict:
-                tmp_list.append(tmp_ordered_dict)
+                if tmp_ordered_dict:
+                    tmp_list.append(tmp_ordered_dict)
 
-        res = tmp_list
+            res = tmp_list
 
     # filter empty items
     res = [i for i in res if i != ""]
@@ -259,48 +266,41 @@ def xml_type(document, rule, rule_file_path=None):
 
     return _recursive_parse(context, rule, "xml", rule_file_path)
 
-try:
-    from pdfminer.pdfdevice import TagExtractor
-    from pdfminer.pdfinterp import PDFResourceManager
-    from pdfminer.pdfinterp import PDFPageInterpreter
-    from pdfminer.pdfpage import PDFPage
-except (ImportError, ) as no_pdfminer_installed:
-    pass
-else:
-    def pdf_type(document, rule, rule_file_path=None):
-        """
-        use this function if page is pdf
-        TODO: do not forget to document this
-    
-        :param rule_file_path:
-            :type rule_file_path: str
-    
-        :param rule:
-            :type rule: Rule
-    
-        :param document: Document to be parsed
-            :type document: Document
-    
-        :rtype: OrderedDict
-        """
-    
-        resource_manager = PDFResourceManager(caching=True)
-    
-        out_fp = StringIO()
-        in_fp = StringIO(document.content)
-    
-        device = TagExtractor(resource_manager, out_fp, codec='utf-8')
-    
-        interpreter = PDFPageInterpreter(resource_manager, device)
-        for page in PDFPage.get_pages(in_fp):
-            page.rotate %= 360
-            interpreter.process_page(page)
-    
-        out_fp.seek(0)  # reset the buffer position to the beginning
-    
-        xml = Document(
-            out_fp.read(),
-            namespace=document.namespace,
-            url=document.url
-        )
-        return xml_type(xml, rule, rule_file_path)
+
+def pdf_type(document, rule, rule_file_path=None):
+    """
+    use this function if page is pdf
+    TODO: do not forget to document this
+
+    :param rule_file_path:
+        :type rule_file_path: str
+
+    :param rule:
+        :type rule: Rule
+
+    :param document: Document to be parsed
+        :type document: Document
+
+    :rtype: OrderedDict
+    """
+
+    class MyIO(StringIO):
+        encoding = "utf-8"
+
+    resource_manager = PDFResourceManager()
+
+    out_fp = MyIO()
+    in_fp = BytesIO(document.content)
+
+    device = TagExtractor(resource_manager, out_fp)
+
+    process_pdf(resource_manager, device, in_fp)
+
+    out_fp.seek(0)  # reset the buffer position to the beginning
+
+    xml = Document(
+        out_fp.read(),
+        namespace=document.namespace,
+        url=document.url
+    )
+    return xml_type(xml, rule, rule_file_path)

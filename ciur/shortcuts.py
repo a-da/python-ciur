@@ -33,7 +33,7 @@ HTTP_HEADERS = {
 LOGGER = get_logger(__name__)
 
 
-def pretty_parse_(ciur_file_or_path,
+def pretty_parse(ciur_file_or_path,
                   url,
                   doctype=None,
                   namespace=None,
@@ -131,7 +131,7 @@ def pretty_parse_from_document(rule, document):
     return pretty_json(data)
 
 
-def pretty_parse_from_resources(ciur_rule, document_to_parse, namespace=None):
+def pretty_parse_from_resources(ciur_rule, document_to_parse, namespace=None, doctype=None):
     if is_url(ciur_rule):
         LOGGER.info("Downloading rule %r", ciur_rule)
         response = REQ_SESSION.get(ciur_rule, headers=HTTP_HEADERS)
@@ -148,6 +148,7 @@ def pretty_parse_from_resources(ciur_rule, document_to_parse, namespace=None):
         # with ciur.open_file(document_to_parse, __file__) as file_cursor:
         #     document_to_parse = file_cursor.read()
 
-        document = Document(document_to_parse, namespace=namespace)
+        document = Document(document_to_parse, namespace=namespace,
+                            doctype=doctype)
 
     return pretty_parse_from_document(ciur_rule, document)
