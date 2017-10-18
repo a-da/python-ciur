@@ -21,24 +21,26 @@ It exports all scrapper related code into separate layer.
 
 If you are annoyed by
 `Spaghetti code <https://en.wikipedia.org/wiki/Spaghetti_code>`_,
-sql inside php and inline css inside html
-THEN you also are annoyed by xpath/css code inside crawler.
+**SQL** inside **PHP** or inline **CSS** inside **HTML**
+THEN you also are annoyed by XPATH/CSS selectors code inside crawler.
 
-Ciur gives the taste of `Lasagna code <http://c2.com/cgi/wiki?LasagnaCode>`_
+**Ciur** gives the taste of `Lasagna code <http://c2.com/cgi/wiki?LasagnaCode>`_
 generally by enforcing encapsulation for scrapping layer.
 
-It tries to not repeat the `bad code <./docs/bad_code/>`_.
+It tries to not repeat the `bad code <./bad_code/>`_.
 
-What does *Ciur* mean?
-======================
+What does CIUR mean?
+====================
 
 Ciur is Romanian for `Sieve <https://en.wikipedia.org/wiki/Sieve>`_.
 
 It fulfils the same purpose in the sense of being a
-"device for separating wanted elements from unwanted material".
+``device for separating wanted elements from unwanted material``.
 
 Python ciur API
 ---------------
+
+.. code-block:: python
 
     >>> import ciur
     >>> from ciur.shortcuts import pretty_parse_from_resources
@@ -57,8 +59,8 @@ Python ciur API
 
 Samples of usage:
 
-* Say `Hello World <./docs/hello_world.rst>`_ in ciur language with `<http://www.example.org>`_
-* Container `Docker + lambda amazon + Ciur combination <docs/docker/README.rst>`_ for cuir
+* Say `Hello World <./hello_world.rst>`_ in ciur language with `<http://www.example.org>`_
+* Container `Docker + lambda amazon + Ciur combination <docker/README.rst>`_ for cuir
 * `Exchange money rates world wide parsers <https://bitbucket.org/ada/ciur.example.exchange>`_ based on Ciur
   --> parsing world wide (40 sources, 4 country) currency exchange rates.
 * https://bitbucket.org/ada/ciur.example.social --> parsing networking sites (such as Facebook, Linkedin, Xing ...) (not yet ready for open realease)
