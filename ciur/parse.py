@@ -194,7 +194,9 @@ def _recursive_parse(context_, rule, doctype, rule_file_path=None):
         sys.stderr.write("[WARN] there are children that were ignored on"
                          " rule.name=`%s`\n" % rule.name)
 
-    if not res and not isinstance(res, NOT_NULL_TYPES):
+    if isinstance(res, etree._Element):
+        return res
+    elif not res and not isinstance(res, NOT_NULL_TYPES):
         return res
     else:
         if res == "":

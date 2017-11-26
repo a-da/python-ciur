@@ -17,7 +17,7 @@ import warnings
 # noinspection PyProtectedMember
 
 __title__ = "ciur"
-__version__ = "0.1.2"
+__version__ = "0.1.3"
 __author__ = "Andrei Danciuc"
 __license__ = "MIT"
 __git__ = "https://bitbucket.org/ada/ciur"
@@ -134,7 +134,10 @@ def get_logger(name, formatter=None, handler=None, level=logging.INFO):
             :type lineno: int
         :param _: unused
         """
-        logger.warn(
+        if CONF["IGNORE_WARNING"]:
+            return
+
+        logger.warning(
             warnings.formatwarning(message, category, filename, lineno).strip()
         )
 

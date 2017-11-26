@@ -79,8 +79,8 @@ PARSER.add_argument(
 
 PARSER.add_argument(
     "-w", "--ignore_warn",
-    help='suppress warning',
-    type=bool
+    action="store_true",
+    help="suppress python warning warnings and ciur warnings hints",
 )
 
 VERSION_STRING = "%s/%s Python/%s %s/%s" % (
