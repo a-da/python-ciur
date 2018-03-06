@@ -91,14 +91,16 @@ CORRECT
 
     file: scrapper_spaggety.ciur
 
-        .. code-block::
+    .. code-block::
 
-            root `//body` +1
-                title `.//span[@id='titreDetail']/text()` +1
-                price `.//div[@id='infosVehicule']//ul[last()]/li[1]/span[1]/text()` float +1
-                ....
+        root `//body` +1
+            title `.//span[@id='titreDetail']/text()` +1
+            price `.//div[@id='infosVehicule']//ul[last()]/li[1]/span[1]/text()` float +1
+            ...
 
     execute
+
+    .. code-block::
 
         >>> ciur.parse("scrapper_spaggety.ciur" , "http://some_site.org")
         {
