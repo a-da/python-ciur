@@ -10,6 +10,7 @@ NOTE:
     local convention for all public cast function is `[a-z]+[a-z0-9_]+_`
     it should end with underscore
 """
+import html
 from html.parser import HTMLParser
 from urllib.parse import urlparse
 from dateutil import parser
