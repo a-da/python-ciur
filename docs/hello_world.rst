@@ -13,8 +13,8 @@ Lets assume that we using virtual env
 Install branch python3.6-ciur with pip
 
 .. code-block :: bash
-
-    $ ${PIP} install "git+https://bitbucket.org/ada/python-ciur.git@python3.6-ciur#egg=ciur"
+    $ branch_name=python3-ciur  # you can find all available branches in bitbucket UI interface
+    $ ${PIP} install "git+https://bitbucket.org/ada/python-ciur.git@${branch_name}#egg=ciur"
     # or for contribution purposes
     # ${PIP} install -e "/your/local/clone/of/ciur/branch"
     ...
