@@ -466,20 +466,20 @@ def external2list(rules, namespace=None):
     :rtype: list[str]
     """
     assert isinstance(rules, (TextIOWrapper, str))
-    
+
     file_name = None
     if isinstance(rules, TextIOWrapper):
         file_name = rules.name
         rules = rules.read()
-        
+
     if not rules.strip():
         raise CiurBaseException(
             "DSL is empty", {
                 "file_name": os.path.abspath(file_name) if file_name else None
             }
         )
-    
-    if not re.search(r"\n\s*$", rules):        
+
+    if not re.search(r"\n\s*$", rules):
         raise CiurBaseException(
             "no new line at the end of file", {
                 "file_name": os.path.abspath(file_name) if file_name else None
@@ -528,7 +528,7 @@ def ensure_unicode_provision(data):
     :rtype list[unicode] or unicode or object
     """
     if isinstance(data, list):
-        return [ensure_unicode_provision(i) for i in data]    
+        return [ensure_unicode_provision(i) for i in data]
 
     return data
 
