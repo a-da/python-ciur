@@ -48,3 +48,5 @@ tests/html-cov-ciur
 /README.html
 /docs/*.html
 /docs/build/
+.idea/
+/TODO.txt
