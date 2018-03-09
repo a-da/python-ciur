@@ -14,6 +14,8 @@ import os
 import sys
 import warnings
 
+from . import optional_requests
+
 # noinspection PyProtectedMember
 
 __title__ = "ciur"
@@ -26,6 +28,10 @@ __email__ = "python.ciur@gmail.com"
 # TODO make configurable
 CONF = {
     "IGNORE_WARNING":  False
+}
+
+HTTP_HEADERS = {
+    "User-Agent": f"{__title__}/{__version__} {optional_requests.display_version} {__git__}"
 }
 
 
