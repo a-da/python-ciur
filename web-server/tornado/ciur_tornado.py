@@ -3,10 +3,10 @@ import tornado.web
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
-        self.write("Hello, world")
+        self.render("template.html")        
 
 def make_app():
-    return tornado.web.Application([
+    return tornado.web.Application([        
         (r"/", MainHandler),
     ])
 
