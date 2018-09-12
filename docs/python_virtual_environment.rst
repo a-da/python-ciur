@@ -4,8 +4,8 @@ Python virtual environment
 
 We will work with python 3.5, but is is recommended 3.6
 
-Compile python it from source code
-----------------------------------
+Compile python from source code
+-------------------------------
 
 In case you don not have it, follow bellow instructions to compile it from source code.
 
