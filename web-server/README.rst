@@ -3,3 +3,7 @@ Our goal is to reproduce something like YQL demo UI https://developer.yahoo.com/
 
 Next is to deploy ciur UI somewhere intoo PASS for free like
 https://www.slant.co/topics/3478/~platform-as-a-service-providers-that-have-a-free-plan
+
+Where
+
+- openshift: https://medium.com/@uddishverma22/leveraging-docker-images-to-deploy-your-django-backend-on-openshift-5e268d679173
