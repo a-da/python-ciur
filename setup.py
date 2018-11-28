@@ -3,13 +3,13 @@ import setuptools
 import re
 import ciur
 
-# requires
-# http://setuptools.readthedocs.io/en/latest/setuptools.html
-# optional features of your project
 
-extras_require = {
+EXTRA_REQUIRE = {
     'pdf': ["pdfminer==20140328"],
 }
+
+with open("README.rst") as file:
+    LONG_DESCRIPTION = file.read()
 
 
 def parse_requirements(filename, editable=False):
@@ -37,6 +37,10 @@ def parse_requirements(filename, editable=False):
 
 setup_params = dict(
     name=ciur.__title__,
+    description="Ciur is a scrapper layer based on DSL for extracting data",
+    long_description=LONG_DESCRIPTION,
+    long_description_content_type="text/x-rst",
+    license="MIT",
     version=ciur.__version__,
     url=ciur.__git__,
     dependency_links=[
@@ -44,22 +48,20 @@ setup_params = dict(
     ],
     author_email=ciur.__email__,
     author=ciur.__author__,
-    description=ciur.__doc__,
-    license="MIT",
-    long_description=open("README.rst").read(),
     packages=[
         ciur.__title__
     ],
     install_requires=parse_requirements("requirements-pip.txt"),
-    extras_require=extras_require,
+    extras_require=EXTRA_REQUIRE,
     setup_requires=['pytest-runner'],
     tests_require=['pytest'],
     classifiers=[
-        "Intended Audience :: Developers",
         "Topic :: Software Development :: Libraries :: Python Modules",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
         "Programming Language :: Python",
-        # "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.7",
     ],
     entry_points={
         "console_scripts": [

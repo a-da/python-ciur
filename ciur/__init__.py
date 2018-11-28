@@ -1,5 +1,5 @@
 """
-*Ciur is a scrapper layer*
+*Ciur is a scrapper layer based on DSL for extracting data*
 
 *Ciur is a lib because it has less black magic than a framework*
 
@@ -19,10 +19,10 @@ from . import optional_requests
 # noinspection PyProtectedMember
 
 __title__ = "ciur"
-__version__ = "0.1.4"
+__version__ = "0.1.5"
 __author__ = "Andrei Danciuc"
 __license__ = "MIT"
-__git__ = "https://bitbucket.org/ada/ciur"
+__git__ = "https://bitbucket.org/ada/python-ciur"
 __email__ = "python.ciur@gmail.com"
 
 # TODO make configurable

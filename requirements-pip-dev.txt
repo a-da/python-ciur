@@ -46,5 +46,8 @@ pyenchant==1.6.6 # spelling for pylint
 pytest-cov==2.2.0
 coverage==4.0.3
 
+# Publish
+# =======
+twine==1.12.1
 
 
