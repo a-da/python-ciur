@@ -6,12 +6,13 @@ Ciur
    :target: https://bitbucket.org/ada/python-ciur
    :alt: Ciur
 
+.. contents::
+
 ..
 
     *Ciur is a scrapper layer in code development*
 
     *Ciur is a lib because it has less black magic than a framework*
-
 
 It exports all scrapper related code into separate layer.
 
