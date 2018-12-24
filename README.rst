@@ -58,6 +58,7 @@ Will produce a json
         }
     }
 
+
 Installation
 ============
 
@@ -92,11 +93,13 @@ Install via docker
       -w, --ignore_warn     suppress python warning warnings and ciur warnings hints
       -v, --version         show program's version number and exit
 
+
 Ciur use MIT License
 ====================
 This means that code may be included in proprietary code without any additional restrictions.
 
 Please see `LICENSE <./LICENSE>`_.
+
 
 Contribution
 ============
@@ -108,4 +111,3 @@ All contribution are welcome and should be done via Bitbucket (Pull Request, Iss
 
 A second alternative as exception (maybe if bitbucket is not available)
 can be done via email ciur[mail symbol].asta-s.eu
-
