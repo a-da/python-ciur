@@ -42,7 +42,7 @@ This command
 
 .. code-block :: bash
 
-    $ ciur --url "http://example.org" --rule "example.org.ciur"
+    $ ciur -p http://example.org -r https://bitbucket.org/ada/python-ciur/raw/HEAD/docs/docker/example.org.ciur
 
 Will produce a json
 
