@@ -69,3 +69,15 @@ Ciur use MIT License
 This means that code may be included in proprietary code without any additional restrictions.
 
 Please see `LICENSE <./LICENSE>`_.
+
+Contribution
+============
+
+The code of **Cuir** have been concepted in 2012 and,
+is going to be in continue developing.
+
+All contribution are welcome and should be done via Bitbucket (Pull Request, Issues).
+
+A second alternative as exception (maybe if bitbucket is not available)
+can be done via email ciur[mail symbol].asta-s.eu
+
