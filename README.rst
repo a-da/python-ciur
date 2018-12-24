@@ -8,7 +8,7 @@ Ciur
 
 ..
 
-    *Ciur is a scrapper layer in development*
+    *Ciur is a scrapper layer in code development*
 
     *Ciur is a lib because it has less black magic than a framework*
 
