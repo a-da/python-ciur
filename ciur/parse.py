@@ -9,6 +9,7 @@ import sys
 from io import BytesIO, StringIO
 from collections import OrderedDict
 import logging
+import decimal
 
 # noinspection PyProtectedMember
 from lxml.etree import _Element as EtreeElement
@@ -25,7 +26,7 @@ from ciur.models import Document
 LOG = logging.getLogger(__name__)
 
 
-NOT_NULL_TYPES = (bool, float, str)
+NOT_NULL_TYPES = (bool, float, str, decimal.Decimal)
 
 
 def _is_list(value):
