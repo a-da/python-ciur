@@ -69,6 +69,9 @@ def element2text(value):
     if not value:
         return value
 
+    if not isinstance(value, str):
+        value = str(value)
+
     return value.strip()
 
 

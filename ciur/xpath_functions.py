@@ -157,4 +157,25 @@ def fn_lower_case(context, text):
     return text.lower()
 
 
+def fn_dehumanise_number(context, number: str) -> float:
+    """
+    >>> dehumanise_number("11.5k")
+    11500.0
+    >>> dehumanise_number("69")
+    69.0
+    >>> dehumanise_number("1M")
+    1000000.0
+    """
+    del context
+
+    number = number.lower()
+    if number[-1] == "k":
+        number = float(number[:-1]) * 1000
+    elif number[-1] == "m":
+        number = float(number[:-1]) * 1_000_000
+    else:
+        number = float(number)
+
+    return number
+
 load_xpath_functions(locals())
