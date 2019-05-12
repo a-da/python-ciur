@@ -10,6 +10,10 @@ NOTE:
     local convention for all public cast function is `[a-z]+[a-z0-9_]+_`
     it should end with underscore
 """
+
+from decimal import Decimal
+
+
 import html
 from html.parser import HTMLParser
 from urllib.parse import urlparse
@@ -192,6 +196,24 @@ def fn_text(context, value):
     """
 
     return value
+
+
+@convert_element2text
+def fn_decimal(context, value, *_):
+    """
+    convert textual into Decimal (required for AWS Dynamodb)
+    :param context: Parent DOM context
+        :type context: EtreeElement
+    :param value:
+        :type value: basestring
+    :param _: unused
+
+    :rtype: decimal
+    """
+    del context
+
+    return Decimal(value)
+
 
 
 HTML_PARSER = HTMLParser()

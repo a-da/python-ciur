@@ -19,11 +19,11 @@ from . import optional_requests
 # noinspection PyProtectedMember
 
 __title__ = "ciur"
-__version__ = "0.1.5"
+__version__ = "0.1.6"
 __author__ = "Andrei Danciuc"
 __license__ = "MIT"
 __git__ = "https://bitbucket.org/ada/python-ciur"
-__email__ = "python.ciur@gmail.com"
+__email__ = "ciur@asta-s.eu"
 
 # TODO make configurable
 CONF = {

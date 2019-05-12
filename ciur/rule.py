@@ -149,8 +149,8 @@ class Rule(ciur.CommonEqualityMixin):
             # TODO  rename func_name into callable_name
             if isinstance(func_name, list):
                 obj_str, method_str = func_name
-                import __builtin__
-                obj = getattr(__builtin__, obj_str)
+                import builtins
+                obj = getattr(builtins, obj_str)
                 method = getattr(obj, method_str)
                 tmp.append([method, args])
             else:
