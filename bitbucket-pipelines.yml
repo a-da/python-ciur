@@ -16,8 +16,7 @@ pipelines:
             - pip install -r requirements-pip-dev.txt
             - pytest -v tests/* --junitxml=test-reports/report.xml
       - step:
-          name: Lint code
+          name: Release
           script:
             # Enforce style consistency across Python projects https://flake8.pycqa.org/en/latest/manpage.html
-            - pip install flake8
-            - flake8 . --extend-exclude=dist,build --show-source --statistics
+            - python ./automation/new_release.py && python setup.py sdist bdist_wheel && twine upload --username="${TWINE_USERNAME}" --password="${TWINE_PASSWORD}" dist/*
