@@ -1,0 +1,39 @@
+#
+#  ansible-playbook --connection=local automation/ansible/dev_playbook.yaml
+#
+---
+- name: Setup dev environment
+  hosts: localhost
+  vars:
+    ciur_python_version: 3.9.1
+    ciur_venv: ~/.pyenv/my_venv/ada/ciur
+
+  tasks:
+  - name: Install pyenv
+    git:
+      repo: https://github.com/yyuu/pyenv.git
+      dest: "~/.pyenv"
+
+  - name: Install pyenv-virtualenv plugin
+    git:
+      repo: https://github.com/yyuu/pyenv-virtualenv.git
+      dest: "~/.pyenv/plugins/pyenv-virtualenv"
+
+  - name: Install default python version
+
+    shell: "~/.pyenv/bin/pyenv install {{ ciur_python_version }}"
+    args:
+      creates: "~/.pyenv/versions/{{ ciur_python_version }}"
+
+  - name: Create scrappy venv
+    shell: "~/.pyenv/versions/{{ ciur_python_version }}/bin/python -m venv {{ ciur_venv }}/"
+    args:
+      creates: "{{ ciur_venv }}/"
+
+  - name: Update pip and wheel
+    shell: "{{ ciur_venv }}/bin/pip install -U pip wheel && touch {{ ciur_venv }}/pip_and_wheel_updated"
+    args:
+      creates: "{{ ciur_venv }}/pip_and_wheel_updated"
+
+  - name: Install our requirements into venv
+    shell: "cd .. && cd .. && {{ ciur_venv }}/bin/pip install -e '.[dev]'"

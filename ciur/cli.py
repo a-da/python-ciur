@@ -83,13 +83,10 @@ PARSER.add_argument(
     help="suppress python warning warnings and ciur warnings hints",
 )
 
-VERSION_STRING = "%s/%s Python/%s %s/%s" % (
-    "%(prog)s",
-    ciur.__version__,
-    platform.python_version(),
-    platform.system(),
-    platform.release(),
-)
+VERSION_STRING = f"%(prog)s/{ciur.__version__} " \
+                 f"Python/{platform.python_version()} " \
+                 f"{platform.system()}/{platform.release()}"
+
 
 PARSER.add_argument(
     '-v', '--version',

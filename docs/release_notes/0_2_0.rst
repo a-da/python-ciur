@@ -1,0 +1,14 @@
+=============
+Release 0.2.0
+=============
+
+1. Switch to python 3.9.
+2. Fix broken tests.
+3. Update dependencies to the latest version for all libs (dev and prod).
+4. Add automation with ansible for developers see `<automation/ansible/dev_playbook.yaml>`_.
+
+
+Breaking changes
+----------------
+
+Give up on version 3.6, 3.7, 3.8 and supporting just 3.9.

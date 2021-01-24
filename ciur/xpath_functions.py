@@ -159,11 +159,11 @@ def fn_lower_case(context, text):
 
 def fn_dehumanise_number(context, number: str) -> float:
     """
-    >>> dehumanise_number("11.5k")
+    >>> fn_dehumanise_number("11.5k")
     11500.0
-    >>> dehumanise_number("69")
+    >>> fn_dehumanise_number("69")
     69.0
-    >>> dehumanise_number("1M")
+    >>> fn_dehumanise_number("1M")
     1000000.0
     """
     del context

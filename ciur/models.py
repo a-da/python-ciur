@@ -33,14 +33,19 @@ class Document(object):  # pylint: disable=too-few-public-methods
             self.content = content
             self.encoding = encoding
             self.url = url
-
-        if "/xml" in doctype:
-            doctype = "xml"
-        elif "/pdf" in doctype:
-            doctype = "pdf"
-        elif "/html" in doctype:
-            doctype = "html"
-
+        
+        if doctype:
+            if "/xml" in doctype:
+                doctype = "xml"
+            elif "/pdf" in doctype:
+                doctype = "pdf"
+            elif "/html" in doctype:
+                doctype = "html"
+        elif hasattr(content, "name"):
+            if content.name.endswith(".html") or content.name.endswith(".htm"):
+                doctype = "html"
+            # try to add more fallback here
+            
         self.doctype = doctype
 
         self.namespace = namespace

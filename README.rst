@@ -63,14 +63,15 @@ Will produce a json
 Installation
 ============
 
-The recommendable way to install is via
-`Python Virtual environment <docs/python_virtual_environment.rst>`_.
+.. code-block::
+
+    pip install ciur
 
 Install via docker
 
 .. code-block:: bash
 
-    $ docker run -it python:3.7 bash
+    $ docker run -it python:3.9 bash
     root@e4d327153f2f:/# pip install ciur
     root@e4d327153f2f:/# ciur --help
 
@@ -97,6 +98,7 @@ Install via docker
 
 Ciur use MIT License
 ====================
+
 This means that code may be included in proprietary code without any additional restrictions.
 
 Please see `LICENSE <./LICENSE>`_.
@@ -105,10 +107,10 @@ Please see `LICENSE <./LICENSE>`_.
 Contribution
 ============
 
-The code of **Cuir** have been concepted in 2012 and,
-is going to be in continue developing.
+The code of **Cuir** was concepted in 2012,
+and is going to continue developing.
 
-All contribution are welcome and should be done via Bitbucket (Pull Request, Issues).
+All contributions are welcome and should be done via Bitbucket (Pull Request, Issues).
 
 A second alternative as exception (maybe if bitbucket is not available)
-can be done via email ciur[mail symbol].asta-s.eu
+can be done via email ciur[mail symbol]asta-s.eu.

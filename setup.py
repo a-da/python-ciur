@@ -4,10 +4,6 @@ import re
 import ciur
 
 
-EXTRA_REQUIRE = {
-    'pdf': ["pdfminer==20140328"],
-}
-
 with open("README.rst") as file:
     LONG_DESCRIPTION = file.read()
 
@@ -35,6 +31,13 @@ def parse_requirements(filename, editable=False):
 
     return _
 
+
+EXTRA_REQUIRE = {
+    'pdf': ["pdfminer==20140328"],  # TODO: exclude this from 3.6>
+    # 'dev': ["pytest==6.2.1 "]
+    'dev': parse_requirements("requirements-pip-dev.txt"),
+}
+
 setup_params = dict(
     name=ciur.__title__,
     description="Ciur is a scrapper layer based on DSL for extracting data",
@@ -53,7 +56,6 @@ setup_params = dict(
     ],
     install_requires=parse_requirements("requirements-pip.txt"),
     extras_require=EXTRA_REQUIRE,
-    setup_requires=['pytest-runner'],
     tests_require=['pytest'],
     classifiers=[
         "Topic :: Software Development :: Libraries :: Python Modules",

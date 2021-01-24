@@ -1,8 +1,3 @@
-.. ciur documentation master file, created by
-   sphinx-quickstart on Sun Jul  9 11:59:38 2017.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 Welcome to Python-Ciur
 ======================
 
@@ -68,33 +63,6 @@ Samples of usage:
 
 For Developers:
 ===============
-
-* Local `Python Virtual environment <docs/source/python_virtual_environment.rst>`_ for cuir
-
-
-.. Features
-   ========
-
-   The ``ciur`` can do a lot.
-
-   Please see `list of all features <./features.rst>`_.
-
-
-TODO:
-=====
-
- * TODO: http://lybniz2.sourceforge.net/safeeval.html
- * demo on cloud9
- * build documentation on readthedocs
- * http://lxml.de/lxmlhtml.html#parsing-html
-
-   .cssselect(expr):
-
-   .base_url:
-
-.. ====== Last Mile
-   https://youtu.be/FVEEndIwOSA?t=2243
-
 
 .. include:: contents.rst
 

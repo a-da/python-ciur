@@ -1,33 +1,28 @@
+from unittest import mock
+from textwrap import dedent
+
 import pytest
 
-from ciur import cli
+import ciur  # just for mock
+import sys  # just for mock
+import platform  # just for mock
 
-HELP = """\
-usage: ciur [-h] -p PARSE -r RULE [-w IGNORE_WARN] [-v]
 
-*Ciur is a scrapper layer*
+with \
+        mock.patch.object(
+            sys, "argv", 
+            new_callable=mock.PropertyMock(return_value=["ciur"])), \
+        mock.patch.object(
+            ciur, "__version__",
+            new_callable=mock.PropertyMock(return_value="0.2.0")):
+    
+    from ciur import cli
 
-*Ciur is a lib because it has less black magic than a framework*
-
-If you are annoyed by `Spaghetti code` than we can taste `Lasagna code`
-with help of Ciur
-
-https://bitbucket.org/ada/python-ciur
-
-optional arguments:
-  -h, --help            show this help message and exit
-  -p PARSE, --parse PARSE
-                        url or local file path required document for html, xml, pdf. (f.e. http://example.org or /tmp/example.org.html)
-  -r RULE, --rule RULE  url or local file path file with parsing dsl rule (f.e. /tmp/example.org.ciur or http:/host/example.org.ciur)
-  -w IGNORE_WARN, --ignore_warn IGNORE_WARN
-                        suppress warning
-  -v, --version         show program's version number and exit
-"""
 
 EXAMPLE_ORG = """{
     "root": {
         "name": "Example Domain",
-        "paragraph": "This domain is established to be used for illustrative examples in documents. You may use this\\n    domain in examples without prior coordination or asking for permission."
+        "paragraph": "This domain is for use in illustrative examples in documents. You may use this\\n    domain in literature without prior coordination or asking for permission."
     }
 }"""
 
@@ -37,17 +32,41 @@ EXAMPLE_ORG_CIUR_AS_URL = "https://bitbucket.org/ada/python-ciur/raw/HEAD/docs/d
 @pytest.mark.parametrize("test_input,expected", [
     (
         ("--version",),
-        "ciur/0.1.2 Python/3.6.1 Linux/4.4.0-21-generic\n".replace(
-            "ciur/", "_jb_pytest_runner.py/")
+        "ciur/0.2.0 Python/3.9.1 Linux/5.4.0-64-generic\n"
     ),
     (
-         ("--help",), HELP.replace(
-            "usage: ciur ", "usage: _jb_pytest_runner.py ")
+        ("--help",),
+
+        dedent("""\
+        usage: ciur [-h] -p PARSE -r RULE [-w] [-v]
+
+        *Ciur is a scrapper layer based on DSL for extracting data*
+
+        *Ciur is a lib because it has less black magic than a framework*
+
+        If you are annoyed by `Spaghetti code` than we can taste `Lasagna code`
+        with help of Ciur
+
+        https://bitbucket.org/ada/python-ciur
+
+        optional arguments:
+          -h, --help            show this help message and exit
+          -p PARSE, --parse PARSE
+                                url or local file path required document for html, xml, pdf. (f.e. http://example.org or /tmp/example.org.html)
+          -r RULE, --rule RULE  url or local file path file with parsing dsl rule (f.e. /tmp/example.org.ciur or http:/host/example.org.ciur)
+          -w, --ignore_warn     suppress python warning warnings and ciur warnings hints
+          -v, --version         show program's version number and exit
+        """)
+        # "usage: ciur ", "usage: _jb_pytest_runner.py "
     )
 ])
 def test_cli_parse_basic(capfd, test_input, expected):
-
-    with pytest.raises(SystemExit) as exc_info:
+    
+    with \
+            pytest.raises(SystemExit) as exc_info, \
+            mock.patch.object(platform, "release", 
+                              return_value="5.4.0-64-generic"):
+        
         cli.parse_cli(*test_input)
 
     assert exc_info.value.code == 0
