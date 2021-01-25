@@ -25,10 +25,14 @@ pipelines:
 
     - step:
         name: Test
+        caches:
+          - pip
         script:
           - python -m pytest -v tests/* --junitxml=test-reports/report.xml
           
     - step:
         name: Release
+        caches:
+          - pip
         script:
           - python ./automation/new_release.py && python setup.py sdist bdist_wheel && twine upload --username="${TWINE_USERNAME}" --password="${TWINE_PASSWORD}" dist/*
