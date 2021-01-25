@@ -21,6 +21,7 @@ pipelines:
         caches:
           - pip
         script:
+          - echo --username="${TWINE_USERNAME}" --password="${TWINE_PASSWORD}"
           - pip install -r requirements-pip-dev.txt
 
           # test
