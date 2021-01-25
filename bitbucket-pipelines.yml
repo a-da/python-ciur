@@ -7,8 +7,8 @@ pipelines:
         script:
           - apt update
           - apt install python3-pip --yes
-          - pip install -U pip wheel
-          - pip install ansible
+          - pip3 install -U pip wheel
+          - pip3 install ansible
           - ansible-playbook --connection=local automation/ansible/dev_playbook.yaml
 
     - step:
