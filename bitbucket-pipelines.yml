@@ -9,6 +9,9 @@ pipelines:
           - apt install python3-pip git --yes
           - pip3 install -U pip wheel
           - pip3 install ansible
+    - step:
+        name: Install ansible-playbook
+        script:
           - ansible-playbook --connection=local automation/ansible/dev_playbook.yaml
 
     - step:
