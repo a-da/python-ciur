@@ -6,9 +6,9 @@ pipelines:
         name: Install OS depencencies
         script:
           - apt update
-          - apt install software-properties-common
+          - apt install software-properties-common --yes
           - apt-add-repository --yes --update ppa:ansible/ansible
-          - apt install ansible
+          - apt install ansible --yes
           - ansible-playbook --connection=local automation/ansible/dev_playbook.yaml
 
     - step:
