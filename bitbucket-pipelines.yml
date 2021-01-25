@@ -1,18 +1,20 @@
-image: ubuntu:20.04
+image: python:3.9
 
 pipelines:
   default:
-    - step:
-        name: Install OS depencencies
-        script:
-          - apt update
-          - apt install python3-pip git --yes
-          - pip3 install -U pip wheel
-          - pip3 install ansible
-    - step:
-        name: Install ansible-playbook
-        script:
-          - ansible-playbook --connection=local automation/ansible/dev_playbook.yaml
+
+# ubuntu: 20.04 fail
+#    - step:
+#        name: Install OS depencencies
+#        script:
+#          - apt update
+#          - apt install python3-pip git --yes
+#          - pip3 install -U pip wheel
+#          - pip3 install ansible
+#    - step:
+#        name: Install ansible-playbook
+#        script:
+#          - ansible-playbook --connection=local automation/ansible/dev_playbook.yaml
 
     - step:
         name: Install python dependencies
@@ -24,7 +26,7 @@ pipelines:
     - step:
         name: Test
         script:
-          - pytest -v tests/* --junitxml=test-reports/report.xml
+          - python -m pytest -v tests/* --junitxml=test-reports/report.xml
           
     - step:
         name: Release
