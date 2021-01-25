@@ -14,7 +14,9 @@ with \
             new_callable=mock.PropertyMock(return_value=["ciur"])), \
         mock.patch.object(
             ciur, "__version__",
-            new_callable=mock.PropertyMock(return_value="0.2.0")):
+            new_callable=mock.PropertyMock(return_value="0.2.0")), \
+        mock.patch.object(platform, "release",
+                          return_value="5.4.1-64-generic"):
     
     from ciur import cli
 
@@ -32,7 +34,7 @@ EXAMPLE_ORG_CIUR_AS_URL = "https://bitbucket.org/ada/python-ciur/raw/HEAD/docs/d
 @pytest.mark.parametrize("test_input,expected", [
     (
         ("--version",),
-        "ciur/0.2.0 Python/3.9.1 Linux/5.4.0-64-generic\n"
+        "ciur/0.2.0 Python/3.9.1 Linux/5.4.1-64-generic\n"
     ),
     (
         ("--help",),
@@ -63,9 +65,7 @@ EXAMPLE_ORG_CIUR_AS_URL = "https://bitbucket.org/ada/python-ciur/raw/HEAD/docs/d
 def test_cli_parse_basic(capfd, test_input, expected):
     
     with \
-            pytest.raises(SystemExit) as exc_info, \
-            mock.patch.object(platform, "release", 
-                              return_value="5.4.0-64-generic"):
+            pytest.raises(SystemExit) as exc_info:
         
         cli.parse_cli(*test_input)
 
