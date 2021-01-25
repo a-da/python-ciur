@@ -3,7 +3,16 @@ image: ubuntu:20.04
 pipelines:
   default:
     - step:
-        name: install
+        name: Install OS depencencies
+        script:
+          - apt update
+          - apt install software-properties-common
+          - apt-add-repository --yes --update ppa:ansible/ansible
+          - apt install ansible
+          - ansible-playbook --connection=local automation/ansible/dev_playbook.yaml
+
+    - step:
+        name: Install python dependencies
         caches:
           - pip
         script:
