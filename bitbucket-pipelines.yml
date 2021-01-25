@@ -1,24 +1,20 @@
-#  Template python-build
-
-#  This template allows you to validate your python code.
-#  The workflow allows running tests and code linting on the default branch.
-
 image: python:3.9
 
 pipelines:
   default:
-    - parallel:
-      - step:
-          name: Test
-          caches:
-            - pip
-          script:
-            - pip install -r requirements-pip-dev.txt
-            - pytest -v tests/* --junitxml=test-reports/report.xml
-      - step:
+    - step:
+        name: install
+        caches:
+          - pip
+        script:
+          - pip install -r requirements-pip-dev.txt
+
+    - step:
+        name: Test
+        script:
+          - pytest -v tests/* --junitxml=test-reports/report.xml
           
-- step:
-    name: Release
-    script:
-        # Enforce style consistency across Python projects https://flake8.pycqa.org/en/latest/manpage.html
-        - python ./automation/new_release.py && python setup.py sdist bdist_wheel && twine upload --username="${TWINE_USERNAME}" --password="${TWINE_PASSWORD}" dist/*
+    - step:
+      name: Release
+      script:
+          - python ./automation/new_release.py && python setup.py sdist bdist_wheel && twine upload --username="${TWINE_USERNAME}" --password="${TWINE_PASSWORD}" dist/*
