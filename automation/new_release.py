@@ -7,7 +7,6 @@ class Pip:
 
     def __contains__(self, project_module: str):
         url = f"https://pypi.org/rss/project/{ project_module.__name__ }/releases.xml"
-        print(url)
         
         response = requests.get(url)
         return f"<title>{project_module.__version__}</title>" in response.text
