@@ -35,11 +35,6 @@ build
 
 *.sw[klmonpaefghij]
 
-# vagrant config
-# ~~~~~~~~~~~~~~
-
-/.vagrant
-
 # test coverage
 # ~~~~~~~~~~~~~
 
