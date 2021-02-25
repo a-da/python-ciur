@@ -63,9 +63,16 @@ Will produce a json
 Installation
 ============
 
+Ensure that you have
+`lxml OS dependencies <https://lxml.de/installation.html#requirements>`_
+and
+`cryptography OS dependencies <https://cryptography.io/en/latest/installation.html#debian-ubuntu>`_
+available.
+
 .. code-block::
 
     pip install ciur
+
 
 Install via docker
 

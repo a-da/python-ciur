@@ -9,6 +9,26 @@
     ciur_venv: ~/.pyenv/my_venv/ada/ciur
 
   tasks:
+
+  # based on https://lxml.de/installation.html#requirements
+  - name: Install lxml OS dependencies
+    apt:
+      pkg:
+        - libxml2-dev
+        - libxslt-dev
+        - python-dev
+        - # build-dep it may not be available
+        - python3-lxml
+
+  # based on https://cryptography.io/en/latest/installation.html#debian-ubuntu
+  - name: Install cryptography OS dependencies
+    apt:
+      pkg:
+        - build-essential
+        - libssl-dev
+        - libffi-dev
+        - python3-dev cargo
+
   - name: Install pyenv
     git:
       repo: https://github.com/yyuu/pyenv.git

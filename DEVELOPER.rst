@@ -43,7 +43,9 @@ IDE pycharm tuning::
 
     Editor > Spelling > [TAB] Dictionaries
 
-        Custom Dictionaries Folder: ${CIUR_HOME}
+        Custom Dictionaries Folder: `<docs/ciur.spellchecking.dic>`_
+
+        Restart IDE after this.
 
     Editor > General > Appearance
 
