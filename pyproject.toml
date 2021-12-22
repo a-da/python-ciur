@@ -1,0 +1,124 @@
+[project]
+    name = "ciur"
+    readme = "README.rst"
+    version = "0.2.1.dev2"
+    authors = [
+        {name = "Andrei Danciuc", email = "python.ciur@gmail.com"},
+    ]
+    license = "MIT"
+    dependencies = [
+        # keep sorted
+        "cssselect==1.2.0",
+        "html5lib==1.1",
+        "lxml==5.3.1",
+        "pyparsing==3.2.1",
+        "python-dateutil==2.9.0.post0",
+        "requests[security]==2.32.3",
+
+    ]
+    requires-python = "== 3.13.2"
+
+[project.urls]
+Repository = "https://github.com/a-da/python-ciur.git"
+
+[project.scripts]
+    "ciur" = "ciur.cli:main"
+
+[project.optional-dependencies]
+    dev = [
+        # keep sorted
+        "bpython==0.25",
+        "coverage==7.6.12",
+        "lxml-stubs==0.5.1",
+        "pyenchant==3.2.2",
+        "pylint==3.3.4",
+        "pytest-cov",
+        "pytest-runner==6.0.1",
+        "pytest-sugar==1.0.0",
+        "pytest==8.3.4",
+        "setuptools-lint==0.6.0",
+        "sh==2.2.1",
+        "sphinx==8.2.0",
+        "twine==6.1.0",
+        "types-html5lib==1.1.11.20241018",
+        "types-python-dateutil==2.9.0.20241206",
+        "types-requests==2.32.0.20250306"
+
+    ]
+    pdf = [
+        "pdfminer==20191125"
+    ]
+
+[build-system]
+    requires = ["setuptools>=61.0"]
+    build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+    where = ["src/"]
+    exclude = ["docs*", "tests*"]
+
+[tool.setuptools.package-data]
+    "tec.analytics" = ["py.typed"]
+
+
+[tool.isort]
+    known_typing = "typing"
+    known_localfolder = "src"
+    known_tec = "tec"
+    sections = ["FUTURE", "TYPING", "STDLIB", "FIRSTPARTY", "THIRDPARTY", "TEC", "LOCALFOLDER"]
+
+[tool.coverage.run]
+    branch = true
+    source = ["ciur"]
+
+[tool.coverage.report]
+    fail_under = 71
+    show_missing = true
+
+[tool.pytest.ini_options]
+    addopts = "--strict-markers -m 'not integration' -v --doctest-modules --doctest-glob=test_*.rst"
+    markers = ["integration"]
+    testpaths = ["tests", "ciur"]
+    filterwarnings = [
+        "error",
+    ]
+    log_level = "INFO"
+
+
+[tool.mypy]
+    python_version = "3.13"
+    #strict = true
+    show_error_codes = true
+    plugins = "pydantic.mypy"
+
+[[tool.mypy.overrides]]
+    module = "influxdb.*"
+    ignore_missing_imports = true
+
+[tool.pylint.typecheck]
+    signature-mutators=[
+        'click.decorators.option',
+        'click.decorators.argument',
+        'click.decorators.version_option',
+        'click.decorators.help_option',
+        'click.decorators.pass_context',
+        'click.decorators.confirmation_option'
+    ]
+
+[tool.pylint.'MESSAGES CONTROL']
+    max-line-length = 120
+    disable = [
+        'logging-fstring-interpolation',
+        'missing-function-docstring',
+        'missing-class-docstring',
+        'line-too-long',
+        'fixme',
+        'arguments-differ'
+    ]
+
+# see configuration specification
+# https://github.com/DavidAnson/markdownlint/blob/main/doc/md013.md
+[tool.markdownlint.MD013]
+    line_length = 100
+    tables = false
+    code_blocks = false

@@ -1,1 +1,0 @@
-git+https://bitbucket.org/ada/python-ciur.git@python3-ciur#egg=ciur
