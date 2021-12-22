@@ -18,10 +18,9 @@ NOTE:
 import re
 import sre_constants
 
-from ciur.helpers import load_xpath_functions
-from ciur.helpers import element2text
-
 from ciur.exceptions import CiurBaseException
+from ciur.helpers import element2text
+from ciur.helpers import load_xpath_functions
 from ciur.xpath_functions_ciur import fn_raw
 
 
@@ -45,16 +44,16 @@ def fn_replace(context, value, pattern, replacement=""):
     if not text:
         return text
 
-    if not (
-            isinstance(text, str) or
-            isinstance(text, list) and len(text) == 1
-    ):
-        raise CiurBaseException({
-            "type": type(text),
-            "len": len(text),
-            "text": text,
-            "context": fn_raw(None, context.context_node)
-        }, "type checking violation in function `replace`")
+    if not (isinstance(text, str) or isinstance(text, list) and len(text) == 1):
+        raise CiurBaseException(
+            {
+                "type": type(text),
+                "len": len(text),
+                "text": text,
+                "context": fn_raw(None, context.context_node),
+            },
+            "type checking violation in function `replace`",
+        )
 
     if not isinstance(text, str):
         text = text[0]
@@ -62,8 +61,7 @@ def fn_replace(context, value, pattern, replacement=""):
     try:
         string = re.sub(pattern, replacement, text)
     except (sre_constants.error,) as regex_error:
-        raise CiurBaseException("wrong regexp-> %s `%s`" % (
-            str(regex_error), pattern))
+        raise CiurBaseException("wrong regexp-> %s `%s`" % (str(regex_error), pattern))
 
     return string
 
@@ -88,9 +86,11 @@ def fn_matches(context, value, regex):
     FIXME:
     """
     if isinstance(value, list):
-        return [i for i in [
-            fn_matches(context, i_value, regex) for i_value in value
-            ] if i is not None]
+        return [
+            i
+            for i in [fn_matches(context, i_value, regex) for i_value in value]
+            if i is not None
+        ]
 
     text = element2text(value)
 
@@ -99,9 +99,8 @@ def fn_matches(context, value, regex):
 
     try:
         match = re.search(regex, text)
-    except (sre_constants.error, ) as regexp_error:
-        raise CiurBaseException("wrong regexp-> %s `%s`" % (
-            str(regexp_error), regex))
+    except (sre_constants.error,) as regexp_error:
+        raise CiurBaseException("wrong regexp-> %s `%s`" % (str(regexp_error), regex))
 
     return value if match else None
 
@@ -159,11 +158,11 @@ def fn_lower_case(context, text):
 
 def fn_dehumanise_number(context, number: str) -> float:
     """
-    >>> fn_dehumanise_number("11.5k")
+    >>> fn_dehumanise_number(None,"11.5k")
     11500.0
-    >>> fn_dehumanise_number("69")
+    >>> fn_dehumanise_number(None, "69")
     69.0
-    >>> fn_dehumanise_number("1M")
+    >>> fn_dehumanise_number(None, "1M")
     1000000.0
     """
     del context
@@ -177,5 +176,6 @@ def fn_dehumanise_number(context, number: str) -> float:
         number = float(number)
 
     return number
+
 
 load_xpath_functions(locals())
