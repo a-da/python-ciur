@@ -10,37 +10,42 @@ NOTE:
     local convention for all public cast function is `[a-z]+[a-z0-9_]+_`
     it should end with underscore
 """
-
-from decimal import Decimal
-
-
 import html
+import urllib.parse
+from decimal import Decimal
 from html.parser import HTMLParser
-from urllib.parse import urlparse
+
 from dateutil import parser
 from lxml.etree import tostring
 
-from ciur.helpers import load_xpath_functions
-from ciur.helpers import element2text
+from ciur.dateutil_aditional_languages import MONTHS
 from ciur.decorators import check_new_node
 from ciur.decorators import convert_element2text
 from ciur.exceptions import CiurBaseException
-from ciur.dateutil_aditional_languages import MONTHS
+from ciur.helpers import element2text
+from ciur.helpers import load_xpath_functions
 
 
-def url_(url, base_url):
+def url_(url: str, base_url: str) -> str:
     """
     get absolute url
+    >>> url_(
+    ... "s-anzeige/lego-exoforce-7704/1966828669-23-3333",
+    ... "https://www.ebay-kleinanzeigen.de/s-bestandsliste.html?userId=248358"
+    ... )
+    'https://www.ebay-kleinanzeigen.de/s-anzeige/lego-exoforce-7704/1966828669-23-3333'
     """
-    return urlparse.urljoin(base_url, url)
+    return urllib.parse.urljoin(base_url, url)
 
 
 def url_param_(url, param, *_):
     """
     get param from url
+    >>> url_param_("http://some-web-site?some-param=some-value", "some-param")
+    ['some-value']
     """
-    parsed = urlparse.urlparse(url)
-    return urlparse.parse_qs(parsed.query)[param]
+    parsed = urllib.parse.urlparse(url)
+    return urllib.parse.parse_qs(parsed.query)[param]
 
 
 @convert_element2text
@@ -54,6 +59,9 @@ def fn_int(context, value, *_):
     :param _: unused
 
     :rtype: int
+
+    >>> fn_int(None, "1")
+    1
     """
     del context
 
@@ -189,6 +197,7 @@ def fn_tail(context, value):
 
     return value.tail
 
+
 @convert_element2text
 def fn_text(context, value):
     """
@@ -213,7 +222,6 @@ def fn_decimal(context, value, *_):
     del context
 
     return Decimal(value)
-
 
 
 HTML_PARSER = HTMLParser()
