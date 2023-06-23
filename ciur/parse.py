@@ -5,6 +5,8 @@ NOTE:
     local convention for all public paring function is `[a-z]+[a-z0-9_]+_type`
     is should end with "_type"
 """
+from typing import Any, Dict
+
 import sys
 from io import BytesIO, StringIO
 from collections import OrderedDict
@@ -221,7 +223,7 @@ def _prepare_context(context_, url=None):
     return context_
 
 
-def html_type(document, rule, rule_file_path=None):
+def html_type(document, rule, rule_file_path=None) -> Dict[str, Any]:
     """
     use this function if page is html
 

@@ -1,6 +1,8 @@
 """
 place where to hold all Models related class of ``ciur``
 """
+from typing import Union, Optional
+
 from requests.models import Response
 
 
@@ -13,12 +15,12 @@ class Document(object):  # pylint: disable=too-few-public-methods
     """
     def __init__(
             self,
-            content,
-            namespace=None,
-            encoding=None,
-            url=None,
-            doctype="/html"
-    ):
+            content: Union[Response, bytes],
+            namespace: Optional[str] = None,
+            encoding: Optional[str] = None,
+            url: Optional[str] = None,
+            doctype: str ="/html"
+    ) -> None:
         """
         :param doctype: MIME types to specify the nature of the file currently
             being handled.

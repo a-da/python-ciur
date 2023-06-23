@@ -180,6 +180,8 @@ scrapy.org_support.doctest
 ]
 """
 
+from typing import Sequence, Dict, Any
+
 import os
 import re
 from collections import OrderedDict
@@ -533,7 +535,7 @@ def ensure_unicode_provision(data):
     return data
 
 
-def external2dict(rules, namespace=None):
+def external2dict(rules, namespace=None) -> Sequence[Dict[str, Any]]:
     """
     convert external_dls (*.ciur) to dict_dsl
     TODO: define in documentation type of DSL:

@@ -1,6 +1,8 @@
 """
 ciur internal dsl (python api)
 """
+from typing import Sequence, Dict, Any
+
 from collections import OrderedDict
 from types import FunctionType
 import json
@@ -254,7 +256,7 @@ class Rule(ciur.CommonEqualityMixin):
         )
 
     @staticmethod
-    def from_list(list_):
+    def from_list(list_: Sequence[Dict[str, Any]]) -> 'ListOfT':
         """
         factory method, build ListOf `Rule` objects from `list_`
         :param list_:
