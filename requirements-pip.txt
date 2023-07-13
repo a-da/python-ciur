@@ -8,7 +8,7 @@
 
 html5lib==1.1
 
-lxml==4.6.2 # xml like document parsing
+lxml==4.9.3 # xml like document parsing
 cssselect==1.1.0 # enable css selector feature in xml
 
 pyparsing==2.4.7 # ciur grammar rule parser builder
