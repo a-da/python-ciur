@@ -37,7 +37,7 @@ jobs:
       - run: source .venv/bin/activate && make pytest
 
   pypi_publish:
-    if: github.event.pull_request.merged == true
+    if: github.ref == 'refs/heads/master'
     needs: test
     runs-on: ubuntu-latest
     environment:
@@ -57,7 +57,7 @@ jobs:
         uses: pypa/gh-action-pypi-publish@release/v1
 
   docker:
-    if: github.event.pull_request.merged == true
+    if: github.ref == 'refs/heads/master'
     needs: pypi_publish
     runs-on: ubuntu-latest
     environment:
