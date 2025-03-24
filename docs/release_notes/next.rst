@@ -34,3 +34,10 @@ Those are just simple notes of goals for the next release.
 
         .. ====== Last Mile
            https://youtu.be/FVEEndIwOSA?t=2243
+
+4. add pylint check
+
+5. add mypy check
+
+6. Add bump_version.py script to increase versions for ciur and python.
+

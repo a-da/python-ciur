@@ -1,0 +1,6 @@
+=============
+Release 0.2.1
+=============
+
+1. Switch to python 3.13.2
+2. Migrate from bitbucket.org to github.com

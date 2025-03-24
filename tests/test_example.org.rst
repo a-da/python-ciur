@@ -29,14 +29,13 @@ test internal dsl
 test external dsl
 -----------------
 
->>> from ciur import bnf_parser, open_file
+>>> import ciur
+>>> from ciur import bnf_parser
+>>> from pathlib import Path
 
->>> import pathlib
->>> # str(pathlib.Path(bnf_parser.__file__).parent.parent)
-
->>> res = bnf_parser.external2dict(open_file(
-...     "../tests/res/example.org.ciur"
-... ))
+>>> example_org = Path(ciur.__file__).parent.joinpath(
+... "../../tests/res/example.org.ciur").read_text()
+>>> res = bnf_parser.external2dict(example_org)
 >>> rule = Rule.from_dict(res[0])  # doctest: +NORMALIZE_WHITESPACE
 >>> data = parse.html_type(parse.Document(response.content), rule)
 >>> print(pretty_json(data))  # doctest: +NORMALIZE_WHITESPACE
@@ -47,28 +46,3 @@ test external dsl
     }
 }
 
->>> res = bnf_parser.external2dict(open_file(
-...     "../tests/res/example.org.ciur"
-... ))
->>> rule = Rule.from_dict(res[0])  # doctest: +NORMALIZE_WHITESPACE
->>> data = parse.html_type(parse.Document(response.content), rule)
->>> print(pretty_json(data))  # doctest: +NORMALIZE_WHITESPACE
-{
-    "root": {
-        "name": "Example Domain",
-        "paragraph": "This domain is for use in illustrative examples in documents. You may use this\n    domain in literature without prior coordination or asking for permission."
-    }
-}
-
->>> res = bnf_parser.external2dict(open_file(
-...     "../tests/res/example.org.ciur"
-... ))
->>> rule = Rule.from_dict(res[0])  # doctest: +NORMALIZE_WHITESPACE
->>> data = parse.html_type(parse.Document(response.content), rule)
->>> print(pretty_json(data))  # doctest: +NORMALIZE_WHITESPACE
-{
-    "root": {
-        "name": "Example Domain",
-        "paragraph": "This domain is for use in illustrative examples in documents. You may use this\n    domain in literature without prior coordination or asking for permission."
-    }
-}

@@ -8,7 +8,7 @@
 tests/.cache
 ciur/.cache
 /.cache
-tests/.coverage.ciur
+.coverage
 
 # python related
 # ~~~~~~~~~~~~~~

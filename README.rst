@@ -78,7 +78,7 @@ Install via docker
 
 .. code-block:: bash
 
-    $ docker run -it python:3.9 bash
+    $ docker run -it python:3.13.2 bash
     root@e4d327153f2f:/# pip install ciur
     root@e4d327153f2f:/# ciur --help
 
@@ -114,7 +114,7 @@ Please see `LICENSE <./LICENSE>`_.
 Contribution
 ============
 
-The code of **Cuir** was concepted in 2012,
+The code of **Cuir** was conceived in 2012,
 and is going to continue developing.
 
 All contributions are welcome and should be done via Bitbucket (Pull Request, Issues).
