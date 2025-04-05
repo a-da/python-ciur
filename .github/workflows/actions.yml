@@ -89,7 +89,7 @@ jobs:
           file: ./docker/prod/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: adan/ciur:${CIUR_VERSION}
-          build-args:
-            CIUR_VERSION: ${CIUR_VERSION}
-            PYTHON_VERSION: ${PYTHON_VERSION}
+          tags: adan/ciur:${{ env.CIUR_VERSION }}
+          build-args: |
+            CIUR_VERSION=${{ env.CIUR_VERSION }}
+            PYTHON_VERSION=${{ env.PYTHON_VERSION }}
