@@ -61,7 +61,6 @@ jobs:
         uses: pypa/gh-action-pypi-publish@release/v1
 
   docker:
-    if: github.ref == '^refs/heads/relase/0/2/latest$'
     needs:
       #- pypi_publish
       - test
