@@ -5,6 +5,7 @@ from textwrap import dedent
 from unittest import mock
 
 import pytest
+from requests import Response
 
 import ciur  # just for mock
 from ciur.cli import VERSION_STRING
@@ -112,13 +113,25 @@ def test_cli_parse_resources(test_input, expected):
     parse url and local combinations
     """
     # WHEN
-    with mock.patch('ciur.shortcuts.REQ_SESSION') as req_session:
-        req_session.get.return_value.text = (
+    with (
+        mock.patch('ciur.shortcuts.REQ_SESSION') as req_session_rule,
+        mock.patch('ciur.models.REQ_SESSION') as req_session_document
+    ):
+        
+        req_session_rule.get.return_value.text = (
             Path(__file__).parent / 'res/example.org.ciur'
         ).read_text()
         
+        response = req_session_document.get.return_value
+        response.__class__ = Response
+        response.headers = {"content-type": "text/html"}
+        response.content = (
+            Path(__file__).parent / 'res/example.org.html'
+        ).read_bytes()
+        response.url = test_input[1]
+        
         result = cli.parse_cli(*test_input)
-    
+
     # THEN
     assert result == expected
 

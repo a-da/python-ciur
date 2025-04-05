@@ -36,3 +36,10 @@ validate_before_push: \
 	mypy \
 	pylint
 
+docker_build:
+	export BUILDKIT_PROGRESS=plain && docker build \
+		-t adan/ciur:$(shell yq ".env.CIUR_VERSION" .github/workflows/actions.yml) \
+		-f ./docker/prod/Dockerfile \
+		--build-arg PYTHON_VERSION=$(shell yq ".env.PYTHON_VERSION" .github/workflows/actions.yml) \
+		--build-arg CIUR_VERSION=$(shell yq ".env.CIUR_VERSION" .github/workflows/actions.yml) \
+		.

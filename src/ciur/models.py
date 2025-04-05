@@ -39,10 +39,11 @@ class Document:  # pylint: disable=too-few-public-methods
         self.encoding: Optional[str]
 
         if isinstance(content, Response):
-            self.content = content.content
-            self.encoding = content.apparent_encoding
-            self.url = content.url
-            doctype = content.headers["content-type"]
+            response: Response = content
+            self.content = response.content
+            self.encoding = response.apparent_encoding
+            self.url = response.url
+            doctype = response.headers["content-type"]
         else:
             self.content = content
             self.encoding = encoding
