@@ -27,7 +27,7 @@ jobs:
           path: .venv
           key: a-key
 
-  test:
+  coverage:
     needs: [setup]
     runs-on: ubuntu-latest
     steps:
@@ -38,11 +38,40 @@ jobs:
         with:
           path: .venv
           key: a-key
-      - run: source .venv/bin/activate && make pytest
+      - run: source .venv/bin/activate && make coverage
+
+  mypy:
+    needs: [ setup ]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+      - name: Restore cache
+        uses: actions/cache@v3
+        with:
+          path: .venv
+          key: a-key
+      - run: source .venv/bin/activate && make mypy
+
+  pylint:
+    needs: [ setup ]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+      - name: Restore cache
+        uses: actions/cache@v3
+        with:
+          path: .venv
+          key: a-key
+      - run: source .venv/bin/activate && make pylint
 
   pypi_publish:
     if: github.ref == '^refs/heads/relase/0/2/latest$'
-    needs: test
+    needs:
+      - coverage
+      - pylint
+      - mypy
     runs-on: ubuntu-latest
     environment:
       name: pypi
@@ -62,8 +91,7 @@ jobs:
 
   docker:
     needs:
-      #- pypi_publish
-      - test
+      - pypi_publish
     runs-on: ubuntu-latest
     environment:
       name: hub.docker.com
