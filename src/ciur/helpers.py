@@ -2,12 +2,13 @@
 Common function that can not be hold in ciur.__init__ because it is doing
 third party library calls
 """
+from typing import Sequence
+
 import os
 from http.cookiejar import LWPCookieJar
 
 from lxml.etree import FunctionNamespace
 from lxml.etree import _Element as EtreeElement
-
 from requests import Session
 
 
@@ -54,7 +55,9 @@ def get_session(callback_log_in, cookie_file_path):
     return session
 
 
-def element2text(value):
+def _element2text(
+    value: EtreeElement| Sequence[EtreeElement |str]
+) -> str | Sequence:
     """
     convert value to text if is EtreeElement or strip value is is text already
     :param value:
@@ -62,17 +65,29 @@ def element2text(value):
     :rtype str or iterable[str]
     """
     if isinstance(value, EtreeElement):
-        return value.text
-    elif isinstance(value, list) and len(value) > 0:
-        return [element2text(i) for i in value]
+        return value.text or ""
+
+    if isinstance(value, list) and len(value) > 0:
+        return (*(element2text(i) for i in value),)
 
     if not value:
-        return value
+        return ""
 
     if not isinstance(value, str):
         value = str(value)
 
     return value.strip()
+
+
+def element2text(
+    value: EtreeElement| Sequence[EtreeElement |str]
+) -> str:
+    text = _element2text(value)
+
+    if not isinstance(text, str):
+        raise ValueError(f"Type {type(text)} not supported")
+
+    return text
 
 
 def is_url(path):

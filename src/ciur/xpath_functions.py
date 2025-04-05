@@ -15,43 +15,40 @@ NOTE:
         fn_string_join -> string-join(//p)
 
 """
+from typing import Any
+
 import re
 
 from ciur.exceptions import CiurBaseException
-from ciur.helpers import element2text
-from ciur.helpers import load_xpath_functions
-from ciur.xpath_functions_ciur import fn_raw
+from ciur.helpers import element2text, load_xpath_functions
 
 
-def fn_replace(context, value, pattern, replacement=""):
+def fn_replace(_, value: Any, pattern: str, replacement: str = "") -> str:
     """
     http://www.w3.org/TR/xpath-functions/#func-replace
-    :param context: Parent DOM context
-        :type context: EtreeElement
+
     :param value: matches xpath results
-        :type value: EtreeElement or basestring
-
     :param replacement:
-        :type replacement: str
     :param pattern: regex pattern
-        :type pattern: str
-
-    :rtype: str
     """
     text = element2text(value)
-
-    if not text:
-        return text
 
     try:
         string = re.sub(pattern, replacement, text)
     except (re.error,) as regex_error:
-        raise CiurBaseException("wrong regexp-> %s `%s`" % (str(regex_error), pattern))
+        raise CiurBaseException(
+            f"wrong regexp-> {regex_error} `{pattern}`"
+        ) from regex_error
 
     return string
 
 
-def fn_matches(context, value, regex):
+def fn_to_arg(_, *arg, **kwargs):
+    """Conventional function which joins input as a single argument"""
+    del arg, kwargs
+
+
+def fn_matches(_, value, regex):
     """
     TODO: add text for this function
     The function returns true if a matches the regular expression supplied as
@@ -78,7 +75,9 @@ def fn_matches(context, value, regex):
     try:
         match = re.search(regex, text)
     except (re.error,) as regexp_error:
-        raise CiurBaseException("wrong regexp-> %s `%s`" % (str(regexp_error), regex))
+        raise CiurBaseException(
+            f"wrong regexp-> {regexp_error} `{regex}`"
+        ) from regexp_error
 
     return value if match else None
 
@@ -96,12 +95,10 @@ def fn_string_join(context, text, separator=""):
     :param separator:
         :type separator: str
     :rtype: str
+    # FIXME: deprecate this function
     """
     del context
     return separator.join(text)
-
-
-fn_string_join.process_list = True  # type: ignore[attr-defined]
 
 
 def fn_upper_case(context, text):
@@ -150,8 +147,7 @@ def fn_dehumanise_number(context, number: str) -> float:
         return float(number[:-1]) * 1000
     if number[-1] == "m":
         return float(number[:-1]) * 1_000_000
-    
-    return float(number)
 
+    return float(number)
 
 load_xpath_functions(locals())

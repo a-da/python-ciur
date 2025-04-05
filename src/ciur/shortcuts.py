@@ -2,32 +2,62 @@
 This module collects helper functions and classes.
 """
 
+from typing import Optional, cast
+
 import inspect
 import io
 import sys
-from typing import Union
+from pathlib import Path
 
 import requests
+from requests import Response
 
-from ciur import bnf_parser
-from ciur import get_logger
-from ciur import parse
-from ciur import pretty_json
+import ciur
+from ciur import CONF, bnf_parser, get_logger, parse, pretty_json
 from ciur.exceptions import CiurBaseException
-from ciur import CONF
 from ciur.helpers import is_url
 from ciur.models import Document
 from ciur.rule import Rule
-import ciur
 
 REQ_SESSION = requests.Session()
-
 
 
 LOGGER = get_logger(__name__)
 
 
-def pretty_parse(ciur_file_or_path,
+def _resolve_ciur_definition(
+    ciur_file_or_path: io.StringIO | str,
+    called_by_script: str
+) -> str:
+    if isinstance(ciur_file_or_path, io.StringIO):
+        definition = ciur_file_or_path.read()
+    else:
+        ciur_file_path = ciur.path(ciur_file_or_path, called_by_script)
+
+        definition = Path(ciur_file_path).read_bytes().decode()
+
+    return definition
+
+
+def _resolve_doc_type(doctype: Optional[str], headers: dict[str, str]) -> Optional[str]:
+    if doctype:
+        return doctype
+
+    for i_doc_type in dir(parse):
+        if i_doc_type.endswith("_type") and i_doc_type.replace(
+            "_type", "") in headers["content-type"]:
+
+            doctype = i_doc_type
+            break
+    else:
+        raise CiurBaseException(
+            f"can not autodetect doc_type `{headers["content-type"]}`"
+        )
+
+    return doctype
+
+
+def pretty_parse(ciur_file_or_path, # pylint: disable=too-many-arguments,too-many-positional-arguments
                   url,
                   doctype=None,
                   namespace=None,
@@ -50,19 +80,16 @@ def pretty_parse(ciur_file_or_path,
     :return : extracted data as pretty json
     """
     if not headers:
-        headers = HTTP_HEADERS
+        headers = ciur.HTTP_HEADERS
 
-    # workaround for get relative files
-    called_by_script = inspect.stack()[1][1]
+    ciur_definition = _resolve_ciur_definition(
+        ciur_file_or_path,
 
-    if isinstance(ciur_file_or_path, file):
-        ciur_file_path, ciur_file = ciur_file_or_path.name, ciur_file_or_path
-    else:
-        ciur_file_path = ciur.path(ciur_file_or_path, called_by_script)
+        # workaround for get relative files
+        inspect.stack()[1][1]
+    )
 
-        ciur_file = open(ciur_file_path)
-
-    res = bnf_parser.external2dict(ciur_file, namespace=namespace)
+    res = bnf_parser.external2dict(ciur_definition, namespace=namespace)
     rule = Rule.from_list(res)
 
     if req_callback:
@@ -77,16 +104,7 @@ def pretty_parse(ciur_file_or_path,
                 sys.stderr.write("[WARN] request.response has Etag, . "
                                  "TODO: link to documentation\n")
 
-    if not doctype:
-        for i_doc_type in dir(parse):
-            if i_doc_type.endswith("_type") and i_doc_type.replace(
-                    "_type", "") in response.headers["content-type"]:
-
-                doctype = i_doc_type
-                break
-        else:
-            raise CiurBaseException("can not autodetect doc_type `%s`" %
-                                    response.headers["content-type"])
+    doctype = _resolve_doc_type(doctype, dict(response.headers))
 
     parse_fun = getattr(parse, doctype)
 
@@ -104,16 +122,15 @@ def pretty_parse(ciur_file_or_path,
 
 
 def pretty_parse_from_document(
-    rule: Union[io.StringIO, str], 
-    document: Document) -> str:
-    # type(file or )
+    rule: io.StringIO | str,
+    document: Document
+) -> str:
     """
     WARN:
         do not use this helper in production,
         use only for sake of example,
         because of redundant rules and http session
 
-    :param req_callback:
     :param rule: row text for external dsl
     :param url: url to be fetch with GET requests lib
     :return : extracted data as pretty json
@@ -129,7 +146,12 @@ def pretty_parse_from_document(
     return pretty_json(data)
 
 
-def pretty_parse_from_resources(ciur_rule, document_to_parse, namespace=None, doctype=None):
+def pretty_parse_from_resources(
+    ciur_rule: str,
+    document_to_parse: Response | str,
+    namespace: bool = False,
+    doctype: str = "/html"
+) -> str:
     if is_url(ciur_rule):
         LOGGER.info("Downloading rule %r", ciur_rule)
         response = REQ_SESSION.get(ciur_rule, headers=ciur.HTTP_HEADERS)
@@ -139,12 +161,18 @@ def pretty_parse_from_resources(ciur_rule, document_to_parse, namespace=None, do
     #         ciur_rule = file_cursor.read()
 
     if is_url(document_to_parse):
-        document = Document.from_url(document_to_parse, namespace=namespace)
+        document = Document.from_url(
+            url=cast(str, document_to_parse),
+            namespace=namespace
+        )
     else:
         # with ciur.open_file(document_to_parse, __file__) as file_cursor:
         #     document_to_parse = file_cursor.read()
 
-        document = Document(document_to_parse, namespace=namespace,
-                            doctype=doctype)
+        document = Document(
+            content=cast(Response, document_to_parse),
+            namespace=namespace,
+            doctype=doctype
+        )
 
     return pretty_parse_from_document(ciur_rule, document)

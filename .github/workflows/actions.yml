@@ -5,6 +5,10 @@ on:
 #  pull_request:
 #    branches: [ main ]
 
+env:
+  PYTHON_VERSION: 3.13.2
+  CIUR_VERSION: 0.2.2
+
 jobs:
 
   setup:
@@ -37,7 +41,7 @@ jobs:
       - run: source .venv/bin/activate && make pytest
 
   pypi_publish:
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == '^refs/heads/relase/0/2/latest$'
     needs: test
     runs-on: ubuntu-latest
     environment:
@@ -57,7 +61,7 @@ jobs:
         uses: pypa/gh-action-pypi-publish@release/v1
 
   docker:
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == '^refs/heads/relase/0/2/latest$'
     needs: pypi_publish
     runs-on: ubuntu-latest
     environment:
@@ -85,4 +89,7 @@ jobs:
           file: ./docker/prod/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: adan/ciur:0.2.1.dev2
+          tags: adan/ciur:${CIUR_VERSION}
+          build-args:
+            CIUR_VERSION: ${CIUR_VERSION}
+            PYTHON_VERSION: ${PYTHON_VERSION}

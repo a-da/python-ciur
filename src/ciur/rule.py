@@ -1,21 +1,20 @@
 """
 ciur internal dsl (python api)
 """
-from typing import Sequence, Dict, Any
+from typing import Any, Callable, Literal, Optional, Sequence, cast
 
-from collections import OrderedDict
-from types import FunctionType
+import builtins
 import json
 import re
+from types import FunctionType
 
-import ciur
 import ciur.xpath_functions_ciur
-from ciur import pretty_json, bnf_parser
+from ciur import bnf_parser, pretty_json
 
 _JSON = str
 
 _SELECTOR_TYPE_SET = {"xpath", "css"}
-
+_SEQUENCE_TYPE = (tuple, list)
 
 class Rule(ciur.CommonEqualityMixin):
     """
@@ -104,20 +103,26 @@ class Rule(ciur.CommonEqualityMixin):
     >>> rule1 == rule2
     True
     """
+    rule: Sequence["Rule"]
 
-    def __init__(self, name, selector, type_list_, *selector_type_and_or_rule):
+    def __init__(self,
+                 name: str,
+                 selector: str,
+                 type_list_: str,
+                 *selector_type_and_or_rule) -> None:
         self.name = name
         self.selector = selector
 
         if not selector_type_and_or_rule:
             self.selector_type = "xpath"
-            self.rule = ()
+            self.rule: Sequence[str] = tuple()
         else:
-            if isinstance(selector_type_and_or_rule[0], self.__class__):
+            selector_type = selector_type_and_or_rule[0]
+            if isinstance(selector_type, self.__class__):
                 self.selector_type = "xpath"
                 self.rule = selector_type_and_or_rule
-            elif selector_type_and_or_rule[0] in _SELECTOR_TYPE_SET:
-                self.selector_type = selector_type_and_or_rule[0]
+            elif selector_type in _SELECTOR_TYPE_SET:
+                self.selector_type = selector_type
                 self.rule = selector_type_and_or_rule[1]
             else:
                 raise NotImplementedError("new Use case not Rule, css or xpath")
@@ -126,62 +131,101 @@ class Rule(ciur.CommonEqualityMixin):
         if isinstance(self.rule, list):
             self.rule = tuple(self.rule)
 
-        tmp = []
+        tmp: list = []
 
         for type_i in self._2complex(type_list_):
             #  assert isinstance(type_i, basestring)
 
-            if isinstance(type_i, list):
+            func_name: str | Literal['size']
+
+            if isinstance(type_i, (list, tuple)):
                 func_name = type_i[0]
                 args = type_i[1:]
 
             else:
-                match = re.search(r"^([*+])(\d*)$", type_i)
-                if match:
-                    func_name = "size"
-                    args = (
-                        "mandatory" if match.group(1) == "+" else "optional",
-                        int(match.group(2) or 0),
-                    )
+                size_assert = self._assert_result_size(type_i)
+                if size_assert:
+                    func_name, args = size_assert
                 else:
                     func_name = type_i
-                    args = tuple()
+                    args = tuple() # type: ignore[assignment]
 
-            # TODO there are 2 entity function and methods of object,
-            # TODO  rename func_name into callable_name
-            if isinstance(func_name, list):
-                obj_str, method_str = func_name
-                import builtins
-                obj = getattr(builtins, obj_str)
-                method = getattr(obj, method_str)
-                tmp.append([method, args])
-            else:
-                for casting_module in bnf_parser.casting_modules:
-                    try:
-                        tmp.append([
-                            getattr(casting_module, func_name + "_"),
-                            args
-                        ])
-                        break
-                    except (AttributeError,) as attribute_error:
-                        pass
-
-                    try:
-                        tmp.append([
-                            getattr(casting_module, "fn_" + func_name),
-                            args
-                        ])
-                        break
-                    except (AttributeError,) as attribute_error:
-                        pass
-                else:
-                    raise attribute_error
-
+            self._chain_functions_to_selector(
+                chain=tmp,
+                func_name=func_name,
+                function_args=args
+            )
 
         self.type_list = tmp
 
     @classmethod
-    def _2complex(cls, value):
+    def _assert_result_size(cls, language_token: str) -> Optional[tuple[
+            Literal['size'],
+            tuple[Literal['mandatory', 'optional'], int]
+    ]]:
+        """
+        - plus (+) at least one result will be requireds
+        - asterix (*) the result will be optional
+        - numbers after the plus or asterix presents exact matching size
+
+        Examples::
+
+            +2 exact two matches will be required
+            *2 nothing or two matches will be required
+        """
+        match = re.search(r"^([*+])(\d*)$", language_token)
+        if not match:
+            return None
+
+        return "size", (
+            "mandatory" if match.group(1) == "+" else "optional",
+            int(match.group(2) or 0),
+        )
+
+    @classmethod
+    def _chain_functions_to_selector(
+        cls,
+        func_name: str | Sequence[str],
+        function_args: Sequence[str | int],
+        chain: list[tuple[Sequence[Callable], Sequence[str | int]]]
+    ):
+        # TODO there are 2 entity function and methods of object,
+        # TODO  rename func_name into callable_name
+        if isinstance(func_name, list):
+            obj_str, method_str = func_name
+
+            obj = getattr(builtins, obj_str)
+            method = str, getattr(obj, method_str)
+            chain.append((method, function_args))
+            return
+
+        # func_name is str
+        func_name = cast(str, func_name)
+        for casting_module in bnf_parser.casting_modules:
+            # TODO: test this !!!!!!
+            try:
+                chain.append((
+                    getattr(casting_module, func_name + "_"),
+                    function_args
+                ))
+                break
+            except (AttributeError,):
+                pass
+
+            try:
+                chain.append((
+                    getattr(casting_module, "fn_" + func_name),
+                    function_args
+                ))
+                break
+            except (AttributeError,):
+                pass
+
+    @classmethod
+    def _2complex(
+        cls,
+        value: Sequence[ str | Literal['size'] ] | str | Literal['size']
+    ) -> Sequence[str | Literal['size']]:
         """
         convert data from simple/compact format into complex/verbose format
         :param value:
@@ -191,72 +235,112 @@ class Rule(ciur.CommonEqualityMixin):
         if not isinstance(value, (tuple, list)):
 
             # noinspection PyRedundantParentheses
-            return (value, )
+            return (value, ) # type: ignore[return-value]
+
+        if isinstance(value, list):
+            return tuple(value)
 
         return value
 
     @classmethod
-    def _2simple(cls, value):
+    def _2simple_for_function_type(
+        cls,
+        function: Callable | Sequence[str],
+        function_properties: Sequence
+    ) -> Callable[..., Any] | Sequence[str]:
+        if not isinstance(function, FunctionType):
+            return function
+
+        if function.__name__ == "size_":
+            required = "+" if function_properties[0] == "mandatory" else "*"
+            next_function = (
+                "" if function_properties[1] == 0 else function_properties[1]
+            )
+
+            return f"{required}{next_function}"
+
+        if function_properties[1]:
+            return function
+
+        if function.__name__.startswith("fn_"):
+            return str(function_properties[3:])
+
+        if function.__name__.endswith("_"):
+            # TODO: debug type
+            return str(function_properties[:-1])
+
+        raise NotImplementedError(f"new use case {function=}")
+
+    @classmethod
+    def _2simple(
+        cls,
+        complex_verbose_format: Sequence
+    ) -> Sequence[Callable| str ] | str:
         """
         convert data from complex/verbose format into simple/compact
-        :param value:
-            :type value: list or tuple or str
+        :param complex_verbose_format:
         :rtype: value or list or tuple
         """
-        if isinstance(value, (list, tuple)):
-            tmp = []
-            for value_i in value:
-                tmp_i = value_i
-                if isinstance(value_i[0], FunctionType):
-                    function = value_i[0].__name__
-                    if function == "size_":
-                        tmp_i = "%s%s" % (
-                            "+" if value_i[1][0] == "mandatory" else "*",
-                            "" if value_i[1][1] == 0 else value_i[1][1]
-                        )
-                    else:
-                        if not value_i[1]:
-                            if function.startswith("fn_"):
-                                tmp_i = ("%s" % function[3:])
-                            elif function.endswith("_"):
-                                tmp_i = ("%s" % function[:-1])
-                            else:
-                                # TODO remove this in future
-                                raise Exception("new use case")
+        if not isinstance(complex_verbose_format, _SEQUENCE_TYPE):
+            return complex_verbose_format
 
-                tmp.append(tmp_i)
-            value = tmp
+        simple = []
+        # TODO: make a structure
+        # function:
+        #    name: str
+        #    optional: true|false
+        #    next_functions: list
+        for func, func_properties in complex_verbose_format:
+            tmp_i = cls._2simple_for_function_type(
+                func,
+                func_properties
+            )
 
-            if len(value) == 1:
-                return value[0]
+            simple.append(tmp_i)
 
-        return value
+        if len(complex_verbose_format) == 1:
+            return simple[0] # type: ignore[return-value]
+
+        ## FIXME: never is called
+        return tuple(simple) # type: ignore[arg-type]
 
     @staticmethod
-    def from_dict(dict_):
+    def from_dict(input_definition: dict | str):
         """
-        factory method, build `Rule` object from `dict_`
-        :param dict_:
-            :type dict_: dict or basestring
+        Factory method, build `Rule` object from `dict_`
+        :param definition:
+            :type definition: dict or basestring
         :rtype: Rule
         """
-        # TODO: check load root list
+        definition: dict
 
-        assert isinstance(dict_, (dict, _JSON))
+        if isinstance(input_definition, _JSON):
+            definition = json.loads(input_definition)
+        else:
+            definition = input_definition
 
-        if isinstance(dict_, _JSON):
-            dict_ = json.loads(dict_)
+        # check for children, emtpy list [] means no children
+        sub_rule = tuple(list(
+            Rule.from_dict(rule)
+            for rule in definition.get("rule", tuple())
+        ))
 
-        # check for children [] means no children
-        rule = [Rule.from_dict(rule) for rule in dict_.get("rule", [])]
+        type_list = definition["type_list"]
+        if isinstance(type_list, list):
+            type_list = tuple(type_list)
 
         return Rule(
-            dict_["name"], dict_["selector"], dict_["type_list"],
-            *(dict_.get("selector_type", "xpath"), rule)
+            definition["name"],
+            definition["selector"],
+            type_list,
+            *(
+                definition.get("selector_type", "xpath"),
+                sub_rule
+            )
         )
 
     @staticmethod
-    def from_list(list_: Sequence[Dict[str, Any]]) -> 'ListOfT':
+    def from_list(list_: Sequence[dict[str, Any]]) -> 'ListOfT':
         """
         factory method, build ListOf `Rule` objects from `list_`
         :param list_:
@@ -277,16 +361,16 @@ class Rule(ciur.CommonEqualityMixin):
 
         return Rule.from_list(res)
 
-    def to_dict(self):
+    def to_dict(self) -> dict[str, str | Sequence[str | Callable]]:
         """
-        exporting/serializing `Rule` object into `OrderedDict`
-        :rtype OrderedDict
+        exporting/serialising `Rule` object into dict
         """
-        ret = OrderedDict()
-        ret["name"] = self.name
-        ret["selector"] = self.selector
-        ret["selector_type"] = self.selector_type
-        ret["type_list"] = self._2simple(self.type_list)
+        ret: dict[str, Any] = {
+            'name': self.name,
+            'selector': self.selector,
+            'selector_type': self.selector_type,
+            'type_list': self._2simple(self.type_list)
+        }
 
         rule = [i.to_dict() for i in self.rule]
         if rule:
@@ -294,16 +378,16 @@ class Rule(ciur.CommonEqualityMixin):
 
         return ret
 
-    def __repr__(self):
-        return "%s.%s(%s)" % (
+    def __repr__(self) -> str:
+        return "%s.%s(%s)" % ( # pylint: disable=consider-using-f-string
             self.__class__.__module__,
             self.__class__.__name__,
             self.to_dict()
         )
 
-    def __str__(self):
+    def __str__(self) -> str:
         pretty = pretty_json(self.to_dict())
-        return "%s.%s(%s)" % (
+        return "%s.%s(%s)" % ( # pylint: disable=consider-using-f-string
             self.__class__.__module__,
             self.__class__.__name__,
             pretty
@@ -325,7 +409,8 @@ class ListOfT(list):
         """
         return value
 
-    def __str__(self):
+    def __str__(self) -> str:
+        # pylint: disable=consider-using-f-string)
         name = "%s.%s:" % (self.__class__.__module__, self.__class__.__name__)
         res = name + "".join(
             "\n-----------%d-\n%s" % (index, self._callback(t))
@@ -338,8 +423,8 @@ class ListOfT(list):
 class ListOfDict(ListOfT):
     """
     wrapper for List Of Dict
-    The purpose is to have pretty print option for that complex type
+    The purpose is to have a pretty print option for that complex type
     """
     @classmethod
-    def _callback(cls, x):
-        return pretty_json(x)
+    def _callback(cls, value) -> str:
+        return pretty_json(value)

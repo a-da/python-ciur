@@ -15,7 +15,7 @@ pytest:
 	pytest
 
 pylint:
-	pylint
+	pylint src
 
 mypy:
 	mypy src
@@ -28,9 +28,11 @@ coverage_report:
 
 coverage: coverage_run coverage_report
 
+isort:
+	isort src tests $(ISORT_ARGS)
+
 validate_before_push: \
 	coverage \
-	mypy
-
-	#pylint \
+	mypy \
+	pylint
 

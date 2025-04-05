@@ -1,4 +1,4 @@
-Testing http://example.org
+Testing https://example.org
 ==========================
 >>> import os
 
@@ -7,7 +7,7 @@ Testing http://example.org
 >>> import requests
 
 >>> requests = requests.Session()
->>> response = requests.get("http://example.org")
+>>> response = requests.get("https://example.org")
 
 test internal dsl
 -----------------

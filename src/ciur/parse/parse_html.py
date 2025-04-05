@@ -1,32 +1,33 @@
-from typing import Any
+"""
+Parse HTML files
+"""
+from typing import Any, Optional, Sequence
 
 import html5lib
 
+from ..models import Document
+from ..rule import Rule
 from ._parse import _prepare_context, _recursive_parse
 
 
-def html_type(document, rule, rule_file_path=None) -> dict[str, Any]:
-    """
-    use this function if page is html
+def html_type(
+    document: Document,
+    rule: Rule,
+    rule_file_path: Optional[str] = None
+) -> Sequence[Any] | dict[Any, Any]:
+    """Use this function if page is HTML"""
 
-    :param rule_file_path:
-        :type rule_file_path: str
-
-    :param rule:
-        :type rule: Rule
-
-    :param document: Document to be parsed
-        :type document: Document
-
-    :rtype: OrderedDict
-    """
-
-    context = html5lib.parse(
-        document.content,
+    html = html5lib.parse(
+        doc=document.content,
         treebuilder="lxml",
         namespaceHTMLElements=document.namespace,
     )
 
-    context = _prepare_context(context, document.url)
+    html = _prepare_context(html, document.url)
 
-    return _recursive_parse(context, rule, "html", rule_file_path)
+    return _recursive_parse(
+        context_=html,
+        rule=rule,
+        doctype="html",
+        rule_file_path=rule_file_path
+    )

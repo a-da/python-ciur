@@ -179,49 +179,26 @@ scrapy.org_support.doctest
     }
 ]
 """
-import io
-from typing import Sequence, Dict, Any, Union
+from typing import Any
+from typing import Optional as TypeOptional
+from typing import Sequence
 
+import io
 import os
 import re
-from collections import OrderedDict
-from io import TextIOWrapper
 
-from lxml import etree
-from pyparsing import (
-    ParseFatalException,
-    ParseException,
-    FollowedBy,
-    Word,
-    Regex,
-    Optional,
-    Forward,
-    OneOrMore,
-    Group,
-    Literal,
-    Suppress,
-    ParseBaseException,
-    ZeroOrMore,
-    Or,
-    QuotedString
-)
-from pyparsing import (
-    col,
-    lineEnd,
-    empty,
-    alphas,
-    alphanums,
-    pythonStyleComment,
-    delimitedList,
-    oneOf)
-
-from ciur import xpath_functions_ciur
-from ciur import pretty_json
-from ciur.exceptions import CiurBaseException, ParseExceptionInCiurFile
+import pyparsing
+from pyparsing import (FollowedBy, Forward, Group, Literal, OneOrMore,
+                       Optional, Or, ParseBaseException, ParseException,
+                       ParseFatalException, QuotedString, Regex, Suppress,
+                       Word, ZeroOrMore, alphanums, alphas, col, delimitedList,
+                       empty, lineEnd, oneOf, pythonStyleComment)
 
 # noinspection PyUnresolvedReferences
 # load namespace function in lxml.etree
 import ciur.xpath_functions  # pylint: disable=unused-import
+from ciur import pretty_json, xpath_functions_ciur
+from ciur.exceptions import CiurBaseException, ParseExceptionInCiurFile
 
 _INDENT_STACK = [1]
 
@@ -345,7 +322,7 @@ def type_list_validation(string, location, expr, error):
     raise ParseFatalException(
         string,
         location + 1,
-        "type_list_validation->%s, %s" % (error, expr)
+        f"type_list_validation->{error}, {expr}"
     )
 
 casting_modules = {
@@ -363,7 +340,7 @@ def _type_list():
 
     casting_functions_list = [
         Group(Literal(i[:-1]) + casting_functions_args)
-        for i in xpath_functions_ciur.__dict__.keys()
+        for i in xpath_functions_ciur.__dict__
         if i.endswith("_") and not i.startswith("__")
     ]
 
@@ -394,47 +371,11 @@ def _type_list():
     ).setFailAction(type_list_validation)
 
 
-def _get_bnf(namespace=None):
+def _get_bnf(_: TypeOptional[dict] = None) -> pyparsing.ParserElement:
     """
     :param namespace:
-        :type namespace: dict
-
     :return: Backus-Naur Form grammars
-    :rtype pyparsing.ParserElement
     """
-
-    def validate_xpath(string, location, tokens):
-        """
-        :param string: the original string being parsed
-            :type string: str
-
-        :param location: the location of the matching substring
-            :type location: int
-
-        :param tokens: list of matched tokens, packaged as a C{L{ParseResults}}
-            object
-            :type tokens: iterable[C{L{ParseResults}}]
-        """
-        xpath_ = tokens[0]
-        try:
-            if re.search(r"number\(.*?\)", string):
-                import sys
-                sys.stderr.write(
-                    "[WARNING] use `float` from type_list instead of"
-                    "`number` from xpath, because number lies see "
-                    "http://stackoverflow.com/questions/33789196/"
-                    "is-xpath-number-function-lies\n"
-                )
-
-            context = etree.fromstring("<root></root>")
-            context.xpath(xpath_, namespaces=namespace)
-            # XPATH_EVALUATOR(xpath_, namespaces=namespace)
-        except (etree.XPathEvalError, ) as xpath_eval_error:
-            raise ParseFatalException(
-                string,
-                location,
-                "validate_xpath->%s" % xpath_eval_error
-            )
 
     # url <./url> str +1 => xpath query
     xpath = Optional(oneOf("xpath css"), default="xpath") + \
@@ -442,7 +383,7 @@ def _get_bnf(namespace=None):
 
     type_list = _type_list()
 
-    rule = (IDENTIFIER + xpath + type_list)  # <url ./url str +1> => rule line
+    rule = IDENTIFIER + xpath + type_list  # <url ./url str +1> => rule line
 
     stmt = Forward().setParseAction(_check_peer_indent)
     bnf = OneOrMore(stmt)
@@ -451,12 +392,12 @@ def _get_bnf(namespace=None):
 
     # check for children
     # pylint: disable=expression-not-assigned
-    stmt << Group(rule + Optional(children))
+    stmt << Group(rule + Optional(children)) # type: ignore[operator]
 
     return bnf
 
 
-def external2list(rules: Union[io.StringIO, str], namespace=None):
+def external2list(rules: io.StringIO| str, namespace=None) -> Sequence:
     """
     Transform external ciur dsl (file or text) into grammar list
     :param rules: file or basestring
@@ -487,37 +428,38 @@ def external2list(rules: Union[io.StringIO, str], namespace=None):
             }
         )
 
-    bnf = _get_bnf(namespace=namespace)
+    bnf = _get_bnf(namespace)
     try:
         parse_tree = bnf.parseString(rules, parseAll=True)
     except (ParseBaseException,) as parse_error:
-        raise ParseExceptionInCiurFile(rules, file_name, parse_error)
+        raise ParseExceptionInCiurFile(
+            rules, file_name, parse_error
+        ) from parse_error
 
     return parse_tree.asList()
 
 
-def _list_grammar2dict_list(rule_list):
+def _list_grammar2dict_list(rule_list: Sequence[Any]) -> Sequence[dict]:
     """
     convert list of grammar into list of `dict`
     :param rule_list:
         :type rule_list: list
-
-    :rtype: list[OrderedDict]
     """
     rule_list_out = []
 
     for rule_i in rule_list:
-        dict_ = OrderedDict()
-        dict_["name"] = rule_i[0]
-        dict_["selector_type"] = rule_i[1]
-        dict_["selector"] = rule_i[2]
-        dict_["type_list"] = rule_i[3]
+        data = {
+            'name': rule_i[0],
+            'selector_type': rule_i[1],
+            'selector': rule_i[2],
+            'type_list': rule_i[3]
+        }
         if len(rule_i) == 5:
-            dict_["rule"] = _list_grammar2dict_list(rule_i[4])
+            data["rule"] = _list_grammar2dict_list(rule_i[4])
 
-        rule_list_out.append(dict_)
+        rule_list_out.append(data)
 
-    return rule_list_out
+    return tuple(rule_list_out)
 
 
 def ensure_unicode_provision(data):
@@ -534,7 +476,7 @@ def ensure_unicode_provision(data):
     return data
 
 
-def external2dict(rules: Union[io.StringIO, str], namespace=None) -> Sequence[dict[str, Any]]:
+def external2dict(rules: io.StringIO | str, namespace=None) -> Sequence[dict[str, Any]]:
     """
     convert external_dls (*.ciur) to dict_dsl
     TODO: define in documentation type of DSL:
@@ -544,8 +486,6 @@ def external2dict(rules: Union[io.StringIO, str], namespace=None) -> Sequence[di
 
     :param namespace:
         :type namespace: xml namespace
-
-    :rtype: list[OrderedDict]
     """
     list_ = external2list(rules, namespace=namespace)
     list_ = ensure_unicode_provision(list_)
@@ -555,14 +495,13 @@ def external2dict(rules: Union[io.StringIO, str], namespace=None) -> Sequence[di
     return data
 
 
-def external2json(rules):
+def external2json(rules) -> str:
     """
     convert external dls (*.ciur) to python json str
     :param rules:
         :type rules: file or str
 
     :return: json
-        :rtype: str
     """
 
     data = external2dict(rules)

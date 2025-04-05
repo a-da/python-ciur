@@ -10,7 +10,7 @@ Type *"Hello word"*
 
 .. code-block:: bash
 
-    $ ciur --url "http://example.org" --rules="https://bitbucket.org/ada/python-ciur/raw/python3.9-ciur/docs/docker/example.org.ciur"
+    $ ciur --url "https://example.org" --rules="https://bitbucket.org/ada/python-ciur/raw/python3.9-ciur/docs/docker/example.org.ciur"
 
 Based on ciur rules:
 

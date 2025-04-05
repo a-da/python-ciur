@@ -1,9 +1,9 @@
 """
 place where to hold all Models related class of ``ciur``
 """
+from typing import Optional
+
 import copy
-import logging
-from typing import Union, Optional
 
 import requests
 from requests.models import Response
@@ -15,21 +15,20 @@ LOG = ciur.get_logger(__name__)
 
 REQ_SESSION = requests.Session()
 
-
-class Document(object):  # pylint: disable=too-few-public-methods
+class Document:  # pylint: disable=too-few-public-methods
     """
     Model for encapsulated data.
     Scope:
         workaround for too-many-arguments for pylint, to not pass more than
         5 argument in a functions
     """
-    def __init__(
+    def __init__( # pylint: disable=too-many-arguments,too-many-positional-arguments
             self,
-            content: Union[Response, bytes],
-            namespace: Optional[str] = None,
+            content: Response | bytes,
+            namespace: bool = False,
             encoding: Optional[str] = None,
             url: Optional[str] = None,
-            doctype: str ="/html"
+            doctype: str = "/html"
     ) -> None:
         """
         :param doctype: MIME types to specify the nature of the file currently
@@ -38,7 +37,7 @@ class Document(object):  # pylint: disable=too-few-public-methods
         """
         self.url: Optional[str]
         self.encoding: Optional[str]
-        
+
         if isinstance(content, Response):
             self.content = content.content
             self.encoding = content.apparent_encoding
@@ -48,7 +47,7 @@ class Document(object):  # pylint: disable=too-few-public-methods
             self.content = content
             self.encoding = encoding
             self.url = url
-        
+
         if doctype:
             if "/xml" in doctype:
                 doctype = "xml"
@@ -60,7 +59,7 @@ class Document(object):  # pylint: disable=too-few-public-methods
             if content.name.endswith(".html") or content.name.endswith(".htm"):
                 doctype = "html"
             # try to add more fallback here
-            
+
         self.doctype = doctype
 
         self.namespace = namespace
@@ -78,17 +77,17 @@ class Document(object):  # pylint: disable=too-few-public-methods
         if self.namespace:
             _["namespace"] = self.namespace
 
-        return "Document%s" % _
-    
+        return f"Document{_}"
+
     @classmethod
     def from_url(cls,
                  url: str,
                  headers: Optional[dict[str, str]] = None,
-                 namespace: Optional[str] = None) -> 'Document':
-        
+                 namespace: bool = True) -> 'Document':
+
         if not is_url(url):
             raise ValueError(f"Url input {url} must be a valid URL")
-        
+
         if not headers:
             headers = copy.deepcopy(ciur.HTTP_HEADERS)
 

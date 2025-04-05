@@ -1,9 +1,9 @@
-from ciur import bnf_parser, open_file
-from ciur.rule import Rule
-from unittest.mock import MagicMock
-from requests import Response
-from ciur import parse, pretty_json
 from decimal import Decimal
+
+from requests import Response
+
+from ciur import bnf_parser, parse, pretty_json
+from ciur.rule import Rule
 
 
 def test_type_casting():

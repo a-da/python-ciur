@@ -1,13 +1,12 @@
+import platform  # just for mock
+import sys  # just for mock
 from pathlib import Path
-from unittest import mock
 from textwrap import dedent
+from unittest import mock
 
 import pytest
 
 import ciur  # just for mock
-import sys  # just for mock
-import platform  # just for mock
-
 from ciur.cli import VERSION_STRING
 
 with \
@@ -53,8 +52,8 @@ EXAMPLE_ORG_CIUR_AS_URL = "https://some.domain/example.org.ciur"
 
         options:
           -h, --help         show this help message and exit
-          -p, --parse PARSE  url or local file path required document for html, xml, pdf. (f.e. http://example.org or /tmp/example.org.html)
-          -r, --rule RULE    url or local file path file with parsing dsl rule (f.e. /tmp/example.org.ciur or http:/host/example.org.ciur)
+          -p, --parse PARSE  url or local file path required document for html, xml, pdf. (f.e. https://example.org or /tmp/example.org.html)
+          -r, --rule RULE    url or local file path file with parsing dsl rule (f.e. /tmp/example.org.ciur or https:/host/example.org.ciur)
           -w, --ignore_warn  suppress python warning warnings and ciur warnings hints
           -v, --version      show program's version number and exit
         """)
@@ -77,7 +76,7 @@ def test_cli_parse_basic(capfd, test_input, expected):
 @pytest.mark.parametrize("test_input,expected", [
     pytest.param(
         (
-            "--parse", "http://example.org",
+            "--parse", "https://example.org",
             "--rule", EXAMPLE_ORG_CIUR_AS_URL,
         ),
         EXAMPLE_ORG,
@@ -93,7 +92,7 @@ def test_cli_parse_basic(capfd, test_input, expected):
     ),
     pytest.param(
         (
-            "--parse", "http://example.org",
+            "--parse", "https://example.org",
             "--rule", "./res/example.org.ciur",
         ),
         EXAMPLE_ORG,
