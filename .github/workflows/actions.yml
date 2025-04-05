@@ -62,7 +62,9 @@ jobs:
 
   docker:
     if: github.ref == '^refs/heads/relase/0/2/latest$'
-    needs: pypi_publish
+    needs:
+      #- pypi_publish
+      - test
     runs-on: ubuntu-latest
     environment:
       name: hub.docker.com
