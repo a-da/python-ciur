@@ -6,8 +6,8 @@ from typing import Any, Optional, Sequence
 from io import BytesIO, StringIO
 
 # pylint: disable=import-error
-from pdfminer.pdfdevice import TagExtractor  # type: ignore[import-not-found]
-from pdfminer.pdfinterp import (  # type: ignore[import-not-found]
+from pdfminer.pdfdevice import TagExtractor  # type: ignore[import-untyped]
+from pdfminer.pdfinterp import (  # type: ignore[import-untyped] # pylint: disable=no-name-in-module
     PDFResourceManager, process_pdf)
 
 # pylint: enable=import-error
