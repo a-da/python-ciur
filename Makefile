@@ -18,6 +18,7 @@ pylint:
 	pylint src
 
 mypy:
+	pip list
 	mypy src
 
 coverage_run:
