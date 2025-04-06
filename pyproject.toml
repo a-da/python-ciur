@@ -90,7 +90,6 @@ Repository = "https://github.com/a-da/python-ciur.git"
     python_version = "3.13"
     #strict = true
     show_error_codes = true
-    plugins = "pydantic.mypy"
 
 [[tool.mypy.overrides]]
     module = "influxdb.*"
