@@ -1,6 +1,6 @@
-import pytest
 from pathlib import Path
 
+import pytest
 
 root_repository_path = Path(__file__).parent.parent.resolve()
 

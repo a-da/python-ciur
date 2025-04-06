@@ -1,27 +1,29 @@
-from pdfminer.pdfdevice import TagExtractor  # type: ignore[import-not-found]
-from pdfminer.pdfinterp import PDFResourceManager, process_pdf  # type: ignore[import-not-found]
+"""
+Parse PDF files
+"""
+from typing import Any, Optional, Sequence
 
 from io import BytesIO, StringIO
 
+# pylint: disable=import-error
+from pdfminer.pdfdevice import TagExtractor  # type: ignore[import-untyped]
+from pdfminer.pdfinterp import (  # type: ignore[import-untyped] # pylint: disable=no-name-in-module
+    PDFResourceManager, process_pdf)
+
+# pylint: enable=import-error
 from ciur.models import Document
+
+from ..rule import Rule
 from .parse_xml import xml_type
 
 
-def pdf_type(document, rule, rule_file_path=None):
+def pdf_type(
+    document: Document,
+    rule: Rule,
+    rule_file_path: Optional[str] = None
+) -> Sequence[Any] | dict[Any, Any]:
     """
     use this function if page is pdf
-    TODO: do not forget to document this
-
-    :param rule_file_path:
-        :type rule_file_path: str
-
-    :param rule:
-        :type rule: Rule
-
-    :param document: Document to be parsed
-        :type document: Document
-
-    :rtype: OrderedDict
     """
 
     class MyIO(StringIO):
@@ -39,7 +41,7 @@ def pdf_type(document, rule, rule_file_path=None):
     out_fp.seek(0)  # reset the buffer position to the beginning
 
     xml = Document(
-        out_fp.read(),
+        out_fp.read(), # type: ignore[arg-type]
         namespace=document.namespace,
         url=document.url
     )

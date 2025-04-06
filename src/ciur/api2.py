@@ -2,10 +2,10 @@
 shortcuts for api version 2
 ciur.shortcuts is version 1
 """
+import ciur
+from ciur import bnf_parser
 from ciur.models import Document
 from ciur.rule import Rule
-from ciur import bnf_parser
-import ciur
 
 
 def parse(http_response, ciur_rule):

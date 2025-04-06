@@ -1,6 +1,10 @@
-FROM python:3.13.2
+ARG PYTHON_VERSION=3.13.2
 
-RUN pip install ciur==0.2.1.dev2
+FROM python:${PYTHON_VERSION}
+ARG CIUR_VERSION=0.2.2
+
+ENV PIP_ROOT_USER_ACTION=ignore
+RUN pip install ciur==${CIUR_VERSION}
 
 # validate
-RUN set -x && ciur --version | grep -qF "0.2.1.dev2"
+RUN set -x && ciur --version | grep -qF "${CIUR_VERSION}"

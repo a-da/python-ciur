@@ -9,6 +9,6 @@ As a result request lib should be an option and not a must
 try:
     import requests
 except ImportError:
-    display_version = ""
+    DISPLAY_VERSION = ""
 else:
-    display_version = f"{requests.__title__}/{requests.__version__}"
+    DISPLAY_VERSION = f"{requests.__title__}/{requests.__version__}"

@@ -5,6 +5,10 @@ on:
 #  pull_request:
 #    branches: [ main ]
 
+env:
+  PYTHON_VERSION: 3.13.2
+  CIUR_VERSION: 0.2.2
+
 jobs:
 
   setup:
@@ -21,9 +25,9 @@ jobs:
       - uses: actions/cache@v3
         with:
           path: .venv
-          key: a-key
+          key: a-key2
 
-  test:
+  coverage:
     needs: [setup]
     runs-on: ubuntu-latest
     steps:
@@ -33,12 +37,41 @@ jobs:
         uses: actions/cache@v3
         with:
           path: .venv
-          key: a-key
-      - run: source .venv/bin/activate && make pytest
+          key: a-key2
+      - run: source .venv/bin/activate && make coverage
+
+  mypy:
+    needs: [ setup ]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+      - name: Restore cache
+        uses: actions/cache@v3
+        with:
+          path: .venv
+          key: a-key2
+      - run: source .venv/bin/activate && make mypy
+
+  pylint:
+    needs: [ setup ]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+      - name: Restore cache
+        uses: actions/cache@v3
+        with:
+          path: .venv
+          key: a-key2
+      - run: source .venv/bin/activate && make pylint
 
   pypi_publish:
-    if: github.ref == 'refs/heads/master'
-    needs: test
+    if: github.ref == '^refs/heads/relase/0/2/latest$'
+    needs:
+      - coverage
+      - pylint
+      - mypy
     runs-on: ubuntu-latest
     environment:
       name: pypi
@@ -57,8 +90,8 @@ jobs:
         uses: pypa/gh-action-pypi-publish@release/v1
 
   docker:
-    if: github.ref == 'refs/heads/master'
-    needs: pypi_publish
+    needs:
+      - pypi_publish
     runs-on: ubuntu-latest
     environment:
       name: hub.docker.com
@@ -85,4 +118,7 @@ jobs:
           file: ./docker/prod/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: adan/ciur:0.2.1.dev2
+          tags: adan/ciur:${{ env.CIUR_VERSION }}
+          build-args: |
+            CIUR_VERSION=${{ env.CIUR_VERSION }}
+            PYTHON_VERSION=${{ env.PYTHON_VERSION }}

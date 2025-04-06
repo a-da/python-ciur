@@ -19,11 +19,9 @@ from dateutil import parser
 from lxml.etree import tostring
 
 from ciur.dateutil_aditional_languages import MONTHS
-from ciur.decorators import check_new_node
-from ciur.decorators import convert_element2text
+from ciur.decorators import check_new_node, convert_element2text
 from ciur.exceptions import CiurBaseException
-from ciur.helpers import element2text
-from ciur.helpers import load_xpath_functions
+from ciur.helpers import element2text, load_xpath_functions
 
 
 def url_(url: str, base_url: str) -> str:
@@ -38,7 +36,7 @@ def url_(url: str, base_url: str) -> str:
     return urllib.parse.urljoin(base_url, url)
 
 
-def url_param_(url, param, *_):
+def url_param_(url: str, param: str, *_):
     """
     get param from url
     >>> url_param_("http://some-web-site?some-param=some-value", "some-param")
@@ -46,7 +44,6 @@ def url_param_(url, param, *_):
     """
     parsed = urllib.parse.urlparse(url)
     return urllib.parse.parse_qs(parsed.query)[param]
-
 
 @convert_element2text
 def fn_int(context, value, *_):
@@ -105,25 +102,32 @@ def fn_iraw(context, value, *_):
     return text + "".join(fn_raw(context, child) for child in value) + tail
 
 
-def size_(got, mandatory_or_optional, expect):
+def size_(got: int, mandatory_or_optional: str, expect: int) -> None:
     """
     check if expected size match result size
     """
     if mandatory_or_optional == "mandatory":
         if not got:  # + got 0
-            assert False, "expect mandatory"
-        elif expect == 0:  # +0 got 1
-            pass
-        else:  # +10 got 1
-            assert got == expect, "expect size `%s`, got `%s`" % (expect, got)
-    else:
-        if not got:  # * got 0
-            pass
-        elif expect == 0:  # * got 19
-            pass
-        else:  # *5 got 5
-            assert got == expect, "expect size `%s`, got `%s`" % (expect, got)
+            raise AssertionError("No result for mandatory field")
 
+        if expect != 0:  # +0 got 1
+            if got != expect:
+                raise AssertionError(f"expect size `{expect}`, got `{got}`")
+
+        return None
+
+    # optional
+    if not got:  # * got 0
+        return None
+
+    if expect == 0:  # * got 19
+        return None
+
+      # *5 got 5
+    if got != expect:
+        raise AssertionError(f"expect size `{expect}`, got `{got}`")
+
+    return None
 
 @convert_element2text
 def fn_datetime(context, value):
@@ -150,8 +154,9 @@ def fn_datetime(context, value):
     try:
         return parser.parse(text)
     except (ValueError,) as value_error:
-        raise CiurBaseException(value_error, {"text": text})
-
+        raise CiurBaseException(
+            value_error, {"text": text}
+        ) from value_error
 
 @convert_element2text
 @check_new_node
@@ -175,10 +180,10 @@ def fn_float(context, text):
     try:
         return float(text)
     except (ValueError,) as value_error:
-        if "invalid literal for float()" in value_error.message:
+        if "invalid literal for float()" in str(value_error):
             return float(text.replace(",", "."))
-        else:
-            raise value_error
+
+        raise value_error
 
 
 @check_new_node
@@ -199,9 +204,10 @@ def fn_tail(context, value):
 
 
 @convert_element2text
-def fn_text(context, value):
+def fn_text(_, value):
     """
-    del context
+    Convert to text
+    TODO: find why is empty 
     """
 
     return value

@@ -1,19 +1,22 @@
+"""
+Parse XML files
+"""
+from typing import Any, Optional, Sequence
+
 from lxml import etree
+
+from ..models import Document
+from ..rule import Rule
 from ._parse import _prepare_context, _recursive_parse
 
-def xml_type(document, rule, rule_file_path=None):
+
+def xml_type(
+    document: Document,
+    rule: Rule,
+    rule_file_path: Optional[str] = None
+) -> Sequence[Any] | dict[Any, Any]:
     """
     use this function if page is xml
-    :param rule:
-        :type rule: Rule
-
-    :param document: Document to be parsed
-        :type document: Document
-
-    :param rule_file_path:
-        :type rule_file_path: str
-
-    :rtype: OrderedDict
     """
 
     context = etree.fromstring(document.content)

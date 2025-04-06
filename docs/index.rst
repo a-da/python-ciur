@@ -42,7 +42,7 @@ Python ciur API
     >>> with ciur.open_file("example.org.ciur", __file__) as f:
     ...    print pretty_parse_from_resources(
     ...            f,
-    ...            "http://example.org"
+    ...            "https://example.org"
     ...    )
     {
          "root": {

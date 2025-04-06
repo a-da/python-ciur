@@ -6,21 +6,24 @@
 If you are annoyed by `Spaghetti code` then we can taste `Lasagna code`
 with the help of Ciur
 """
+from typing import IO, Any, Sequence
+
+import importlib.metadata
 import json
 import logging
 import os
 import sys
 import warnings
 
-import importlib.metadata
-from typing import Any
+from lxml.etree import CommentBase
+
+from . import optional_requests
 
 NAME = "ciur"
 VERSION = importlib.metadata.version(NAME)
 META = importlib.metadata.metadata(NAME)
 GIT = META.get('Project-URL')
 
-from . import optional_requests
 
 # TODO make configurable
 CONF = {
@@ -28,11 +31,11 @@ CONF = {
 }
 
 HTTP_HEADERS = {
-    "User-Agent": f"{NAME}/{VERSION} {optional_requests.display_version} {GIT}"
+    "User-Agent": f"{NAME}/{VERSION} {optional_requests.DISPLAY_VERSION} {GIT}"
 }
 
 
-def pretty_json(data: Any) -> str:
+def pretty_json(data: dict[str, Any]| Sequence[dict[str, Any]]) -> str:
     """
     wrapper for long code
     :param data: to be converted in json
@@ -49,11 +52,9 @@ def pretty_json(data: Any) -> str:
         :type value: object
         :rtype: str
         """
-        # noinspection PyProtectedMember
-        from lxml.etree import _Comment as EtreeComment
 
-        if isinstance(value, EtreeComment):
-            return "<!--%s %s -->" % (value.text, value.tail)
+        if isinstance(value, CommentBase):
+            return f"<!--{value.text} {value.tail} -->"
 
         return repr(value)
 
@@ -61,7 +62,7 @@ def pretty_json(data: Any) -> str:
     return res
 
 
-class CommonEqualityMixin(object):  # pylint: disable=too-few-public-methods
+class CommonEqualityMixin:  # pylint: disable=too-few-public-methods
     """
     boilerplate class for equal method
     """
@@ -73,31 +74,24 @@ class CommonEqualityMixin(object):  # pylint: disable=too-few-public-methods
         return not self.__eq__(other)
 
 
-def path(relative, root=__file__):
+def path(relative: str, root: str = __file__) -> str:
     """
     :param relative: path
-        :type relative: str
     :param root: path
-        :type root: str
     :return: absolute path
-    :rtype: str
     """
     root_ = os.path.dirname(os.path.abspath(root))
     return os.path.join(root_, relative)
 
 
-def open_file(relative, root=__file__, mode='r'):
+def open_file(relative: str, root: str = __file__, mode: str = 'r') -> IO[Any]:
     """
     :param relative: path
-        :type relative: str
     :param root: path
-        :type root: str
     :param mode: file mode read, write, binary ...
-        :type mode: str
     :return: absolute path
-    :rtype: FileIO
     """
-    return open(path(relative, root), mode)
+    return open(path(relative, root), mode, encoding="utf-8")
 
 
 def get_logger(name, formatter=None, handler=None, level=logging.INFO):

@@ -4,17 +4,17 @@ Command line interface for ``ciur`` module.
 """
 import argparse
 import io
-from argparse import RawTextHelpFormatter
-import sys
-import platform
 import logging
+import platform
+import sys
+from argparse import RawTextHelpFormatter
 
-from requests.models import PreparedRequest
 import requests.exceptions
+from requests.models import PreparedRequest
 
 import ciur
-from ciur.shortcuts import pretty_parse_from_resources
 from ciur.helpers import is_url
+from ciur.shortcuts import pretty_parse_from_resources
 
 LOG = logging.getLogger(__name__)
 
@@ -32,7 +32,7 @@ def check_url(url):
         raise argparse.ArgumentTypeError(url_error)
 
 
-def check_file(path):
+def check_file(path) -> io.StringIO:
     """
     :param path:
         :type path: str
@@ -42,11 +42,11 @@ def check_file(path):
                          "extension `.ciur`\n\n")
 
     try:
-        with open(path) as f:
-            the_file = io.StringIO(f.read())
+        with open(path, mode='b+r') as f:
+            the_file = io.StringIO(f.read().decode())
             the_file.name = f.name
             return the_file
-     
+
     except (IOError, ) as io_error:
         raise argparse.ArgumentTypeError(io_error)
 
@@ -70,7 +70,7 @@ PARSER.add_argument(
     "--parse",
     required=True,
     help="url or local file path required document for html, xml, pdf. "
-         "(f.e. http://example.org or /tmp/example.org.html)",
+         "(f.e. https://example.org or /tmp/example.org.html)",
     type=check_resource
 )
 
@@ -79,7 +79,7 @@ PARSER.add_argument(
     "--rule",
     required=True,
     help="url or local file path file with parsing dsl rule "
-         "(f.e. /tmp/example.org.ciur or http:/host/example.org.ciur)",
+         "(f.e. /tmp/example.org.ciur or https:/host/example.org.ciur)",
     type=check_resource
 )
 

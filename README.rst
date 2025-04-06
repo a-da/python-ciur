@@ -43,7 +43,7 @@ This command
 
 .. code-block :: bash
 
-    $ ciur -p http://example.org -r https://bitbucket.org/ada/python-ciur/raw/HEAD/docs/docker/example.org.ciur
+    $ ciur -p https://example.org -r https://bitbucket.org/ada/python-ciur/raw/HEAD/docs/docker/example.org.ciur
 
 Will produce a json
 
@@ -97,8 +97,8 @@ Install via docker
     optional arguments:
       -h, --help            show this help message and exit
       -p PARSE, --parse PARSE
-                            url or local file path required document for html, xml, pdf. (f.e. http://example.org or /tmp/example.org.html)
-      -r RULE, --rule RULE  url or local file path file with parsing dsl rule (f.e. /tmp/example.org.ciur or http:/host/example.org.ciur)
+                            url or local file path required document for html, xml, pdf. (f.e. https://example.org or /tmp/example.org.html)
+      -r RULE, --rule RULE  url or local file path file with parsing dsl rule (f.e. /tmp/example.org.ciur or https:/host/example.org.ciur)
       -w, --ignore_warn     suppress python warning warnings and ciur warnings hints
       -v, --version         show program's version number and exit
 

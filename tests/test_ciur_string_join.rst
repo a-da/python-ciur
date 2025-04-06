@@ -32,17 +32,17 @@ Testing string_join xpath function
 }
 
 >>> string_join_sample_rule2 = Rule.from_dsl("""
-... text `//body/div[@class='paragraph']//text()` string_join +
+... text `//body/div[@class='paragraph']//text()` to_arg str.join('\\n') +
 ... """)[0]
 
 >>> data = parse.html_type(html_document, string_join_sample_rule2)
 >>> print(pretty_json(data))  # doctest: +NORMALIZE_WHITESPACE
 {
-    "text": "\n    Do you want to face a new challenge?\n    Building a platform with top-notch\n"
+    "text": "\n    \nDo you want to face a new challenge?\n\n    \nBuilding a platform with top-notch\n\n"
 }
 
 >>> string_join_sample_rule3 = Rule.from_dsl("""
-... text `//body/div[@class='paragraph']//text()` string_join('|') +
+... text `//body/div[@class='paragraph']//text()` to_arg str.join('|') +
 ... """)[0]
 
 >>> data = parse.html_type(html_document, string_join_sample_rule3)
