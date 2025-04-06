@@ -7,7 +7,7 @@ on:
 
 env:
   PYTHON_VERSION: 3.13.2
-  CIUR_VERSION: 0.2.2.dev2
+  CIUR_VERSION: 0.2.2.dev8
 
 jobs:
 
@@ -88,7 +88,6 @@ jobs:
 
       - name: Publish a Python distribution to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
-      - run: sleeep 30 # give some time to upload
 
   docker:
     needs:
@@ -111,7 +110,6 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-
 
       - name: Build and push
         uses: docker/build-push-action@v6
