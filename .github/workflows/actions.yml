@@ -7,7 +7,7 @@ on:
 
 env:
   PYTHON_VERSION: 3.13.2
-  CIUR_VERSION: 0.2.2
+  CIUR_VERSION: 0.2.2.dev1
 
 jobs:
 
@@ -67,7 +67,7 @@ jobs:
       - run: source .venv/bin/activate && make pylint
 
   pypi_publish:
-    if: github.ref == '^refs/heads/relase/0/2/latest$'
+    if: ${{ github.ref == 'refs/heads/relase/0/2/latest' }}
     needs:
       - coverage
       - pylint
