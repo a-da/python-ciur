@@ -1,7 +1,7 @@
 [project]
     name = "ciur"
     readme = "README.rst"
-    version = "0.2.2.dev1"
+    version = "0.2.2.dev2"
     authors = [
         {name = "Andrei Danciuc", email = "python.ciur@gmail.com"},
     ]
