@@ -1,77 +1,82 @@
-#name: Custolint
+name: On Feature Branch
+
 on:
-  push:
-    #branches: [ main ]
-#  pull_request:
-#    branches: [ main ]
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+    # Optionally, restrict to PRs targeting specific branches:
+    # branches:
+    #   - main
+    #   - develop
 
 env:
   PYTHON_VERSION: 3.13.2
-  CIUR_VERSION: 0.2.2.dev8
+  CIUR_VERSION: 0.2.3
 
 jobs:
 
-  setup:
+  coverage:
     runs-on: ubuntu-latest
     steps:
-
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version-file: 'pyproject.toml'
-
-      - run: python -m venv .venv
-      - run: source .venv/bin/activate && make update_pip_and_wheel install_dev
-      - uses: actions/cache@v3
-        with:
-          path: .venv
-          key: a-key2
-
-  coverage:
-    needs: [setup]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-      - name: Restore cache
-        uses: actions/cache@v3
-        with:
-          path: .venv
-          key: a-key2
-      - run: source .venv/bin/activate && make coverage
+          cache: 'pip' # caching pip dependencies
+      - run: make update_pip_and_wheel install_dev
+      - run: make coverage
 
   mypy:
-    needs: [ setup ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
-      - name: Restore cache
-        uses: actions/cache@v3
         with:
-          path: .venv
-          key: a-key2
-      - run: source .venv/bin/activate && make mypy
+          python-version-file: 'pyproject.toml'
+          cache: 'pip' # caching pip dependencies
+      - run: make update_pip_and_wheel install_dev
+      - run: make mypy
 
   pylint:
-    needs: [ setup ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
-      - name: Restore cache
-        uses: actions/cache@v3
         with:
-          path: .venv
-          key: a-key2
-      - run: source .venv/bin/activate && make pylint
+          python-version-file: 'pyproject.toml'
+          cache: 'pip' # caching pip dependencies
+      - run: make update_pip_and_wheel install_dev
+      - run: make pylint
+
+  isort:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version-file: 'pyproject.toml'
+          cache: 'pip' # caching pip dependencies
+      - run: make update_pip_and_wheel install_dev
+      - run: ARGS=--check make isort
+
+  pip-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version-file: 'pyproject.toml'
+          cache: 'pip' # caching pip dependencies
+      - run: make update_pip_and_wheel install_dev
+      - run: make pip-audit
 
   pypi_publish:
-    if: ${{ github.ref == 'refs/heads/release/0/2/latest' }}
+    if: ${{ github.ref == 'refs/heads/release/0/2/latest' && github.event.pull_request.merged == true }}
     needs:
       - coverage
       - pylint
       - mypy
+      - isort
+      - pip-audit
     runs-on: ubuntu-latest
     environment:
       name: pypi
