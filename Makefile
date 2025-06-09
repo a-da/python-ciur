@@ -31,10 +31,15 @@ coverage: coverage_run coverage_report
 isort:
 	isort src tests $(ISORT_ARGS)
 
+pip-audit:
+	pip-audit --ignore-vuln=PYSEC-2022-42969
+
 validate_before_push: \
+	isort \
 	coverage \
 	mypy \
-	pylint
+	pylint \
+	pip-audit
 
 docker_build:
 	export BUILDKIT_PROGRESS=plain && docker build \
